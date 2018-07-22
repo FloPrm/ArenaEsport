@@ -1,0 +1,198 @@
+<% unless @pending.empty? %>
+<h4 class="text-center"><%=t 'mentorats.my_requests' %></h4>
+<p class="text-center text-muted"><%=t 'mentorats.my_requests_subtitle' %></p>
+<hr>
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= sort_link @search, :updated_at, "Date", {}, { :remote => true, :method => :get } %></th>
+      <th>Lang</th>
+      <th><%=t('layout.player').capitalize %></th>
+      <th><%=t 'layout.role' %></th>
+      <% if current_user.account.game.has_soloq %>
+        <th class="text-center"><%= sort_link @search, :game_account_mmr, "#{has_teamq? ? "Solo" : t('layout.rank')}", {}, { :remote => true, :method => :get } %></th>
+      <% end %>
+      <% if current_user.account.game.has_teamq %>
+        <th class="text-center"><%= sort_link @search, :game_account_flex_mmr, "Flex", {}, { :remote => true, :method => :get } %></th>
+      <% end %>
+      <th class="text-center"><%=t 'layout.week' %></th>
+      <th class="text-center"><%=t 'layout.weekend' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pending.where(teacher_id:current_user.mentor).each do |mentorat|%>
+      <% @account = mentorat.user.account %>
+      <tr>
+        <td><%= mentorat.updated_at.strftime("%d/%m/%y") %></td>
+        <td><%= render partial:"users/language", locals:{user: mentorat.user, height:20} %></td>
+        <td><%= link_to @account.name, mentorat_preview_mentorat_path(mentorat), remote: true %></td>
+        <td><span class="label label-default"><%= @account.p_role %></span></td>
+        <% if current_user.account.game.has_soloq %>
+          <td class="table-rank"><%= render 'users/rank' %></td>
+        <% end %>
+        <% if current_user.account.game.has_teamq %>
+          <td class="table-rank"><%= render 'users/rank_flex' %></td>
+        <% end %>
+        <%= render(partial: 'users/dispos', locals: {reload: true, player: mentorat.user}) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr>
+<% end %>
+<% unless @pending_t.empty? %>
+<% unless @pending.present? %>
+<h4 class="text-center"><%=t 'mentorats.my_requests' %></h4>
+<hr>
+<% end %>
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= sort_link @search_t, :updated_at, "Date", {}, { :remote => true, :method => :get } %></th>
+      <th>Lang</th>
+      <th><%=t('teams.one').capitalize %></th>
+      <% if current_user.account.game.has_soloq %>
+        <th class="text-center"><%= current_user.account.game.has_teamq ? "Max Solo" : t('mentorats.max_rank') %></th>
+      <% end %>
+      <% if current_user.account.game.has_teamq %>
+        <th class="text-center">Max Flex</th>
+      <% end %>
+      <th class="text-center"><%=t 'layout.week' %></th>
+      <th class="text-center"><%=t 'layout.weekend' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pending_t.where(teacher_id:current_user.mentor).each do |mentorat| %>
+      <% @team = mentorat.team %>
+      <% @joueurs = @team.members %>
+      <tr>
+        <td><%= mentorat.updated_at.strftime("%d/%m/%y") %></td>
+        <td><%= render partial:"teams/language", locals:{team: @team, height:20} %></td>
+        <td class="<%= "text-gold1" if @team.members.where(role:'capitain_p').present? %>"><%= link_to @team.name, mentorat_preview_mentorat_path(mentorat), remote: true %></td>
+        <% @game_accounts = @team.accounts %>
+        <% if current_user.account.game.has_soloq %>
+          <% @soloQ = @game_accounts.sort_by(&:"#{:mmr}").last %>
+          <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @soloQ})%></td>
+        <% end %>
+        <% if current_user.account.game.has_teamq %>
+          <% @flexQ = @game_accounts.sort_by(&:"#{:flex_mmr}").last %>
+          <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @flexQ})%></td>
+        <% end %>
+        <% @week_starts = @joueurs.pluck(:week_start) %>
+        <% @week_ends = @joueurs.pluck(:week_end) %>
+        <% @we_starts = @joueurs.pluck(:we_start) %>
+        <% @we_ends = @joueurs.pluck(:we_end) %>
+        <%= render 'teams/dispos' %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr>
+<% end %>
+<h4 class="text-center"><%=t 'mentorats.available_requests' %></h4>
+<p class="text-center text-muted"><%=t 'mentorats.available_requests_subtitle' %></p>
+<hr>
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= sort_link @search, :updated_at, "Date", {}, { :remote => true, :method => :get } %></th>
+      <th>Lang</th>
+      <th><%=t('layout.player').capitalize %></th>
+      <th><%=t 'layout.role' %></th>
+      <% if current_user.account.game.has_soloq %>
+        <th class="text-center"><%= sort_link @search, :game_account_mmr, "#{has_teamq? ? "Solo" : t('layout.rank')}", {}, { :remote => true, :method => :get } %></th>
+      <% end %>
+      <% if current_user.account.game.has_teamq %>
+        <th class="text-center"><%= sort_link @search, :game_account_flex_mmr, "Flex", {}, { :remote => true, :method => :get } %></th>
+      <% end %>
+      <th class="text-center"><%=t 'layout.week' %></th>
+      <th class="text-center"><%=t 'layout.weekend' %></th>
+      <% if can? :manage, :all %>
+        <th><%=t 'mentorats.wish' %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @mentorats.where(status:0).where('teacher_id != ?', current_user.mentor).where('last_swap < ?', 24.hours.ago).order(:updated_at).reverse_order.each do |mentorat|%>
+      <% @account = mentorat.user.account %>
+      <tr>
+        <td><%= mentorat.updated_at.strftime("%d/%m/%y") %></td>
+        <td><%= render partial:"users/language", locals:{user: mentorat.user, height:20} %></td>
+        <td class="<%= "text-gold1" if mentorat.user.can? :manage, Champion %>"><%= link_to @account.name, mentorat_preview_mentorat_path(mentorat), remote: true %></td>
+        <td><span class="label label-default"><%= @account.p_role %></span></td>
+        <% if current_user.account.game.has_soloq %>
+          <td class="table-rank"><%= render 'users/rank' %></td>
+        <% end %>
+        <% if current_user.account.game.has_teamq %>
+          <td class="table-rank"><%= render 'users/rank_flex' %></td>
+        <% end %>
+        <%= render(partial: 'users/dispos', locals: {reload: true, player: mentorat.user}) %>
+        <% if can? :manage, :all %>
+        <td>
+          <% unless mentorat.teacher.nil? %>
+            <%= link_to mentorat.teacher.account.name, mentorat.teacher %>
+          <% end %>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% unless @mentorats_t.where(status:0).where('teacher_id != ?', current_user.mentor).where('last_swap < ?', 24.hours.ago).empty? %>
+<hr>
+<h4 class="text-center"><%=t 'teams.many' %></h4>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= sort_link @search_t, :updated_at, "Date", {}, { :remote => true, :method => :get } %></th>
+      <th>Lang</th>
+      <th><%=t('teams.one').capitalize %></th>
+      <% if current_user.account.game.has_soloq %>
+        <th class="text-center"><%= current_user.account.game.has_teamq ? "Max Solo" : t('mentorats.max_rank') %></th>
+      <% end %>
+      <% if current_user.account.game.has_teamq %>
+        <th class="text-center">Max Flex</th>
+      <% end %>
+      <th class="text-center"><%=t 'layout.week' %></th>
+      <th class="text-center"><%=t 'layout.weekend' %></th>
+      <% if can? :manage, :all %>
+        <th><%=t 'mentorats.wish' %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @mentorats_t.where(status:0).where('teacher_id != ?', current_user.mentor).where('last_swap < ?', 24.hours.ago).order(:updated_at).reverse_order.each do |mentorat| %>
+      <% @team = mentorat.team %>
+      <% @joueurs = @team.members %>
+      <tr>
+        <td><%= mentorat.updated_at.strftime("%d/%m/%y") %></td>
+        <td><%= render partial:"teams/language", locals:{team: @team, height:20} %></td>
+        <td class="<%= "text-gold1" if @team.members.where(role:'capitain_p').present? %>"><%= link_to @team.name, mentorat_preview_mentorat_path(mentorat), remote: true %></td>
+        <% @game_accounts = @team.accounts %>
+        <% if current_user.account.game.has_soloq %>
+          <% @soloQ = @game_accounts.sort_by(&:"#{:mmr}").last %>
+          <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @soloQ})%></td>
+        <% end %>
+        <% if current_user.account.game.has_teamq %>
+          <% @flexQ = @game_accounts.sort_by(&:"#{:flex_mmr}").last %>
+          <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @flexQ})%></td>
+        <% end %>
+        <% @week_starts = @joueurs.pluck(:week_start) %>
+        <% @week_ends = @joueurs.pluck(:week_end) %>
+        <% @we_starts = @joueurs.pluck(:we_start) %>
+        <% @we_ends = @joueurs.pluck(:we_end) %>
+        <%= render 'teams/dispos' %>
+        <% if can? :manage, :all %>
+        <td>
+          <% unless mentorat.teacher.nil? %>
+            <%= link_to mentorat.teacher.account.name, mentorat.teacher %>
+          <% end %>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

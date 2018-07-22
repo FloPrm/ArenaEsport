@@ -1,0 +1,63 @@
+<style type="text/css">
+#map {
+  width: 100%;
+  height: 200px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.1);
+}
+.panel-heading img,
+.panel-heading div {display: inline-block; margin-top: -10px;}
+</style>
+
+<div id="tabs" class="container">
+
+	<div class="panel panel-default">
+		<div class="panel-heading text-center">
+			<% if  !@user.game_accounts.where(active: true).first.nil? %>
+				<h3 style="display:inline-block"><%= @user.game_accounts.where(active: true).first.name %> <%= render partial:"users/flag", locals:{user: @user, height:25} %></h3>
+			<% else %>
+				<h3 style="display:inline-block"><%= @user.user_name %> <%= render partial:"users/flag", locals:{user: @user, height:25} %></h3>
+			<% end %>
+		</div>
+
+		<div class="panel-body">
+			<%= render 'show' %>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div id="game_accounts"><%= render 'game_accounts' %></div>
+		</div>
+		<div class="panel-footer">
+			<% if user_signed_in? %>
+				<% if current_user.id == @user.id && current_user.role != nil %>
+					<%= link_to "<i class='fa fa-plus'></i> #{t 'game_accounts.add'}".html_safe, new_game_account_url, remote: true, class: "btn btn-default"%>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+  $('#game_account_game1').on('change',function(){
+    $.ajax({
+      type: "POST",
+      url: "/game_accounts/1/choose_game",
+      data: "game=" + $(this).val()
+    })
+  });
+});
+
+	handler = Gmaps.build('Google');
+	handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+	markers = handler.addMarkers(<%=raw @hash.to_json %>);
+	handler.bounds.extendWith(markers);
+	handler.fitMapToBounds();
+	handler.getMap().setZoom(8);
+	});
+</script>

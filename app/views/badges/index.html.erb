@@ -1,0 +1,36 @@
+<style type="text/css">
+
+</style>
+
+<div class="container">
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Badges</h3>
+  </div>
+  <div class="panel-body" style="min-height:400px;">
+    <div id="index">
+      <% @badges.order(:created_at).each do |badge| %>
+        <div class="col-sm-1">
+          <%= link_to edit_badge_path(badge), remote: true do %>
+            <%= render(:partial =>'badges/badge', locals: {reload: true, badge: badge}) %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-sm-6" style="margin-top:10px;">
+        <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        <%= link_to "Achievements", achievements_path, class:"btn btn-default" %>
+      </div>
+      <div class="col-sm-6 text-right" style="margin-top:10px;">
+        <%= link_to '<i class="fa fa-plus"></i> Nouveau'.html_safe, new_badge_path, class:"btn btn-primary", remote: true %>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+</div>
+
+</div>

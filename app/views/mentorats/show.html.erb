@@ -1,0 +1,102 @@
+<div id="show-mentorat" class="container">
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3>
+          <% if @mentorat.mentor.present? %>
+            <% if current_user == @mentorat.user %>
+              <%=t 'mentors.one' %>
+            <% else %>
+              <%=t 'layout.player' %>
+            <% end %>
+          <% elsif @mentorat.teacher.present? %>
+            <% if current_user == @mentorat.user %>
+              <%=t 'mentors.one' %>
+            <% else %>
+              <%=t 'layout.player' %>
+            <% end %>
+          <% end %>
+        </h3>
+      </div>
+      <div class="panel-body text-center">
+        <% if @mentorat.mentor.present? %>
+          <%= render 'mentorats/mentor' %>
+        <% elsif @mentorat.teacher.present? %>
+          <% if current_user == @mentorat.user %>
+            <div style="padding:90px 0px;">
+              <i class="fa fa-circle-o-notch fa-spin"></i>&nbsp; <%=raw t 'mentorats.pending_request', link: link_to(@mentorat.teacher.game_account.name, mentor_path(@mentorat.teacher)) %>
+              <br><br><p class="explain"><%=t 'mentorats.pending_request_explain' %></p>
+            </div>
+          <% else %>
+            <%= render 'mentorats/mentor' %>
+          <% end %>
+        <% else %>
+          <div style="padding:100px 0px;">
+            <%=t 'mentorats.no_mentor' %>
+          </div>
+        <% end %>
+      </div>
+      <div class="panel-footer">
+        <% if current_user != @mentorat.user && current_user.mentor.present? %>
+          <% if current_user.mentor == @mentorat.mentor %>
+            <%= link_to "#{t 'seances.new'}", new_seance_path(mentorat: @mentorat.id), class:"btn btn-primary btn-block", remote: true %>
+          <% end %>
+          <% if @mentorat.status == 0 %>
+            <%= link_to "#{t 'mentorats.follow'}", claim_mentorat_path(@mentorat), method: :put, class:"btn btn-primary btn-block" %>
+          <% end %>
+        <% end %>
+        <% if @mentorat.status == 1 %>
+          <% if current_user == @mentorat.game_account.user or (current_user.mentor.present? && @mentorat.mentor == current_user.mentor) %>
+            <%= link_to "#{t 'mentorats.stop'}", stop_mentorat_path, class:"btn btn-default btn-block", method: :put, data:{confirm: t('mentorats.confirm_stop')} %>
+          <% end %>
+        <% end %>
+        <% if current_user == @mentorat.user && (@mentorat.status == 0 or @mentorat.status == 2) %>
+          <%= link_to "#{t 'mentors.list'}", mentors_path, class:"btn btn-primary btn-block" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3><%=t 'seances.many' %></h3>
+      </div>
+
+      <div class="panel-body" style="min-height:480px;">
+        <h4 class="text-center"><%=t 'seances.soon' %></h4>
+        <div id="mentorat-soon" style="min-height:80px;">
+          <% if @seances.where('date >= ?', Time.now).present? %>
+            <%= render 'mentorats/soon' %>
+          <% else %>
+            <div class="text-center" style="padding-top:30px;"><%=t 'seances.no_soon' %></div>
+          <% end %>
+        </div>
+        <hr>
+        <h4 class="text-center"><%=t 'seances.archives' %></h4>
+        <% if current_user == @mentorat.user && @seances.where('date < ?', Time.now).where(status:0).present? %>
+        <div class="box-info" id="seances-attente"><i class="fa fa-info-circle"></i> <%=t 'seances.pending' %></div>
+        <% end %>
+        <div id="mentorat-archives" style="height:260px!important;width:100%;overflow-x:hidden;overflow-y:scroll;">
+          <%= render 'mentorats/archives' %>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <% unless current_user.mentor.present? %>
+              <%= link_to "#{t 'btn.back'}", dashboard_path, class:"btn btn-default" %>
+            <% else %>
+              <%= link_to "#{t 'btn.back'}", mentorats_path, class:"btn btn-default" %>
+            <% end %>
+          </div>
+          <div class="col-sm-6 text-right">
+            <% if current_user == @mentorat.user or current_user.role == "admin" %>
+              <%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_mentorat_path(@mentorat), class:"btn btn-default" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

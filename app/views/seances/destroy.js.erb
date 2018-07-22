@@ -1,0 +1,8 @@
+if ($("#mentor-seances").length > 0) {
+  $("#mentor-seances").html("<%= j (render 'mentors/seances') %>");
+}
+<% if @team.present? %>
+if ($('#team-tabs').length > 0) {
+  $('#team-tabs').html("<%= j (render 'teams/mentorat') %>");
+}
+<% end %>

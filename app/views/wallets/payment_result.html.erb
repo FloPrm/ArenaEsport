@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>
+        Achat de gems
+      </h3>
+    </div>
+    <div class="panel-body text-center" style="height:400px;padding:110px 0px;">
+      <h4 style="margin-bottom:20px;">
+        <% if @wallet_history.validation == true %>
+          Merci de ta confiance ! <i class="fa fa-heart" style="color:#d9534f;"></i>
+        <% elsif @wallet_history.validation == false %>
+          Echec de l'achat
+        <% else %>
+          Echec de l'achat
+        <% end %>
+      </h4>
+      <p>
+        <% if @wallet_history.validation == true %>
+          <p>Ton compte a été crédité de <b><%= @gems %></b> <i class="ra ra-gem" style="color:#3498db;"></i></p>
+          <p>Tu peux désormais les utiliser pour l'achat d'abonnements premiums en choisissant le mode de paiement associé.</p>
+        <% elsif @wallet_history.validation == false %>
+          Une erreur s'est produite lors du paiement, veuillez contacter un administrateur.
+        <% else %>
+          Le paiement a été avorté
+        <% end %>
+      </p>
+      <%= link_to "Premium", pricing_path, class:"btn btn-primary", style:"margin-top:20px;" %>
+      <%= link_to "Dashboard", dashboard_path, class:"btn btn-default", style:"margin-top:20px;" %>
+    </div>
+  </div>
+</div>

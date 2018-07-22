@@ -1,0 +1,32 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th><%=t 'layout.date' %></th>
+      <th><%=t 'layout.title' %></th>
+      <th><%=t 'mentors.one' %></th>
+      <th><%=t 'layout.status' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @seances.where('mentor_id > ?', 0).order(:date).reverse_order.where('date < ?', Time.now).each do |seance| %>
+    <tr>
+      <td><%= seance.date.strftime("%d/%m/%y") %></td>
+      <td><%= link_to truncate(seance.title, length: 35), seance_path(seance), remote: true %></td>
+      <td><%= link_to seance.mentor.user.account.name, mentor_path(seance.mentor) %></td>
+      <td><%= render(partial: 'seances/status', locals: {reload: true, seance: seance}) %></td>
+      <% if current_user == seance.mentor.user  %>
+        <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_seance_path(seance), remote: true %></td>
+        <% if seance.status == 0 %>
+        <td><%= link_to '<i class="fa fa-remove"></i>'.html_safe, seance, method: :delete, data: {confirm: t('seances.delete')}%></td>
+        <% end %>
+      <% end %>
+      <% if seance.status == 0 && (current_user == seance.mentorat.user or (can? :manage, :all)) %>
+        <td>
+          <%= link_to '<i class="fa fa-check"></i>'.html_safe, validate_seance_path(seance, validation: 1), class:"btn btn-success", method: :put, remote: true %>
+          <%= link_to '<i class="fa fa-remove"></i>'.html_safe, validate_seance_path(seance, validation: 2), class:"btn btn-danger", method: :put, remote: true %>
+        </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,56 @@
+<style type="text/css">
+  input {
+    text-align: center;
+  }
+</style>
+
+<%= simple_form_for(@game_account, method: :put) do |f| %>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Modifier un compte</h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <%= f.error_notification %>
+
+      <div class="field">
+          <h4>Nom d'invocateur</h4>
+          <p class="explain">Code à placer en titre de l'une de vos pages de runes : <b><%= @activation_code %></b></p>
+          <%= f.input :name, label: false, required: true, maxlength: 30 %>
+      </div>
+
+      <div class="field">
+        <h4>Rôle Principal</h4>
+        <%= f.collection_select :p_role, @game_account.game.roles, :to_s, :humanize, required: true %>
+      </div>
+
+      <div class="field">
+        <h4 style="margin-bottom:0px;">Rôle Secondaire</h4>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+        <span class="explain">(Optionnel)</span>
+        <ul style="text-align:left;">
+        <% for s_role in @game_account.game.roles %>
+          <li>
+            <%= check_box_tag "s_role[]", s_role %>
+            <%= s_role.humanize %>
+          </li>
+        <% end %>
+        </ul>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+
+      <%= hidden_field_tag(:activation_code, @activation_code) %>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Modifier", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+<% end %>

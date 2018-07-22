@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>
+        <%=t 'subscriptions.one' %>
+      </h3>
+    </div>
+    <div class="panel-body text-center" style="height:400px;padding:125px 0px;">
+      <h4 style="margin-bottom:20px;">
+        <% if params[:response] == "subscription" or params[:response] == "renewal" %>
+          <%=t 'subscriptions.thanks' %> <i class="fa fa-heart" style="color:#d9534f;"></i>
+        <% elsif params[:response] == "failure" %>
+          <%=t 'subscriptions.failure' %>
+        <% else %>
+          <%=t 'subscriptions.error' %>
+        <% end %>
+      </h4>
+      <p>
+        <% if params[:response] == "subscription" %>
+          <%=raw t 'subscriptions.response_subscription', link: link_to("Discord", current_user.account.game.discord, target:"_blank") %>
+        <% elsif params[:response] == "renewal" %>
+          <%=t 'subscriptions.response_renewal', name: @subscription_plan.title %>
+        <% elsif params[:response] == "failure" %>
+          <%=t 'subscriptions.response_failure' %>
+        <% else %>
+          <%=t 'subscriptions.response_error' %>
+        <% end %>
+      </p>
+      <%= link_to "Dashboard", dashboard_path, class:"btn btn-primary", style:"margin-top:20px;" %>
+      <% unless params[:response] == "failure" %>
+        <%= link_to "#{t 'subscriptions.one'}", subscriptions_manager_path, class:"btn btn-default", style:"margin-top:20px;" %>
+      <% end %>
+    </div>
+  </div>
+</div>

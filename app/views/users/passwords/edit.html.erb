@@ -1,0 +1,49 @@
+<section class="row" style="padding:0px;">
+
+  <section class="col-lg-3 hidden-sm hidden-xs">
+  </section>
+
+  <section class="container col-lg-6 col-sm-12 col-xs-12" style="margin:auto;">
+  <%= form_for(resource, as: resource_name, url: update_pw_path, html: { method: :put }) do |f| %>
+    <!-- <%= devise_error_messages! %> -->
+    <%= render 'layouts/error_messages', object: f.object %>
+  <div class="panel panel-default">
+    <div class="panel-heading text-center">
+      <h2>Modifier mot de passe</h2>
+    </div>
+      <%= f.hidden_field :reset_password_token %>
+
+      <div class="panel-body">
+        <div class="form-inputs text-center">
+          <div class="field">
+            <%= f.label :password, "Nouveau mot de passe" %><br />
+            <% if @minimum_password_length %>
+              <em>(<%= @minimum_password_length %> caractères minimum)</em><br />
+            <% end %>
+            <%= f.password_field :password, autofocus: true, autocomplete: "off" %>
+          </div>
+
+          <div class="field">
+            <%= f.label :password_confirmation, "Confirmer le mot de passe" %><br />
+            <%= f.password_field :password_confirmation, autocomplete: "off" %>
+          </div>
+          <div>
+            <%= link_to "Se connecter", new_session_path(resource_name) %> |
+            <%= link_to "S'inscrire", new_registration_path(resource_name) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <%= f.submit "Modifier mon mot de passe", class: "btn btn-primary btn-lg btn-block"%>
+      </div>
+    </div>
+  <% end %>
+
+
+  </section>
+
+  <section class="col-lg-3 hidden-sm hidden-xs">
+  </section>
+
+</section>

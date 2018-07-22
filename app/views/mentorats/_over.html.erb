@@ -1,0 +1,34 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= sort_link @search, :updated_at, "Date" %></th>
+      <th>Joueur</th>
+      <th>Role</th>
+      <% if current_user.account.game.has_soloq %>
+        <th class="text-center"><%= sort_link @search, :game_account_mmr, "#{has_teamq? ? "Solo" : "Niveau"}" %></th>
+      <% end %>
+      <% if current_user.account.game.has_teamq %>
+        <th class="text-center"><%= sort_link @search, :game_account_flex_mmr, "Flex" %></th>
+      <% end %>
+      <th class="text-center">Semaine</th>
+      <th class="text-center">Weekend</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @mentorats.where(status:2).order(:updated_at).reverse_order.each do |mentorat|%>
+      <% @account = mentorat.user.account %>
+      <tr>
+        <td><%= mentorat.updated_at.strftime("%d/%m/%y") %></td>
+        <td class="<%= "text-gold1" if mentorat.user.can? :manage, Champion %>"><%= @account.name %></td>
+        <td><span class="label label-default"><%= @account.p_role %></span></td>
+        <% if current_user.account.game.has_soloq %>
+          <td class="table-rank"><%= render 'users/rank' %></td>
+        <% end %>
+        <% if current_user.account.game.has_teamq %>
+          <td class="table-rank"><%= render 'users/rank_flex' %></td>
+        <% end %>
+        <%= render(partial: 'users/dispos', locals: {reload: true, player: mentorat.user}) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

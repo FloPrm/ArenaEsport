@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sender_id: 1
+  token: MyString
+  invitable_id: 1
+  invitable_type: MyString
+
+two:
+  sender_id: 1
+  token: MyString
+  invitable_id: 1
+  invitable_type: MyString

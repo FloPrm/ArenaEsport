@@ -1,0 +1,28 @@
+<div id="listing-partial">
+
+
+<div class="col-xs-12" id="slide_options" style="display:block; text-align:center;">
+  <hr style="margin-bottom:0;"/>
+  <span class="glyphicon glyphicon-chevron-up" style="margin-top:0; display:inline; text-align:center;" aria-hidden="true"></span>
+</div>
+
+
+<div class="container-fluid all" id ="listing_search">
+<%= render 'listing_search'%>
+
+</div>
+</div>
+<script type="text/javascript">
+  $('#slide_options').on('click', '.glyphicon-chevron-up', function(){
+      $(this).removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+      $('.container-fluid.all').slideUp();
+    });
+    
+  $('#slide_options').on('click', '.glyphicon-chevron-down', function(){
+      $(this).removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+      $('.container-fluid.all').slideDown();
+  });
+
+
+</script>
+    

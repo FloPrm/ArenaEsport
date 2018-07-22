@@ -1,0 +1,50 @@
+<div style="text-align:center;">
+  <h2>Merci de ta confiance !</h2>
+</div>
+<p style="text-align:center;">
+  <% if @subscription.renewal_price.nil? %>Tu as souscrit à une formule premium<% else %>Tu as renouvelé ton abonnement premium<% end %>
+  , voici le détail de ton achat:
+</p>
+<br>
+<hr>
+<p style="text-align:center;"><u>Client:</u> <%= @user.first_name %> <%= @user.last_name %> - <%= @user.address %>.</p>
+<div style="width:45%;display:inline-block;">
+  <table style="margin:0 auto;">
+    <tbody>
+      <tr>
+        <td style="width:40%; text-align:right;"><h4>Formule</h4></td>
+        <td style="width:60%; text-align:center;"><%= @subscription.subscription_plan.title %></td>
+      </tr>
+      <tr>
+        <td style="width:40%; text-align:right;"><h4>Durée</h4></td>
+        <td style="width:60%; text-align:center;"><%= @subscription.end_date.present? ? "#{@duration} mois" : "A vie"  %></td>
+      </tr>
+      <tr>
+        <td style="width:40%; text-align:right;"><h4>Paiement</h4></td>
+        <td style="width:60%; text-align:center;"><%= @subscription.payment_method.capitalize %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div style="width:45%;display:inline-block;">
+  <table style="margin:0 auto;">
+    <tbody>
+      <tr>
+        <td style="width:40%; text-align:right;"><h4>Prix HT</h4></td>
+        <td style="width:60%; text-align:center;"><%= @price_ht.round(2) %>€</td>
+      </tr>
+      <tr>
+        <td style="width:40%; text-align:right;"><h4>TVA (20%)</h4></td>
+        <td style="width:60%; text-align:center;"><%= @tva.round(2) %>€</td>
+      </tr>
+      <tr>
+        <td style="width:40%; text-align:right;"><h4>Prix TTC</h4></td>
+        <td style="width:60%; text-align:center;"><%= @price_ttc.round(2) %>€</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<hr>
+<br>
+<p style="text-align:center;">Arena Esport SAS, Impasse du goulet d'en bas, 22940 Saint-Julien.<br> SIRET: 819 928 086 00019 | TVA: FR 70 819928086</p>
+<br>

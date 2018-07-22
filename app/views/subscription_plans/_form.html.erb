@@ -1,0 +1,41 @@
+<style type="text/css">
+  #subscription-plan-form input { text-align: center; }
+</style>
+<div id="subscription-plan-form" class="container">
+  <%= simple_form_for(@subscription_plan, method: action?("new") ? "post" : "put") do |f| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%= action?("new") ? "Nouveau" : "Editer" %> Plan</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row text-center" style="margin-bottom:20px;">
+        <div class="col-xs-3">
+          <h5>Titre</h5>
+          <input type="text" class="form-control" placeholder="Titre" value="<%= @subscription_plan.title %>" name="subscription_plan[title]" id="subscription_plan_title">
+        </div>
+        <div class="col-xs-3">
+          <h5>Role</h5>
+          <input type="text" class="form-control" placeholder="Role" value="<%= @subscription_plan.role %>" name="subscription_plan[role]" id="subscription_plan_role">
+        </div>
+        <div class="col-xs-2">
+          <h5>Prix</h5>
+          <input type="number" step="any" class="form-control" placeholder="Prix" value="<%= @subscription_plan.price %>" name="subscription_plan[price]" id="subscription_plan_price">
+        </div>
+        <div class="col-xs-2">
+          <h5>Durée</h5>
+          <%= f.input :duration, as: :select, collection: SubscriptionPlan::DURATION, label: false, include_blank:false %>
+        </div>
+        <div class="col-xs-2">
+          <h5>Actif</h5>
+          <%= f.input :active, as: :select, label: false, include_blank: false %>
+        </div>
+      </div>
+      <%= f.input :content, as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini', height:400 } }, label: false, maxlength: 2500 %>
+    </div>
+    <div class="panel-footer text-center">
+      <%= submit_tag "Envoyer", data: { disable_with: "Envoi..." }, class: "btn btn-primary" %>
+      <%= link_to "Retour", subscription_plans_path, class:"btn btn-default" %>
+    </div>
+  </div>
+  <% end %>
+</div>

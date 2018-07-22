@@ -1,0 +1,50 @@
+<style type="text/css">
+  #new-session input { text-align: center; }
+</style>
+
+<section class="row">
+
+  <div class="col-md-3 hidden-sm">
+  </div>
+
+  <div id="new-session" class="col-md-6 col-sm-12 col-xs-12">
+  <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h2><%=t 'layout.sign_in' %></h2>
+      </div>
+
+      <div class="panel-body">
+
+          <div class="form-inputs text-center">
+            <div class="field" style="margin-bottom: 10px;">
+              <%= f.label 'Email' %>
+              <input type="text" class="form-control" style="width:40%;margin:0 auto;" name="user[email]" id="user_email" maxlength="50" autofocus>
+            </div>
+
+            <div class="field">
+              <%= f.label "#{t 'layout.password'}" %>
+              <input type="password" class="form-control" style="width:40%;margin:0 auto;" name="user[password]" id="user_password" maxlength="30">
+            </div>
+
+            <div class="field">
+              <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+            </div>
+            <div>
+              <%= link_to "#{t 'layout.pw_forgotten'}", new_password_path(resource_name) %>
+            </div>
+          </div>
+      </div>
+
+      <div class="panel-footer">
+        <%= submit_tag "#{t 'btn.signin'}", class: "btn btn-primary btn-lg btn-block"%>
+        <%= link_to "#{t 'btn.signup'}", sign_up_path, class: "btn btn-default btn-lg btn-block" %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+
+  <div class="col-md-3 hidden-sm">
+  </div>
+
+</section>

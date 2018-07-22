@@ -1,0 +1,68 @@
+<style type="text/css">
+  .field {
+    margin-bottom: 20px;
+  }
+
+  a:link,
+  a:hover,
+  a:visited {
+    text-decoration:none;
+  }
+
+  select { margin-right: 15px;}
+  hr { margin: 10px;}
+
+</style>
+
+<div id="index-mentor" class="container">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3><%=t 'mentorats.title' %></h3>
+      </div>
+      <div class="panel-body" style="min-height:475px;">
+        <div class="row">
+          <div class="col-sm-1 col-xs-3 text-center">
+            <i class="fa fa-graduation-cap" style="font-size:40px;"></i>
+          </div>
+          <div class="col-sm-11 col-xs-9">
+            <p><%=t 'mentors.intro', name: @game.title %></p>
+          </div>
+        </div>
+        <hr>
+        <%= search_form_for @search do |f| %>
+        <div class="panel panel-default" style="padding:5px 30px;">
+          <div class="row text-center">
+              <div class="col-sm-4">
+                <%= f.search_field :game_account_name_cont, placeholder:"#{t 'layout.player'}", class:"form-control" %>
+              </div>
+              <div class="col-sm-5" style="padding-top:5px;">
+                <%= f.select :game_account_p_role_cont, @game.roles, prompt:"-- #{t 'layout.role'} --" %>
+                <%= f.select :game_account_tier_or_game_account_flex_tier_cont, ["Master", "Diamond", "Platinum", "Gold"], prompt:"-- #{t 'layout.rank'} --" %>
+              </div>
+              <div class="col-sm-3" style="padding-top:5px;">
+                <%= f.submit %>
+                <%= link_to "Reset", mentors_path, class:"btn btn-basic", style:"margin-left:5px;" %>
+              </div>
+          </div>
+        </div>
+        <% end %>
+        <hr>
+        <%= render 'mentors/index' %>
+      </div>
+      <div class="panel-footer text-center">
+        <div class="row">
+
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6"><%= will_paginate @mentors, :previous_label => t('layout.previous'), :next_label => t('layout.next'), inner_window: 2, outer_window: 1 %></div>
+          <div class="col-sm-3" style="padding-top:10px;">
+            <% if mmr_gold_mini? && current_user.mentor.nil? %>
+              <%= link_to "#{t 'layout.become_mentor'}", new_mentor_path, class:"btn btn-default" %>
+            <% end %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

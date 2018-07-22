@@ -1,0 +1,125 @@
+<style type="text/css">
+  #informations-subscription input { text-align: center; margin: 0 auto; }
+  #informations-subscription h4, .explain { text-align: center; }
+
+  #informations-subscription label > input{ /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+  }
+  #informations-subscription label > input + .payment { /* IMAGE STYLES */
+  cursor:pointer;
+  border:4px solid transparent;
+  }
+  #informations-subscription label > input:checked + .payment { /* (RADIO CHECKED) IMAGE STYLES */
+  border:4px solid #0070ba;
+  }
+  #payment-methods label,
+  #payment-methods .payment {
+    width: 100%;
+    min-height: 120px;
+  }
+  #payment-methods .payment {
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    padding: 15px 10px;
+    box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.1);
+  }
+</style>
+<div id="informations-subscription" class="container">
+  <%= simple_form_for(@subscription, url: payment_subscription_plan_path, method: :put, html: {multipart: true}) do |f| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'subscriptions.payment' %></h3>
+    </div>
+    <div class="panel-body" style="padding:20px 15px 50px;">
+      <h4><%=t 'layout.personal_infos' %></h4>
+      <p class="explain"><%= t 'subscriptions.infos_explain' %></p>
+      <hr>
+      <div class="row text-center" style="margin: 50px 0px;">
+        <div class="col-sm-3 col-xs-6">
+          <%= f.label "#{t 'layout.first_name'}" %>
+          <input type="text" value="<%= @user.first_name %>" class="form-control" name="user[first_name]" id="user_first_name" maxlength="30">
+        </div>
+        <div class="col-sm-3 col-xs-6">
+          <%= f.label "#{t 'layout.last_name'}" %>
+          <input type="text" value="<%= @user.last_name %>" class="form-control" name="user[last_name]" id="user_last_name" maxlength="30">
+        </div>
+        <div class="col-sm-6">
+          <%= f.label "#{t 'layout.location'}"%>
+          <input type="text" value="<%= @user.address %>" placeholder="<%=t 'subscriptions.location_placeholder' %>" class="form-control" name="user[address]" id="user_address" maxlength="100">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4><%= @plan.title %></h4>
+            </div>
+            <div class="panel-body" style="min-height:160px;">
+              <div class="row">
+                <div class="col-xs-4">
+                  <h5><%=t 'subscriptions.duration' %></h5>
+                </div>
+                <div class="col-xs-8">
+                  <p>
+                    <% unless @duration.nil? %>
+                      <%=t 'subscriptions.duration_format', nb: @duration, date1: @date1.strftime("%d/%m/%y"), date2: @date2.strftime("%d/%m/%y") %>
+                    <% else %>
+                      <%=t 'subscriptions.lifetime' %>
+                    <% end %>
+                  </p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-xs-4">
+                  <h5><%=t 'subscriptions.price' %></h5>
+                </div>
+                <div class="col-xs-8">
+                  <%= @subscription.renewal_price.nil? ? @subscription.price.to_f.round(2) : @subscription.renewal_price.to_f.round(2) %>€ &nbsp; <%=t 'layout.or' %> &nbsp; <%= @gem_price %> <%= "(- #{@user.wallet.balance})" unless @user.wallet.balance == 0 or @user.wallet.balance >= @gem_price %> <i class="ra ra-gem" style="color:#3498db;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="payment-methods" class="col-sm-6">
+          <h4><%=t 'subscriptions.payment_method' %></h4>
+          <hr>
+          <div class="row">
+            <div class="col-xs-6">
+              <label>
+                <input type="radio" name="payment_method" value="paypal" checked="checked">
+                <div class="payment" style="background-color:white;color:#0070ba;">
+                  <h3><i class="fa fa-paypal"></i> Paypal</h3>
+                  <p>& <%=t 'subscriptions.cb' %></p>
+                </div>
+              </label>
+            </div>
+            <div class="col-xs-6">
+              <label>
+                <input type="radio" name="payment_method" value="gems" <%= 'disabled="disabled"' if @gem_price > @user.wallet.balance %>>
+                <div class="payment" style="background-color:#3498db;">
+                  <h3><i class="ra ra-gem"></i> Gems</h3>
+                  <% unless @gem_price > @user.wallet.balance %>
+                    <p><%= @gem_price %> <%= "(- #{@user.wallet.balance})" unless @user.wallet.balance == 0 or @user.wallet.balance >= @gem_price %></p>
+                  <% else %>
+                    <p><%=t 'subscriptions.insufficient' %></p>
+                  <% end %>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= hidden_field_tag(:subscription, @subscription.id) %>
+    <%= hidden_field_tag(:duration, @duration) %>
+    <div class="panel-footer text-center">
+      <%= submit_tag "#{t 'btn.confirm'}", data: { disable_with: "#{t 'btn.loading'}" }, class: "btn btn-primary" %>
+      <%= link_to "#{t 'btn.back'}", @plan, class: "btn btn-default" %>
+    </div>
+  </div> <!-- Panel end -->
+  <% end %>
+</div>

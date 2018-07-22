@@ -1,0 +1,43 @@
+<style type="text/css">
+  h3 i, td h4 { color: #c0392b; }
+</style>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>Pantheon</h2>
+    </div>
+    <div class="panel-body text-center" style="min-height:500px;">
+      <ul class="nav nav-tabs nav-justified" style="margin-bottom:20px;">
+        <li role="presentation" class="active"><a id="donateurs"><i class="fa fa-heart"></i> Donateurs</a></li>
+        <li role="presentation"><a id="premiums"><i class="ra ra-queen-crown"></i> Premiums</a></li>
+        <li role="presentation"><a id="notables"><i class="fa fa-star"></i> Notables</a></li>
+      </ul>
+      <div id="team-tabs" style="height:550px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+        <%= render 'home/donateurs' %>
+      </div>
+    </div> <!-- Panel Body -->
+  </div> <!-- Panel Default-->
+</div>
+
+<script type="text/javascript">
+
+$('#donateurs').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'home/donateurs') %>");
+});
+
+$('#premiums').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'home/premiums') %>");
+});
+
+$('#notables').on('click', function(){
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'home/notables') %>");
+});
+
+</script>

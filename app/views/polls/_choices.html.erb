@@ -1,0 +1,14 @@
+<h4 class="text-center">Voter</h4>
+<hr style="margin:5px;">
+<%= simple_form_for(Polling.new, remote: true) do |f| %>
+  <%= hidden_field_tag(:poll, @poll.id) %>
+  <% for i in 0..(@poll.choices.count-1) %>
+    <div style="margin-bottom:5px;">
+      <input type="radio" name="polling[vote]" value="<%= i %>" style="box-shadow:none;" <%= 'checked' if i == 0 %>>&nbsp; <%= @poll.choices[i] %>
+    </div>
+  <% end %>
+  <br>
+  <div class="text-center">
+    <%= submit_tag "#{t 'btn.confirm'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary btn-block" %>
+  </div>
+<% end %>

@@ -1,0 +1,12 @@
+<select id="month" style="width:85%; float:right;">
+  <option disabled="true" selected="true"></option>
+  <% for y in 0..(Time.now.year - 2017) %>
+    <optgroup id="<%= y %>" label="20<%= y+17 %>">
+      <% for m in 1..12 %>
+        <% unless m >= (Time.now.month + 1) && y >= (Time.now.year - 2017) %>
+          <option value="<%= m %>"><%= Date::MONTHNAMES[m] %><%=17 + y%></option>
+        <% end %>
+      <% end %>
+    </optgroup>
+  <% end %>
+</select>

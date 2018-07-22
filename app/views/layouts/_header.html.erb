@@ -1,0 +1,159 @@
+<style type="text/css">
+  #gems-header i,
+  #gems-header span { color:#3498db; margin: 0px 4px; }
+  #gems-header h5 { color:#fff; margin:0px; display:inline-block; }
+  #gems-header a { text-transform: lowercase; }
+  #gems-header a:hover { border-bottom: 0; }
+
+  .btn-header { background-color: #c0392b; color: white; font-family: 'Press Start 2P' !important; padding: 8px 16px !important; }
+</style>
+
+    <!-- Custom Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+<!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-custom navbar-fixed-top" style="background:#222;padding: 5px 0;">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <!-- LOGO -->
+                <a class="navbar-brand page-scroll" href="<%= controller?("home") && !action?("admin_panel") ? "/" : dashboard_path %>" style="font-size:24px;">
+                  <span style="color:#c0392b;">Arena</span> <span style="color:#fff; font-family:'Press Start 2P'; font-size:18px;">Esport</span>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right" id="tabs">
+                    <% if controller?("home") && !action?("admin_panel") && !action?("analytics") or !user_signed_in? %>
+                        <li>
+                          <div class="dropdown">
+                              <a class="btn" data-toggle="dropdown" style="background-color:#222; border-color:#222;margin-top:8px;font-size:16px;">
+                                <%=t 'layout.about' %>
+                                <span class="caret"></span></a>
+                              <ul class="dropdown-menu" style="background-color:#222;margin-top:-10px;">
+                                <li>
+                                  <%= link_to "#{t 'layout.our_team'}", our_team_path %>
+                                </li>
+                                <li>
+                                  <%= link_to "#{t 'layout.our_partners'}", our_partners_path %>
+                                </li>
+                                <li>
+                                  <%= link_to "#{t 'layout.pantheon'}", pantheon_path %>
+                                </li>
+                              </ul>
+                          </div>
+                        </li>
+                        <li>
+                          <%= link_to "Premium", pricing_path %>
+                        </li>
+                        <% if !user_signed_in? %>
+                        <li>
+                          <%= link_to "#{t 'layout.sign_in'}", login_path %>
+                        </li>
+                        <% else %>
+                        <li>
+                          <%= link_to "Dashboard", dashboard_path %>
+                        </li>
+                        <%= render 'layouts/icon_menu' %>
+                        <% end %>
+                    <% else %>
+                        <li>
+                            <div class="dropdown">
+                                <a class="btn" data-toggle="dropdown" style="background-color:#222; border-color:#222;margin-top:8px;font-size:16px;">
+                                    <%=t 'layout.my_profile' %>
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu" style="background-color:#222;margin-top:-10px;">
+                                    <%= link_to virtual_currency_wallet_path(current_user.wallet) do %>
+                                    <div id="gems-header" class="col-sm-12 text-center" style="margin:8px 0px;" data-toggle="tooltip" title="Gems: monnaie virtuelle">
+                                      <h5>
+                                        <% unless current_user.wallet.nil? %>
+                                          <%= current_user.wallet.balance %>
+                                        <% else %>
+                                          0
+                                        <% end %>
+                                      </h5>
+                                      <i class="ra ra-gem"></i>
+                                    </div>
+                                    <% end %>
+                                    <li role="separator" class="divider" style="clear:both;"></li>
+                                    <li><%= link_to "#{t 'layout.overview'}", current_user %></li>
+                                    <li><%= link_to "#{t 'layout.edit_profile'}", registration_edit_path %></li>
+                                    <% if !current_user.game_accounts.empty? %>
+                                      <% if current_user.state == 1 %>
+                                        <li><%= link_to "#{t 'layout.edit_form'}", edit_user_path(current_user), data: {confirm: "Attention : Votre temps de recherche sera remis à zéro si vous modifiez vos informations."} %></li>
+                                      <% elsif current_user.state != 1 %>
+                                        <li><%= link_to "#{t 'layout.edit_form'}", edit_user_path(current_user) %></li>
+                                      <% end %>
+                                      <% unless !mmr_gold_mini? && current_user.mentorat.nil?  %>
+                                        <li role="separator" class="divider"><span><i class="fa fa-graduation-cap"></i></span></li>
+                                      <% end %>
+                                      <% unless current_user.mentor.present? %>
+                                        <% if mmr_gold_mini? %>
+                                          <li><%= link_to "#{t 'layout.become_mentor'}", new_mentor_path %></li>
+                                        <% end %>
+                                      <% else %>
+                                        <% if current_user.mentor.present? %>
+                                          <li><%= link_to "#{t 'layout.mentor_hq'}", mentorats_path %></li>
+                                        <% end %>
+                                        <li><%= link_to "#{t 'layout.edit_mentor'}", edit_mentor_path(current_user.mentor) %></li>
+                                      <% end %>
+                                    <% end %>
+                                    <% if current_user.mentorat.present? %>
+                                      <li><%= link_to "#{t 'layout.edit_mentoring'}", edit_mentorat_path(current_user.mentorat) %></li>
+                                    <% end %>
+                                    <li role="separator" class="divider"><span><i class="fa fa-star" style="color:#e7c244;font-size:16px;"></i></span></li>
+                                    <% unless current_user.subscriptions.where.not(active:nil).present? %>
+                                      <li><%= link_to "#{t 'layout.become_premium'}", pricing_path %></li>
+                                    <% else %>
+                                      <li><%= link_to "#{t 'layout.my_subscription'}", subscriptions_manager_path %></li>
+                                    <% end %>
+                                    <% if current_user.user_name == "Nevaran" or current_user.user_name == "test1" %>
+                                      <li><%= link_to "Paysafecard", informations_wallet_path(current_user.wallet) %></li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </li>
+                        <% if can? :manage, Article %>
+                            <li><%= link_to "Administration", admin_panel_path %></li>
+                        <%end%>
+                        <% unless current_user.mentorat.present? or current_user.mentor.present? %>
+                          <li><%= link_to "#{t 'mentorats.title'}", mentors_path %></li>
+                        <% else %>
+                          <% if current_user.mentorat.present? %>
+                            <li><%= link_to "#{t 'mentorats.title'}", mentorat_path(current_user.mentorat) %></li>
+                          <% elsif current_user.mentor.present? %>
+                            <li><%= link_to "#{t 'mentorats.title'}", mentorats_path %></li>
+                          <% end %>
+                        <% end %>
+                        <%if current_user.teamings.where(:active => true).empty?%>
+                            <%if current_user.state == 1%>
+                              <li><%= link_to "#{t 'layout.searching_team'}", searching_team_path %></li>
+                            <%elsif current_user.game_accounts.empty?%>
+                                <li><%= link_to "#{t 'layout.search_team'}", second_step_path %></li>
+                            <%else%>
+                                <li><%= link_to "#{t 'layout.search_team'}", search_team_user_path(current_user), method: :put %></li>
+                            <%end%>
+                        <%elsif current_user.state == 1%>
+                            <li><%= link_to "#{t 'layout.searching_team'}", searching_team_path %></li>
+                        <%else %>
+                            <% teaming = Teaming.where(:user_id => current_user.id).where(:active => true).first %>
+                            <% team = Team.joins(:teamings).merge(Teaming.where(:id => teaming.id).where(:active => true)).first%>
+                            <li><%= link_to "#{t 'teams.mine'}", team %></li>
+                        <% end %>
+                        <% unless controller?("registrations") or action?("analytics") %>
+                          <%= render 'layouts/icon_menu' %>
+                        <% end %>
+                    </ul>
+                    <%end%>
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>

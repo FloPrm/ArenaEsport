@@ -1,0 +1,53 @@
+<style type="text/css">
+  #avatar-modal label > input{ /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+  #avatar-modal label > input + img{ /* IMAGE STYLES */
+  cursor:pointer;
+  border:4px solid transparent;
+}
+  #avatar-modal label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+  border:4px solid #c0392b;
+}
+  .file_field input {
+  box-shadow: none;
+}
+</style>
+
+<%= simple_form_for(@user, url: avatar_user_path, method: :put, remote: true) do |f| %>
+<div id="avatar-modal" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Choisir un Avatar</h3>
+    </div>
+
+    <div class="modal-body col-sm-12" style="padding-top:30px;padding-bottom:30px;">
+      <% unless can? :manage, Champion %>
+        <div class="text-center">
+          Avatar personnalisé pour les <%= link_to "premiums", pricing_path %> uniquement
+        </div>
+        <hr>
+      <% end %>
+      <div style="height:250px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+        <% @images.each do |image|%>
+          <div class="col-sm-3 col-xs-4">
+            <label>
+              <input type="radio" name="icon" value="icons/<%= image.split('/').last %>" <%= 'checked="checked"' if current_user.icon == "icons/#{image.split('/').last}" %> >
+              <%= image_tag "icons/#{image.split('/').last}", class:"img-thumbnail", style:"width:100px;" %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Enregistrer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

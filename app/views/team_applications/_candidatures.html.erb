@@ -1,0 +1,65 @@
+<style type="text/css">
+  #team_applications .label-rank { display: inline-block; width: 100%; }
+  #team_applications .col-sm-6 { padding: 0px 2px;}
+</style>
+<% if @team.team_applications.present? %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3><%=t 'team_applications.title' %></h3>
+  </div>
+  <div class="panel-body">
+    <% @team.team_applications.each do |candidature| %>
+      <% @user = candidature.user %>
+      <% @account = @user.account %>
+      <div class="panel panel-default text-center" style="display:inline-block;width:22.7%;padding:0px;margin:10px 1%;">
+        <div id="team_applications" class="panel-heading" style="padding: 10px 5px;">
+          <% unless can? :manage, :all %>
+            <%= render 'users/avatar' %>
+          <% end %>
+          <h4 style="padding:10px 0px;color:black;"><%= @account.name %></h4>
+          <span class="label label-default" style="display:inline-block;width:100%"><%= candidature.role.capitalize %></span>
+          <% if can? :manage, :all %>
+            <hr style="margin:5px;">
+            <div style="clear:both;display:block;">
+              <% if @account.game.has_teamq %>
+                <div class="col-sm-6"><%= render 'users/rank' %></div>
+                <div class="col-sm-6"><%= render 'users/rank_flex' %></div>
+              <% else %>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6"><%= render 'users/rank' %></div>
+                <div class="col-sm-3"></div>
+              <% end %>
+            </div>
+            <table class="table" style="margin-bottom:0px;">
+              <thead>
+                <tr>
+                  <th class="text-center">Semaine</th>
+                  <th class="text-center">Weekend</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <%= render(partial: 'users/dispos', locals: {reload: true, player: @user}) %>
+                </tr>
+              </tbody>
+            </table>
+          <% end %>
+        </div>
+        <div class="panel-body" style="padding:5px;">
+          <%= link_to "<i class='fa fa-id-card'></i>".html_safe, user_preview_user_path(@user, team_application: candidature.id), method: :get, remote: true, class:"btn btn-default btn-block" %>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-xs-6" style="padding:0px 2px;padding-left:5px;">
+              <%= link_to "<i class='fa fa-check'></i>".html_safe, answer_team_application_path(candidature,answer:true), method: :put, class:"btn btn-success btn-block" %>
+            </div>
+            <div class="col-xs-6" style="padding:0px 2px;padding-right:5px;">
+              <%= link_to "<i class='fa fa-remove'></i>".html_safe, reject_team_application_path(candidature), method: :get, remote: true, class:"btn btn-danger btn-block" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,20 @@
+{
+  "name": "ArenaEsport",
+  "homepage": "https://github.com/FloPrm/arena-esport-beta",
+  "authors": [
+    "FloPrm <flora.parmentier@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ]
+
+}

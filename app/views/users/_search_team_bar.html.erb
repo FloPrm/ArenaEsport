@@ -1,0 +1,20 @@
+<style type="text/css">
+  .progress-bar {
+    background-color: #c0392b
+  }
+</style>
+
+<% if current_user.teamings.where(active:true).exists? %>
+  <% @team = Team.joins(:teamings).where(:teamings => { user_id: current_user.id, active: true }).first %>
+  <% @percent = 100 * @team.members.count / @team.game.nb_players %>
+
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="<%= @percent %>" aria-valuemin="0" aria-valuemax="100" style="width:<%= @percent %>%;">
+      <%= @percent %>%
+    </div>
+  </div>
+<% else %>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+  </div>
+<% end %>

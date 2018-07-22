@@ -1,0 +1,7 @@
+<% if seance.status == 0 %>
+  <span class="label label-default" style="background:#f39c12;"><%=t 'layout.pending' %></span>
+<% elsif seance.status == 1 %>
+  <span class="label label-default" style="background:#16a085;"><%=t 'layout.validated' %></span>
+<% elsif seance.status == 2 %>
+  <span class="label label-default" style="background:#c0392b;"><%=t 'layout.invalidated' %></span>
+<% end %>

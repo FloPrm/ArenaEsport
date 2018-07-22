@@ -1,0 +1,33 @@
+  <%= f.error_notification %>
+
+  <div class="field">
+    <% if @game_account.name.blank? %>
+      <h4>Nom d'invocateur</h4>
+      <p class="explain">Code à placer en titre de l'une de vos pages de runes : <b><%= @activation_code %></b></p>
+      <%= f.input :name, label: false, required: true %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <h4>Rôle Principal</h4>
+    <%= f.collection_select :p_role, @game_account.game.roles, :to_s, :humanize, required: true %>
+  </div>
+
+  <div class="field">
+    <h4 style="margin-bottom:0px;">Rôle Secondaire</h4>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+    <span class="explain">(Optionnel)</span>
+    <ul style="text-align:left;">
+    <% for s_role in @game_account.game.roles %>
+      <li>
+        <%= check_box_tag "s_role[]", s_role %>
+        <%= s_role %>
+      </li>
+    <% end %>
+    </ul>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+  <%= hidden_field_tag(:activation_code, @activation_code) %>

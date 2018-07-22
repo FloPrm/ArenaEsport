@@ -1,0 +1,24 @@
+<% @invitation = current_user.pending_invitations.first %>
+<div class="panel-heading">
+  <div class="row">
+    <div class="col-xs-6 text-right">
+      <h4 style="margin:0px;display:inline-block">Invitation</h4>
+    </div>
+    <div class="col-xs-6">
+      <%= link_to "<i class='fa fa-check'></i>".html_safe, accept_invitation_path(@invitation), method: :put, class:"btn btn-success" %>
+      <%= link_to "<i class='fa fa-remove'></i>".html_safe, decline_invitation_path(@invitation), method: :put, class:"btn btn-danger" %>
+    </div>
+  </div>
+</div>
+<div class="panel-body">
+  <% if @invitation.action == "team" %>
+    <p><b><%= link_to @invitation.sender.account.name, user_preview_user_path(@invitation.sender), remote: true %></b> vous invite à rejoindre son équipe <b><%= link_to @invitation.team.name, preview_team_path(@invitation.team), remote: true %></b> en tant que
+      <b><%= @invitation.role.capitalize %></b> ?
+      <% unless @invitation.content.nil? or @invitation.content.empty? %>
+        &nbsp;&nbsp;<u>Message:</u>&nbsp; <%= @invitation.content %>
+      <% end %>
+    </p>
+  <% elsif @invitation.action == "premade" %>
+    <p>Acceptez-vous de créer une premade pour chercher une équipe avec <b><%= link_to @invitation.sender.account.name, user_preview_user_path(@invitation.sender), remote: true %></b> ?</p>
+  <% end %>
+</div>

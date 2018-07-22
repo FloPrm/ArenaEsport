@@ -1,0 +1,5 @@
+<% @team.notes.order('created_at desc').each do |note| %>
+  <div class="row note-row" id="note-<%= note.id %>">
+    <%= render(note) %>
+  </div>
+<% end %>

@@ -1,0 +1,92 @@
+  <% @account = user.account %>
+    <tr>
+      <% @waiting = (Time.now.to_date - user.date_search.to_date).to_i unless user.date_search.nil? %>
+      <td style="<%= "font-weight:bold" if @waiting >= 7 %>"><%= @waiting %></td>
+      <td>
+      <% if @team.members.count < 1 %>
+        <%= render partial:"users/language", locals:{user: user, height:20} %>
+      <% else %>
+        <%= render partial:"users/flag", locals:{user: user, height:20} %>
+      <% end %>
+      </td>
+      <% unless @account.name.nil? or @waiting.nil? %>
+        <td>
+          <% if user.premade.present? %> <span class="label label-premade" data-toggle="tooltip" title="Premade"><%= user.premade.id %>-<%= user.premade.users.count %></span>&nbsp;<% end %>
+          <% if can? :manage, :all %>
+            <% if user.pending_invitations.where(action:"team").present? %>
+              <%= link_to user.pending_invitations.where(action:"team").first.team do %>
+                <i class="fa fa-group" style="margin-left:5px;margin-right:5px;" data-toggle="tooltip" title="Invitation d'équipe en attente"></i>
+              <% end %>
+            <% end %>
+            <% if user.teamings.joins(:team).where(active: true).present? %>
+              <%= link_to preview_team_path(user.teamings.joins(:team).where(active: true).first.team), remote: true, style:"text-decoration:none;" do %>
+                <i class="fa fa-group" style="margin-right:5px;<%= user.teamings.joins(:team).where(active:true).first.team == @team ? "color:#5cb85c;" : "color:#3498db;" %>" data-toggle="tooltip" title="Placement en attente"></i>
+              <% end %>
+            <% end %>
+            <% unless user.admin_note.nil? or user.admin_note.empty? %>
+              <i class="fa fa-info-circle" style="color:#2980b9;" data-toggle="tooltip" title="Note Admin"></i>
+            <% end %>
+          <% end %>
+          <span class="<%= "text-gold1" if user.can? :manage, Champion %>"><%= link_to @account.name[0..10], user_preview_user_path(id: user), remote: true %></span>
+        </td>
+      <%else%>
+        <td><%= link_to user.user_name, user_preview_team_path(user: user), remote: true %></td>
+      <%end%>
+
+      <% if @account.p_role != nil %>
+      	<td class="text-center"><span class="label label-default"><%= @account.p_role[0...3] %></span></td>
+      <% else %>
+      	<td class="text-center">-</td>
+      <%end%>
+
+      <%unless @account.s_role == [] or @account.s_role.nil?%>
+        <td style="max-width:120px;">
+          <% @account.s_role.each do |s_role| %>
+      			<span class="label label-default" style="background:#a2a2a2;"><%= s_role[0...3] %></span>
+      		<%end%>
+        </td>
+      <%else%>
+        <td>-</td>
+      <%end%>
+      <% if @team.game.has_soloq %>
+        <td><%= render 'users/rank' %></td>
+      <% end %>
+      <% if @team.game.has_teamq %>
+        <td><%= render 'users/rank_flex' %></td>
+      <% end %>
+      <% if user.birth_date != nil %>
+        <% age = user.birth_date.find_age.to_i %>
+        <% if age < 18
+          color = "#c0392b"
+        elsif age >= 18 && age < 21
+          color = "#333"
+        elsif age >= 21
+          color = "green"
+        end %>
+        <td style="color:<%= color %>"><b><%= age %></b></td>
+      <% else %>
+        <td>-</td>
+      <% end %>
+
+      <!-- RENDER DISPOS SEMAINE & WEEKEND -->
+      <%= render(partial: 'users/dispos', locals: {reload: true, player: user}) %>
+
+      <td class="text-center"><%= @account.gameplay %>/4</td>
+      <% if user.role != nil %>
+        <td class="<%= "text-gold1" if user.can? :manage, Champion %>"><%= user.role.to_s.humanize %></td>
+      <% else %>
+        <td>-</td>
+      <%end%>
+
+      <td>
+        <% unless @team.invitations.where(receiver: user).exists? %>
+          <% if can? :manage, :all %>
+            <%= link_to '<i class="fa fa-plus-square" style="font-size:1.2em" aria-hidden="true"></i>'.html_safe,  add_user_team_path(@team, user:  user, role: @role, num_role: num_role), data: { confirm: 'Ajouter en tant que ' +@role.to_s+'?'}, remote: true %>
+          <% elsif can? :manage, Friendship %>
+            <%= link_to '<i class="fa fa-plus-square" style="font-size:1.2em" aria-hidden="true"></i>'.html_safe,  new_invitation_path(type:"premium", receiver: user.id, role: @role, num_role: num_role), remote: true %>
+          <% end %>
+        <% else %>
+          <i class="fa fa-plus-square" style="font-size:1.2em;color:rgba(0, 0, 0, 0.4);" aria-hidden="true" data-toggle="tooltip" title="Invitation en attente"></i>
+        <% end %>
+      </td>
+    </tr>

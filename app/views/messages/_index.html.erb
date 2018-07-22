@@ -1,0 +1,21 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= sort_link @search, :created_at, "Date" %></th>
+      <th>Message</th>
+      <th>Joueur</th>
+      <th>Equipe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @messages.order('created_at desc').each do |message| %>
+    <tr id="message-<%= message.id %>">
+      <td><%= message.created_at.strftime("%d/%m/%y - %H:%M") %></td>
+      <td><%= truncate(message.body, length: 70) %></td>
+      <td><%= link_to message.user.account.name, user_preview_user_path(message.user), method: :get, remote: true %></td>
+      <td><%= link_to message.team.name, message.team %></td>
+      <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, message_path(message, type:"index"), method: :delete, remote: true, data: { confirm: 'Etes-vous sûr de vouloir supprimer le message ?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

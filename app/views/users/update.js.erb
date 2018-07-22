@@ -1,0 +1,5 @@
+$('#modal-large').modal('hide');
+<% unless @team.nil? %>
+$('#team-tabs').html("<%= j (render 'teams/roster') %>");
+<% end %>
+$('#index').html("<%= j (render 'users/index') %>");

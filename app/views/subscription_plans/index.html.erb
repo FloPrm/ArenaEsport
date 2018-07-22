@@ -1,0 +1,42 @@
+<style type="text/css">
+
+</style>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Formules</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Actifs</th>
+            <th>Inactifs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @subscription_plans.each do |plan| %>
+          <tr>
+            <td><%= link_to plan.title, plan %></td>
+            <td><%= plan.subscriptions.where(active:true).count %></td>
+            <td><%= plan.subscriptions.where(active:false).count %></td>
+            <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_subscription_plan_path(plan) %> |
+              <%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, plan, method: :delete, data: { confirm: 'Voulez-vous supprimer ce plan ?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-6">
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-right">
+          <%= link_to '<i class="fa fa-plus"></i> Nouveau'.html_safe, new_subscription_plan_path, class:"btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

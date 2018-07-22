@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading text-center">
+    <% if (@user.state == 0 or @user.state.blank?) or @user.state == 1 %>
+      <h3 class="typewriter-decal"><%=t 'teams.mine' %></h3>
+    <% else %>
+    <% @teaming = @user.teamings.where(active: true).first %>
+    <% @team = Team.find(@teaming.team_id) %>
+    <h3><%= @team.name %></h3>
+    <% end %>
+  </div>
+
+  <div class="panel-body">
+    <% if @user.state == 0 or @user.state.blank? %>
+      <br><br><br>
+     <p class="text-center"><%=t 'teams.none' %></p>
+      <br><br><br>
+    <% elsif @user.state == 1 %>
+      <%= render(:partial =>'users/search') %>
+    <% else %>
+      <%= render(:partial =>'users/roster') %>
+    <% end %>
+  </div>
+
+  <div class="panel-footer">
+    <%= render 'users/mon_equipe_btn' %>
+  </div>
+
+</div>

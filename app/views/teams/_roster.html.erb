@@ -1,0 +1,148 @@
+<% unless @team.start_date.nil? %>
+  <% if (@team.members.where(state:2).count < @team.game.nb_players/2+1) or (!compatible_hours?(@team)) or (@team.members.where(state:2).count >= @team.game.nb_players/2+1 && @team.players.include?(1)) %>
+    <%= render partial:"layouts/ai_box", locals:{partial:"teams/roster"} %>
+  <% end %>
+<% end %>
+
+<% if @team.end_date.nil? %>
+<table class="table" id="index_roster">
+  <thead>
+    <tr>
+      <% if captain? %>
+      <th colspan="1"></th>
+      <% end %>
+      <th colspan="1"></th>
+      <th><%=t 'layout.player_name' %></th>
+      <th class="text-right">Role</th>
+      <% if @team.game.has_soloq %>
+        <th class="text-center"><%= @team.game.has_teamq ? "Solo" : "Niveau" %></th>
+      <%end%>
+      <% if @team.game.has_teamq %>
+        <th class="text-center">Flex</th>
+      <% end%>
+      <% if current_user.role == "admin" %>
+        <th>Age</th>
+      <% end %>
+      <% if @team.game.characters == true %>
+      <th class="text-center">Top 3 <%= @team.game.character_name.capitalize.pluralize %></th>
+      <th class="text-center">Stats</th>
+      <% else %>
+      <th class="text-center">Spé Horaires</th>
+      <% end %>
+      <th class="text-center"><%=t 'layout.week' %></th>
+      <th class="text-center"><%=t 'layout.weekend' %></th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+ <% nb = @team.game.nb_players%>
+ <% for i in 0..(nb -1)%>
+  <% @role = @team.roles[i] %>
+  <% @team.game.adaptable ? @label = "<i class='fa fa-list'></i> Chercher" : @label = "<i class='fa fa-plus'></i> #{@role}" %>
+  <% if @team.players[i] == 2 %>
+    <% if @team.teamings.where(num_role: i, active: true).first.user.state == 2 or (can? :manage, Article) %>
+      <%= render(:partial =>'teams/roster_player', locals: {reload: true, teaming_role: @role, num_role: i})%>
+    <% else %>
+    <td colspan="14"><i class="fa fa-circle-o-notch fa-spin"></i>&nbsp; <%=t 'teams.replacement_role', role: @role.capitalize %></td>
+    <% end %>
+  <% elsif @team.players[i] == 1 %>
+    <% if can? :manage, @team %>
+      <tr>
+        <td id="listing" colspan="14" class="fa-minus.containers">
+          <% if @team.game.adaptable %>
+            <select class="change_role" style="text-transform:capitalize;">
+              <% @team.game.roles.each do |role| %>
+              <option value="<%= role %>-<%= i %>" <%= 'selected="selected"' if role == @role %>><%= role %></option>
+              <% end %>
+            </select>
+          <% end %>
+          <div class="dual_btn" style="margin-right:10px;">
+            <%= link_to "<i class='glyphicon glyphicon-remove'></i>".html_safe, tofit_team_path(@team, num_role:i), method: :put, remote: true, class:"btn btn-danger btn-left" %>
+            <%= link_to "#{@label}".html_safe, listing_team_url(id: @team.id,role: @role, num_role:i), :remote => true, class: "btn btn-default btn-right" %>
+          </div>
+          <%= render(partial: 'teams/add_user', locals: {role: @role, num_role:i}) %>
+          <%= render(partial: 'teams/invitations', locals: {reload: true, num_role:i}) %>
+        </td>
+      </tr>
+    <% else %>
+      <tr>
+        <td colspan="14" style="padding:0px 8px;">
+          <div class="row">
+            <% if @team.game.adaptable %>
+              <div class="col-sm-1" style="padding-top:8px;">
+                <select class="change_role" style="text-transform:capitalize;" <%= 'disabled="disabled"' if @team.invitations.where(num_role:i).exists? %>>
+                  <% @team.game.roles.each do |role| %>
+                  <option value="<%= role %>-<%= i %>" <%= 'selected="selected"' if role == @role %>><%= role %></option>
+                  <% end %>
+                </select>
+              </div>
+            <% end %>
+            <div class="<%= @team.game.adaptable ? "col-sm-2" : "col-sm-3" %>" style="padding-top:5px;">
+            <% if can? :manage, Friendship %>
+              <%= link_to "#{@label}".html_safe, listing_team_url(id: @team.id,role: @role, num_role:i), :remote => true, class: "btn btn-default btn-block" %>
+            <% else %>
+              <%= link_to "#{@label}".html_safe, restricted_content_subscription_plan_path(1), method: :get, remote: true, class:"btn btn-default btn-block" %>
+            <% end %>
+            </div>
+            <div class="col-sm-7">
+              <% unless @team.invitations.where(num_role:i).exists? %>
+                <% if @team.members.where(state:2).count >= @team.game.nb_players/2+1 && compatible_hours?(@team) %>
+                  <%= link_to "<span class='glyphicon glyphicon-transfer'></span> #{t 'teams.replace'}".html_safe, tofit_team_path(@team, num_role: i), method: :put, remote: true, class: "btn btn-default", style:"margin:5px 0px;" %>
+                <% end %>
+                <% if @team.members.include?(current_user) %>
+                  <%= link_to "<i class='fa fa-retweet'></i> Swaplane".html_safe, swap_teaming_path(current_user, asker: @team.teamings.where(user_id: current_user, active: true).first, role: @role, num_role:i), method: :put, class: "btn btn-default", remote: true %>
+                <% end %>
+              <% end %>
+              <%= render(partial: 'teams/invitation', locals: {reload: true, role: @role, num_role: i}) %>
+              <%= render(partial: 'teams/invitations', locals: {reload: true, num_role:i}) %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  <% elsif @team.players[i] == 0 %>
+    <% if can? :manage, @team %>
+      <tr>
+        <td id="listing" colspan="14" class="fa-minus.containers">
+          <% if @team.game.adaptable %>
+            <select class="change_role" style="text-transform:capitalize;">
+              <% @team.game.roles.each do |role| %>
+              <option value="<%= role %>-<%= i %>" <%= 'selected="selected"' if role == @role %>><%= role %></option>
+              <% end %>
+            </select>
+          <% end %>
+          <div class="dual_btn" style="margin-right:10px;">
+            <%= link_to "<i class='glyphicon glyphicon-ok'></i>".html_safe, tofit_team_path(@team, num_role:i), method: :put, remote: true, class:"btn btn-success btn-left" %>
+            <%= link_to "#{@label}".html_safe, listing_team_url(id: @team.id,role: @role, num_role:i), :remote => true, class: "btn btn-default btn-right" %>
+          </div>
+          <%= render(partial: 'teams/add_user', locals: {role: @role, num_role:i}) %>
+          <%= render(partial: 'teams/invitations', locals: {reload: true, num_role:i}) %>
+        </td>
+      </tr>
+    <% else %>
+      <tr>
+        <td colspan="14"><i class="fa fa-circle-o-notch fa-spin"></i>&nbsp; <%=t 'teams.replacement_role', role: @role.capitalize %> <%= link_to "#{t 'btn.cancel'}", tofit_team_path(@team, num_role: i), method: :put, remote: true %></td>
+      </tr>
+    <% end %>
+  <% end %>
+<%end%>
+
+  </tbody>
+</table>
+
+<div id="tab-listing"></div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('.change_role').on('change',function(){
+    $.ajax({
+      type: "POST",
+      url: "<%= change_role_team_path(@team) %>",
+      data: "change=" + $(this).val()
+    })
+  });
+});
+</script>

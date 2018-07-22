@@ -1,0 +1,6 @@
+<br>
+<p><%=t 'hello' %> <b><%= @user.account.name %></b></p>
+<p><%=raw t 'mails.application_validated.l1', name: @team.name %></p>
+<p><%=raw t 'mails.signatures.team', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %></p>
+<%= render 'notifications_mailer/signature' %>
+<br>

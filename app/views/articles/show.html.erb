@@ -1,0 +1,20 @@
+<section>
+
+<h4><%= @article.title%></h4>
+
+<p>Auteur : 
+<%=@article.user.user_name%>
+</p>
+
+<div>
+	<%= @article.body.html_safe	 %>
+
+</div>
+
+<% if user_signed_in? %>
+  <% if current_user == @article.user_id or can? :manage, Article %>
+		<%= link_to 'Modifier', edit_article_path(@article) %> |
+	<%end%>
+<%end%>
+<%= link_to 'Retour', articles_path %>
+</section>

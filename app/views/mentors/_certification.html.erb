@@ -1,0 +1,8 @@
+<% unless @mentor.certification.nil? %>
+  <br><span class="label icon-certified"><i class="fa fa-star"></i></span>
+  <span class="label label-certified">
+    <% Mentor::CERTIFICATION.each do |k,v| %>
+      <%= eval(k) if @mentor.certification == v %>
+    <% end %>
+  </span>
+<% end %>

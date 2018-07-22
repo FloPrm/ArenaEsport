@@ -1,0 +1,10 @@
+<% unless @polls.where(result:result).empty? %>
+  <% @polls.where(result:result).order(order1).order(order2).each do |poll| %>
+    <% if poll.choices.count < 2 %>
+    <% elsif !poll.language.nil? && poll.language == "" or poll.language == current_user.language %> 
+      <%= render(poll) %>
+    <% end %>
+  <% end %>
+<% else %>
+  <p style="margin-top:150px;text-align:center;"><%=t 'polls.no_poll' %></p>
+<% end %>

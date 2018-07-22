@@ -1,0 +1,28 @@
+<% if @user.state == 2 %>
+  <%= link_to "#{t 'teams.mine'}", team_path(@team), class: 'btn btn-primary btn-lg btn-block' %>
+<% elsif @user.state == 1 %>
+  <div id="leave_research" class="row">
+    <div class="col-xs-8" style="padding-right:2px;" data-toggle="tooltip" title="<%=t 'users.apply_for_tooltip' %>"><%= link_to "<i class='fa fa-list'></i> #{t 'teams.apply_for'}".html_safe, recruitment_center_path, class: 'btn btn-primary btn-lg btn-block' %></div>
+    <div class="col-xs-2" style="padding-left:5px;padding-right:5px;" data-toggle="tooltip" title="<%=t 'users.edit_form_tooltip' %>"><%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, edit_user_path(current_user), class: 'btn btn-default btn-lg btn-block', data: { confirm: 'Attention : Votre temps de recherche sera remis à zéro si vous modifiez vos informations.'}%></div>
+    <div class="col-xs-2" style="padding-left:5px;padding-right:5px;" data-toggle="tooltip" title="<%=t 'users.leave_search_tooltip' %>">
+      <% unless @user.premade.present? %>
+        <%= link_to "<i class='fa fa-remove'></i>".html_safe, leave_search_user_path(@user), class: 'btn btn-primary btn-lg btn-block', style:"font-size:18px;padding: 8px 10px;" %>
+      <% else %>
+        <%= link_to "<i class='fa fa-remove'></i>".html_safe, leave_search_modal_user_path(@user), method: :get, remote: true, class: 'btn btn-primary btn-lg btn-block', style:"font-size:18px;padding: 8px 10px;" %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <% if @user.game_accounts.empty? %>
+    <%= link_to "#{t 'layout.search_team' }", second_step_path, class:"btn btn-primary btn-lg btn-block", id:"set_search_show" %>
+  <% else %>
+    <div class="row">
+      <div class="col-sm-10" style="padding-right:2px;">
+        <%= link_to "#{t 'teams.search'}".html_safe, search_team_user_path(@user), method: :put, class: "btn btn-primary btn-lg btn-block", id:"set_search_show" %>
+      </div>
+      <div class="col-sm-2" style="padding-left:2px;">
+        <%= link_to "<i class='fa fa-plus'></i>".html_safe, new_team_path, class: "btn btn-default btn-lg btn-block", remote: true %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

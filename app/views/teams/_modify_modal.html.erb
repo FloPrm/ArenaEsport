@@ -1,0 +1,30 @@
+<style type="text/css">
+  #modify-modal input {
+    text-align: center;
+  }
+</style>
+
+<%= simple_form_for(modify_modal_team_path, url: modify_team_path, method: :put) do |f| %>
+<div id="modify-modal" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Modifier l'equipe</h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <div class="field">
+        <h4>Nom de l'équipe</h4>
+        <input type="text" value="<%= @team.name %>" class="form-control" style="width:50%;margin:0 auto;" name="team[name]" id="team_name" maxlength="30" autofocus>
+      </div>
+      <br>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Confirmer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

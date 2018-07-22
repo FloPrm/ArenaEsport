@@ -1,0 +1,20 @@
+<section>
+	<div class="text-center">
+		<h2><%=@team.name%></h2>
+
+		<p>
+			Bienvenue sur la page de l'équipe <%= @team.name%> !<br>
+		</p>
+
+		<p id="notice"><%= notice %></p>
+	</div>
+
+<br>
+
+<div class="panel panel-default">
+	<div id="roster" class="panel-body">
+	  <%= render "teams/roster" %>
+	</div>
+</div>
+
+</section>

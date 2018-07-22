@@ -1,0 +1,13 @@
+<br>
+<p><%=t 'hello' %> <b><%= @student.name %></b></p>
+<% if @type == "solo" %>
+<p><%=raw t 'mails.mentorat_claim.p1', name: @mentor.name %></p>
+<p><%=t 'mails.mentorat_claim.p2' %></p>
+<p><%=raw t 'mails.signatures.mentorat', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %></p>
+<% elsif @type == "team" %>
+<p><%=raw t 'mails.mentorat_claim.t1', name: @mentor.name %></p>
+<p><%=t 'mails.mentorat_claim.t2' %></p>
+<p><%=raw t 'mails.signatures.team', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %></p>
+<% end %>
+<%= render 'notifications_mailer/signature' %>
+<br>

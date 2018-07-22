@@ -1,0 +1,97 @@
+<style type="text/css">
+  .file_field input {
+    box-shadow: none;
+  }
+</style>
+<section class="container" style="margin:auto;">
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, :autocomplete => "off"}) do |f| %>
+<!-- <%= devise_error_messages! %> -->
+<%= render 'layouts/error_messages', object: f.object %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="line-1 anim-typewriter"><%=t 'layout.modify_profile' %></h3>
+  </div>
+  <div class="panel-body">
+    <div class="col-sm-6">
+      <h4><%=t 'layout.account' %></h4>
+      <hr>
+      <div class="field"><%= f.label "#{t 'layout.user_name'}" %><br />
+        <input type="text" value="<%= @user.user_name %>" class="form-control" style="width:50%;" name="user[user_name]" id="user_user_name" maxlength="30">
+      </div>
+
+      <div class="field">
+        <%= f.label 'Email' %><br />
+        <input type="text" value="<%= @user.email %>" class="form-control" style="width:50%;" name="user[email]" id="user_email" maxlength="50">
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div>En attente de confirmation pour : <%= resource.unconfirmed_email %></div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label "#{t 'layout.new_pw'}" %>
+        <input type="password" class="form-control" style="width:50%;" name="user[password]" id="user_password" maxlength="30">
+        <!-- <%= f.input :password, label: false, autocomplete: false %> -->
+      </div>
+
+      <div class="field">
+        <%= f.label "#{t 'layout.confirm_pw'}" %>
+        <input type="password" class="form-control" style="width:50%;" name="user[password_confirmation]" id="user_password_confirmation" maxlength="30">
+        <!-- <%= f.input :password_confirmation, label: false, autocomplete: false %> -->
+      </div>
+
+      <div class="field">
+        <%= f.label "#{t 'layout.current_pw'}" %>
+        <input type="password" class="form-control" style="width:50%;" name="user[current_password]" id="user_current_password" maxlength="30">
+        <!-- <%= f.input :current_password, label: false, autocomplete: false %> -->
+        <p class="explain"><%=t 'layout.pw_required' %></p>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <h4><%=t 'layout.personal_infos' %></h4>
+      <hr>
+      <div class="field"><%= f.label "#{t 'layout.first_name'}" %><br />
+        <input type="text" value="<%= @user.first_name %>" class="form-control" style="width:50%;" name="user[first_name]" id="user_first_name" maxlength="30">
+      </div>
+
+      <div class="field"><%= f.label "#{t 'layout.last_name'}" %><br />
+        <input type="text" value="<%= @user.last_name %>" class="form-control" style="width:50%;" name="user[last_name]" id="user_last_name" maxlength="30">
+      </div>
+
+      <div id="avatar" class="row text-left">
+        <div class="col-sm-3 col-xs-4">
+          <div id="avatar-thumb">
+            <%= render 'users/avatar' %>
+          </div>
+        </div>
+        <div class="col-sm-9 col-xs-8">
+          <% if (can? :manage, Champion) or (can? :manage, Article) %>
+            <div class="file_field" style="margin-bottom:10px;">
+              <%= f.label :avatar, "#{t 'layout.custom_avatar'}" %><br />
+              <%= f.file_field :avatar %>
+            </div>
+          <% else %>
+          <br>
+          <% end %>
+          <%= link_to "#{t 'layout.gallery'}", avatar_modal_user_path(@user), remote: true, class:"btn btn-default" %>
+        </div>
+      </div>
+      <br>
+
+      <div class="field">
+      <%= f.label "#{t 'layout.location'}" %>
+      <input type="text" value="<%= @user.address %>" placeholder="<%=t 'layout.location_placeholder' %>" class="form-control" style="width:50%;" name="user[address]" id="user_address" maxlength="100">
+      </div>
+
+    </div>
+
+  </div>
+  <div class="panel-footer text-center">
+    <%= submit_tag "#{t 'btn.update'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary"%>
+    <%= link_to "#{t 'btn.back'}", root_path, class: "btn btn-default" %>
+  </div>
+</div>
+<% end %>
+
+</section>

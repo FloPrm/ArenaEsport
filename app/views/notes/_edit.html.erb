@@ -1,0 +1,3 @@
+<%= simple_form_for(@note, method: :put, remote: true) do |f| %>
+  <input type="text" value="<%= @note.body %>" class="form-control" name="note[body]" id="note_body" maxlength="500">
+<% end %>

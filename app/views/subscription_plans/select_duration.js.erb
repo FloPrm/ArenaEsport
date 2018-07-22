@@ -1,0 +1,3 @@
+$("#price").html("<%=  j (render 'subscription_plans/price') %>");
+$("#price1").html("<%= j (hidden_field_tag(:price, @price_ttc)) %>");
+// $("#informations").html("<%= j (link_to 'Souscrire', informations_subscription_plan_path(@subscription_plan, price: @price_ttc, duration: @duration), class: 'btn btn-primary btn-block') %>");

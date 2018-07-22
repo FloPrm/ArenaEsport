@@ -1,0 +1,22 @@
+<%= search_form_for @search do |f| %>
+  <%= f.condition_fields do |c| %>
+  <div style="display:block; margin-bottom:5px;">
+    <div class="field">
+      <%= c.attribute_fields do |a| %>
+        <%= a.attribute_select associations: [:game_accounts, :teams] %>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= c.predicate_select %>
+    </div>
+    <div class="field">
+      <%= c.value_fields do |v| %>
+        <%= v.text_field :value, placeholder: "Recherche" %>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+  <%= f.submit "Chercher" %>
+  <%= link_to "Reset", users_path, class:"btn btn-basic", style: "margin-left: 5px;" %>
+<% end %>
+<hr>

@@ -1,0 +1,35 @@
+<style type="text/css">
+ .field {
+   display: inline;
+   margin-right: 10px;
+   margin-bottom: 5px;
+ }
+</style>
+
+<section class="container">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Joueurs</h3>
+  </div>
+  <div class="panel-body">
+    <div style="margin-bottom:30px;">
+      <%= render 'users/search_form' %>
+    </div>
+    <div id="index">
+      <%= render 'users/index' %>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-sm-3" style="margin-top:10px;">
+        <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+      </div>
+      <div id="users-paginate" class="col-sm-6 text-center">
+        <%= render 'users/pagination' %>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+</div>
+
+</section>

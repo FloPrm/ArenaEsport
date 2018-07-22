@@ -1,0 +1,3 @@
+<%= simple_form_for(@composition, method: :put, remote: true) do |f| %>
+  <input type="text" value="<%= @composition.title %>" class="form-control" style="text-align:center;" name="composition[title]" id="composition_title" maxlength="45" autofocus>
+<% end %>

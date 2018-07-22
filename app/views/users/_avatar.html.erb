@@ -1,0 +1,27 @@
+<% if ((@user.can? :manage, Champion) or (@user.can? :manage, Article)) && @user.avatar.present? %>
+  <%= image_tag @user.avatar.thumb.url, style:"width:100px;", class:"img-thumbnail #{"bg-gold" if (@user.can? :manage, Champion) && @user.role != "admin"} #{"bg-admin" if (@user.can? :manage, Article)}" %>
+<% else %>
+  <% unless @user.icon.nil? or @user.icon.empty? %>
+    <%= image_tag @user.icon, style:"width:100px;", class:"img-thumbnail #{"bg-gold" if (@user.can? :manage, Champion) && @user.role != "admin"} #{"bg-admin" if (@user.can? :manage, Article)}" %>
+  <% else %>
+    <%= image_tag image_url('icons/icon1.jpg'), style:"width:100px;", class:"img-thumbnail #{"bg-gold" if (@user.can? :manage, Champion) && @user.role != "admin"} #{"bg-admin" if (@user.can? :manage, Article)}" %>
+  <% end %>
+<% end %>
+<% if (@user.can? :manage, Champion) && @user.role != "admin" && @user.role != "moderator" %>
+  <span id="premium-icon" class="label avatar-icon premium-icon">
+    <% if @user.role == "arena_p" %>
+      <i class="fa fa-star" data-toggle="tooltip" title="Arena+"></i>
+    <% elsif @user.role == "captain_p" %>
+      <i class="ra ra-helmet" data-toggle="tooltip" title="Capitaine+"></i>
+    <% end %>
+  </span>
+<% end %>
+<% if @user.can? :manage, Article %>
+  <span id="premium-icon" class="label avatar-icon admin-icon">
+    <% if @user.role == "admin" %>
+      <i class="ra ra-queen-crown" data-toggle="tooltip" title="Administrateur"></i>
+    <% elsif @user.role == "moderator" %>
+      <i class="ra ra-crossed-swords" data-toggle="tooltip" title="Modérateur"></i>
+    <% end %>
+  </span>
+<% end %>

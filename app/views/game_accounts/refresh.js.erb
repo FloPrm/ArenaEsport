@@ -1,0 +1,3 @@
+$('#dashboard-rank').html("<%= j (render 'users/rank') %><%= j (render 'users/rank_flex') %>");
+$('#mon-equipe-rank-<%= current_user.id %>').html("<%= j (render 'users/rank') %><%= j (render 'users/rank_flex') %>");
+$('#dashboard-refresh').html("<p class='explain' style='margin-top:10px;'>Dernier refresh : il y a <%= j (time_ago_in_words(@user.game_accounts.where(active:true).first.updated_at)) %></p>");

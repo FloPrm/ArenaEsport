@@ -1,0 +1,74 @@
+<style type="text/css">
+  #seance-stats {
+    width:80%;
+    position:relative;
+    margin:0 auto;
+    clear:both;
+  }
+  .field h4 { clear:both; }
+</style>
+
+<div id="seance-preview" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%= @seance.title %></h3>
+    </div>
+    <div class="modal-body text-center">
+      <div id="seance-stats" class="row">
+        <div class="col-sm-4">
+          <div class="box-stat">
+            <div class="col-sm-4 stat-left">
+              <i class="fa fa-calendar"></i>
+            </div>
+            <div class="col-sm-8 stat-right">
+              <%= @seance.date.strftime("%d/%m/%y")%>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="box-stat">
+            <div class="col-sm-4 stat-left">
+              <i class="fa fa-clock-o"></i>
+            </div>
+            <div class="col-sm-8 stat-right">
+              <%= @seance.hour.strftime("%H:%M") %>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="box-stat">
+            <div class="col-sm-4 stat-left">
+              <i class="fa fa-hourglass-half"></i>
+            </div>
+            <div class="col-sm-8 stat-right">
+              <% Seance::DURATION.each do |k,v| %>
+                <%= k if v == @seance.duration %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="field" style="margin-bottom:20px;">
+        <h4>Contenu de la séance</h4>
+        <div class="box-text col-sm-8">
+          <%= @seance.content.html_safe unless @seance.content.nil? or @seance.content.empty? %>
+        </div>
+      </div>
+
+      <div class="field">
+        <h4>Recommandations</h4>
+        <div class="box-text col-sm-8">
+          <%= @seance.advice.html_safe unless @seance.advice.nil? or @seance.advice.empty?  %>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>

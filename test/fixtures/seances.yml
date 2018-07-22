@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  mentorat_id: 
+  mentor_id: 
+  title: MyString
+  content: MyText
+  advice: MyText
+  date: 2017-02-07 16:00:49
+  hour: 1
+  duration: 1
+  status: 1
+  mmr: 1
+
+two:
+  mentorat_id: 
+  mentor_id: 
+  title: MyString
+  content: MyText
+  advice: MyText
+  date: 2017-02-07 16:00:49
+  hour: 1
+  duration: 1
+  status: 1
+  mmr: 1

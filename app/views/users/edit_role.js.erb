@@ -1,0 +1,5 @@
+<% url = request.original_url.split('?').first %>
+<% if url = users_url %>
+  $('#index').html("<%= j (render 'index') %>");
+<% end %>
+$('#modal-window').modal('hide');

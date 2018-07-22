@@ -1,0 +1,5 @@
+<% if params[:type] == "index" %>
+$("#index-messages").html("<%= j (render 'messages/index') %>");
+<% else %>
+$("#message-<%= params[:id] %>").hide();
+<% end %>

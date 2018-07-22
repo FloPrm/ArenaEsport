@@ -1,0 +1,4 @@
+$('#friender').html("<%= j (render(:partial => 'friendships/friender', locals: {reload: true})).html_safe %>");
+<% unless @team.nil? %>
+$('#team-tabs').html("<%= j (render 'teams/roster') %>");
+<% end %>

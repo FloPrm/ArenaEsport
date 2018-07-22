@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Messages</h3>
+    </div>
+    <div class="panel-body">
+      <%= search_form_for @search do |f| %>
+      <div id="messages-search-form" class="panel panel-default" style="padding:5px 30px;position:relative;margin:0 auto;">
+        <div class="row">
+          <div class="col-sm-4">
+            <%= f.search_field :body_cont, placeholder:"Message", class:"form-control" %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.search_field :account_name_cont, placeholder:"Joueur", class:"form-control" %>
+          </div>
+          <div class="col-sm-3">
+            <%= f.search_field :team_name_cont, placeholder:"Equipe", class:"form-control" %>
+          </div>
+          <div class="col-sm-2" style="padding-top:5px;">
+            <%= f.submit %>
+            <%= link_to "Reset", messages_path, class:"btn btn-basic", style:"margin-left:5px;" %>
+          </div>
+        </div>
+      </div>
+      <% end %>
+      <hr>
+      <div id="index-messages">
+        <%= render 'messages/index' %>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3" style="margin-top:10px;">
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-center">
+          <%= will_paginate @messages, :previous_label => "Précédent", :next_label => "Suivant", inner_window: 2, outer_window: 1 %>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+    </div>
+  </div>
+</div>

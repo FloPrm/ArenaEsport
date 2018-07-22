@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  recepteur_id: 1
+  emetteur_id: 1
+  read_at: 2017-01-09 15:24:19
+  action: MyString
+  notifiable_id: 1
+  notifiable_type: MyString
+
+two:
+  recepteur_id: 1
+  emetteur_id: 1
+  read_at: 2017-01-09 15:24:19
+  action: MyString
+  notifiable_id: 1
+  notifiable_type: MyString

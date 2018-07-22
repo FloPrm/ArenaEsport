@@ -1,0 +1,74 @@
+<style type="text/css">
+  #footer .col-sm-6 p { margin: 0 0 5px; }
+  #footer .col-sm-6 a { text-decoration: none !important; color: #d9534f; margin: 8px;}
+  #footer .col-sm-6 a:hover { color: white; }
+</style>
+<footer id="footer" style="background:#222; color:white; padding:40px 0px;">
+    <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-left">
+                    <span class="copyright">Copyright &copy; Arena Esport 2017</span><br>
+                    <p style="text-align:justify; font-size:12px;">
+                      <%=t 'layout.copyright' %>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline social-buttons">
+                        <li><a href="https://twitter.com/Arena_Esport" target="_blank"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="https://www.facebook.com/arenaesport.officiel" target="_blank"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li>
+                          <% if user_signed_in? && current_user.account.present? %>
+                            <a href="<%= current_user.language == 'french' ? current_user.account.game.discord : current_user.account.game.discord_eu %>" target="_blank"><i class="fa fa-microphone"></i></a>
+                          <% else %>
+                            <a href="https://discord.gg/9w2CfAY" target="_blank"><i class="fa fa-microphone"></i></a>
+                          <% end %>
+                        </li>
+                    </ul>
+                    <br>
+                    <div style="width:50px;margin:0 auto;">
+                    <% unless user_signed_in? %>
+                      <% if params[:locale] == "fr" %>
+                        <%= link_to :locale=>'en' do %>
+                          <img class="img-responsive" src="/assets/flags/gb.png" alt="En">
+                        <% end %>
+                      <% else %>
+                        <%= link_to :locale=>'fr' do %>
+                          <img class="img-responsive" src="/assets/flags/fr.png" alt="Fr">
+                        <% end %>
+                      <% end %>
+                    <% else %>
+                      <% if current_user.language == "french" %>
+                        <%= link_to change_language_user_path(current_user, url:request.original_url, lang:"english"), method: :put do %>
+                          <img class="img-responsive" src="/assets/flags/gb.png" alt="En">
+                        <% end %>
+                      <% else %>
+                        <%= link_to change_language_user_path(current_user, url:request.original_url, lang:"french"), method: :put do %>
+                          <img class="img-responsive" src="/assets/flags/fr.png" alt="Fr">
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-left">
+                    <div class="row text-center">
+                      <div class="col-xs-6">
+                        <h5><%=t 'layout.about' %></h5>
+                        <p><%= link_to "#{t 'layout.homepage'}", root_path %></p>
+                        <p><%= link_to "#{t 'layout.our_team'}", our_team_path %></p>
+                        <p><%= link_to "#{t 'layout.our_partners'}", our_partners_path %></p>
+                        <p><%= link_to "#{t 'layout.pantheon'}", pantheon_path %></p>
+                      </div>
+                      <div class="col-xs-6">
+                        <h5><%=t 'layout.misc' %></h5>
+                        <p><%= link_to "#{t 'layout.eula'}", eula_path %></p>
+                        <p><%= link_to "#{t 'layout.cgu'}", cgu_path %></p>
+                        <p><%= link_to "Premium", pricing_path %></p>
+                        <p><%= link_to "#{t 'polls.title'}", polls_path %></p>
+                      </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</footer>

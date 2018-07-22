@@ -1,0 +1,48 @@
+<table class="table table-striped" id="index_users">
+<thead>
+  <tr>
+    <th><%= sort_link @search, :date_search, "<i class='fa fa-clock-o'></i>".html_safe, {}, { :remote => true, :method => :get } %></th>
+    <th>
+    <% if @team.members.count < 1 %>
+      Lang
+    <% else %>
+      Pays
+    <% end %>
+    </th>
+    <th>Invocateur</th>
+    <th>Rôle 1</th>
+    <th>Rôle(s) 2</th>
+    <% if @team.game.has_soloq %>
+      <th class="text-center"><%= sort_link @search, :account_mmr, "#{ @team.game.has_teamq ? "Solo" : "Niveau" }", {}, { :remote => true, :method => :get } %></th>
+    <% end %>
+    <% if @team.game.has_teamq %>
+      <th class="text-center"><%= sort_link @search, :account_flex_mmr, "Flex", {}, { :remote => true, :method => :get } %></th>
+    <% end %>
+    <th><%= sort_link @search, :birth_date, "Age", {}, { :remote => true, :method => :get } %></th>
+    <th>Semaine</th>
+    <th>Weekend</th>
+    <th><%= sort_link @search, :gameplay, "Tryhard", {}, { :remote => true, :method => :get } %></th>
+    <th>Statut</th>
+    <th colspan="2"></th>
+  </tr>
+</thead>
+
+<tbody>
+  <% @users_list_p.each do |user| %>
+    <%= render partial: 'teams/listing_user', locals:{user: user, num_role: @num_role}%>
+  <%end%>
+  <%unless @users_list_s.empty? %>
+    <tr id="s_roles_button"><td colspan="5"><button type="button" class="btn btn-default" id="s_roles_show">Afficher les <%=@role%> en rôles secondaires</button></td></tr>
+    </div>
+  <%end%>
+</tbody>
+<tbody id="s_role">
+</tbody>
+</table>
+
+<script type="text/javascript">
+  $('#s_roles_show').on('click', function(){
+    $('#s_roles_button').html("");
+    $('#s_role').html("<tr><th colspan='12'>Seconds rôles :</th></tr><% @users_list_s.each do |user| %><%= escape_javascript(render partial: 'teams/listing_user', locals:{user: user, num_role: @num_role}).html_safe%><%end%>");
+  });
+</script>

@@ -1,0 +1,10 @@
+<% if @team.invitations.where(num_role: num_role).exists? %>
+  <div class="input-group" style="display:inline;margin-left:10px;">
+    <span class="input-group-addon"><b>Invitations</b></span>
+    <span class="form-control">
+      <% @team.invitations.where(num_role: num_role).each do |invitation| %>
+      <span style="margin-left:5px;"><%= invitation.receiver.account.name %>  <%= link_to "<i class='fa fa-remove'></i>".html_safe, decline_invitation_path(invitation, team: @team.id), method: :put, remote: true %></span>
+      <% end %>
+    </span>
+  </div>
+<% end %>

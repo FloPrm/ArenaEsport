@@ -1,0 +1,37 @@
+<style type="text/css">
+  #new-invitation textarea { width: 80%; height:150px;}
+</style>
+
+<%= simple_form_for(new_invitation_path, url: invitations_path, method: :post, remote: params[:type] == "premium" ? true : false) do |f| %>
+<div id="new-invitation" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">
+        <% if params[:type] == "team" %>
+          Inviter un ami
+        <% elsif params[:type] == "premium" %>
+          Inviter un joueur
+        <% end %>
+      </h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <% if params[:type] == "premium" %>
+        <p>Inviter <%= @receiver.account.name %> en tant que <%= params[:role].humanize %>.</p>
+        <%= f.input :content, as: :text, label: false, placeholder:"Message d'invitation...(Optionnel)" %>
+        <%= hidden_field_tag(:role, params[:role]) %>
+        <%= hidden_field_tag(:num_role, params[:num_role]) %>
+        <%= hidden_field_tag(:receiver, params[:receiver]) %>
+      <% end %>
+      <%= hidden_field_tag(:type, params[:type]) %>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Envoyer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

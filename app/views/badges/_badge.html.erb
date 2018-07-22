@@ -1,0 +1,5 @@
+<% @badge = badge %>
+<div style="height:3.5em; width:3.5em; margin:0 auto;" data-toggle="tooltip" title="<%= @badge.name %>: <%= @badge.description %>">
+  <%= inline_svg('badges/' + @badge.bg + '.svg', class:"badger #{@badge.bg_color}") %>
+  <i class="<%= @badge.icon.split('-').first %> <%= @badge.icon %>" style="color:<%= @badge.icon_color %>;<%= @badge.icon_style %>"></i>
+</div>

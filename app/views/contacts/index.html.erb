@@ -1,0 +1,40 @@
+<style type="text/css">
+  .th{
+    margin-right: 5px;
+  }
+</style>
+
+<section>
+
+<h4>Liste des messages reçus via le formulaire de contact</h4>
+
+<table class="table table-striped" id="index_contacts">
+  <thead>
+    <tr>
+      <th colspan="1"></th>
+      <th>Nom</th>
+      <th>Mail</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contacts.order(created_at: :desc).each do |contact| %>
+      <tr>
+        <td><%=time_ago_in_words(contact.created_at)%> ago</td>
+        <td><%=contact.name%></td>
+        <td><%=contact.email%></td>
+        <td><%=contact.message[0..50]%>
+          <%if contact.message.length >50%>
+            ...
+          <%end%>
+        </td>
+        <td><%= link_to 'Show', contact %></td>
+        <td><%= link_to 'Destroy', contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+</section>

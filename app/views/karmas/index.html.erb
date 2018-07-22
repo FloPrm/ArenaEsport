@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Karmas</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Voters</th>
+            <th>Voted</th>
+            <th>Vote</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @karmas.order('created_at desc').each do |karma| %>
+            <tr>
+              <td><%= karma.created_at.strftime("%d/%m/%y - %H:%M") %></td>
+              <td><%= link_to karma.voter.account.name, user_preview_user_path(karma.voter), method: :get, remote: true %></td>
+              <td><%= link_to karma.voted.account.name, user_preview_user_path(karma.voted), method: :get, remote: true %></td>
+              <td><% if karma.vote > 0 %><i class="fa fa-thumbs-up" style="color:#93c47d;"></i><% else %><i class="fa fa-thumbs-down" style="color:#c0392b;"></i><% end %></td>
+              <td><%= karma.comment %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3">
+          <%= link_to "#{t 'btn.back'}", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-center">
+          <%= will_paginate @karmas, :previous_label => t('layout.previous'), :next_label => t('layout.next'), inner_window: 2, outer_window: 1 %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

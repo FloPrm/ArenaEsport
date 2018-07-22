@@ -1,0 +1,127 @@
+<style type="text/css">
+  #show-tournament p { margin: 0 0 5px; }
+  #show-tournament table { margin:0px; }
+  #show-tournament table .label { width:auto; }
+  #show-tournament table tbody tr td i { font-size: 18px; margin-right: 5px; }
+  #show-tournament table tbody tr td { border-top: 0px; }
+</style>
+
+<div id="show-tournament" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%= @tournament.name %></h3>
+    </div>
+    <div class="modal-body" style="padding:40px 15px;">
+
+      <!-- HEADER -->
+      <div class="row">
+        <!-- LOGO -->
+        <div class="col-sm-3 text-center">
+          <% unless @tournament.logo.nil? or @tournament.logo.empty? %>
+            <%= link_to @tournament.website, target:"_blank" do %>
+              <%= image_tag @tournament.logo, style:"width:200px;", class:"img-thumbnail" %>
+            <% end %>
+          <% else %>
+            <%= image_tag image_url('icons/icon1.jpg'), style:"width:100px;", class:"img-thumbnail" %>
+          <% end %>
+        </div>
+        <!-- INFOS -->
+        <div class="col-sm-3" style="margin-top:10px;">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td><i class="fa fa-user-circle"></i></td>
+                <td><%= render 'tournaments/rank' %></td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-group"></i></td>
+                <td>
+                  <% Tournament::BATTLE.each do |k,v| %>
+                    <%= k if @tournament.battle == v %>
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-map-o"></i></td>
+                <td>
+                  <% Tournament::MAPS.each do |k,v| %>
+                    <%= k if @tournament.map == v %>
+                  <% end %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-sm-3">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td><i class="fa fa-refresh"></i></td>
+                <td>
+                  <% Tournament::FREQUENCY.each do |k,v| %>
+                    <%= eval(k) if @tournament.frequency == v %>
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-calendar"></i></td>
+                <td>
+                  <% if !@tournament.date.nil? && @tournament.frequency == 1 %>
+                    <%= l(@tournament.date) unless @tournament.date.nil? %>
+                  <% else %>
+                    <% Tournament::DAYS.each do |k,v| %>
+                     <%= eval(k) if @tournament.day == v %>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-clock-o"></i></td>
+                <td><%= @tournament.hour.strftime("%H:%M") unless @tournament.hour.nil? %></td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-microphone"></i></td>
+                <td><a href="<%= @tournament.vocal %>" target="_blank"><%= @tournament.vocal %></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- LIENS -->
+        <div class="col-sm-3" style="padding-top:30px;">
+          <%= link_to "#{t 'tournaments.registration'}", @tournament.registration, class:"btn btn-primary", target:"_blank" %>
+        </div>
+
+      </div>
+
+      <hr>
+      <!-- BODY -->
+      <div class="row text-center">
+        <!-- LEFT PART -->
+        <div class="col-sm-7">
+          <h4><%=t 'tournaments.rules' %></h4>
+          <div class="box-text" style="min-height:500px">
+            <% unless @tournament.rules.nil? or @tournament.rules.empty? %>
+              <%= @tournament.rules.html_safe %>
+            <% end %>
+          </div>
+        </div>
+        <!-- RIGHT PART -->
+        <div class="col-sm-5">
+          <h4><%=t 'tournaments.rewards' %></h4>
+          <div class="box-text" style="min-height:500px">
+            <% unless @tournament.prizes.nil? or @tournament.prizes.empty? %>
+              <%= @tournament.prizes.html_safe %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="text-align:center;">
+      <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.close' %></button>
+    </div>
+  </div>
+</div>

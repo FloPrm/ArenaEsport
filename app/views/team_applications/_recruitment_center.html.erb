@@ -1,0 +1,114 @@
+<% @teams = teams %>
+<% if current_user.lang_p == "french"
+  ordering = ["french", "english"]
+else
+  ordering = ["english", "french"]
+end %>
+<% @teams.sort_by { |t| ordering.index(t.language) || ordering.size}.each do |team| %>
+  <% nb_players = team.game.nb_players %>
+  <% if team.members.count >= nb_players/2 && team.players.include?(0) %>
+  <% @joueurs = team.members %>
+  <div class="panel panel-default" style="margin-bottom:30px;padding:10px;box-shadow:1px 1px 5px 3px rgba(0, 0, 0, 0.1);">
+    <div class="row">
+      <div class="border-right-div col-sm-3">
+        <h4 class="text-center"><%= render partial:"teams/language", locals:{team: team, height:20} %>&nbsp;<%= team.name %></h4>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td class="text-right"><h5><%=t 'layout.players' %></h5></td>
+              <td><%= team.u_count %> /<%= nb_players %></td>
+            </tr>
+            <tr>
+              <td class="text-right"><h5><%=t 'team_applications.recruiting' %></h5></td>
+              <td>
+                <% for i in 0..(nb_players -1)%>
+                  <%= "#{team.roles[i].capitalize} " if team.players[i] == 0 %>
+                <% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-4 border-right-div" style="<%= "padding-top:35px;" unless team.game.has_teamq %>">
+        <% @game_accounts = team.accounts %>
+        <% @min = @game_accounts.sort_by(&:"#{:mmr}").first %>
+        <% @max = @game_accounts.sort_by(&:"#{:mmr}").last %>
+        <% @min_flex = @game_accounts.where.not(flex_mmr:nil).sort_by(&:"#{:flex_mmr}").first %>
+        <% @max_flex = @game_accounts.where.not(flex_mmr:nil).sort_by(&:"#{:flex_mmr}").last %>
+        <table class="table">
+          <thead>
+            <tr>
+              <% if team.game.has_teamq %>
+              <th></th>
+              <% end %>
+              <th class="text-center">Min</th>
+              <th class="text-center">Max</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <% if team.game.has_teamq %>
+              <td>SoloQ</td>
+              <% end %>
+              <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @min})%></td>
+              <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @max})%></td>
+            </tr>
+            <% if team.game.has_teamq %>
+            <tr>
+              <td>FlexQ</td>
+              <td><%= render(:partial =>'teams/rank_flex', locals: {reload: true, account: @min_flex}) unless @min_flex.nil? %></td>
+              <td><%= render(:partial =>'teams/rank_flex', locals: {reload: true, account: @max_flex}) unless @max_flex.nil? %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-3" style="padding-top:35px;">
+        <% @week_starts = @joueurs.pluck(:week_start) %>
+        <% @week_ends = @joueurs.pluck(:week_end) %>
+        <% @we_starts = @joueurs.pluck(:we_start) %>
+        <% @we_ends = @joueurs.pluck(:we_end) %>
+        <table class="table" style="margin-bottom:0px;">
+          <thead>
+            <tr>
+              <th style="text-align:center;"><%=t 'layout.week' %></th>
+              <th style="text-align:center;"><%=t 'layout.weekend' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <%= render 'teams/dispos' %>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-2" style="padding-top:30px;">
+        <div class="row">
+          <div class="col-sm-12 col-xs-6" style="margin-bottom:5px;" data-toggle="tooltip" title="<%=t 'team_applications.team_details' %>">
+            <% if can? :manage, Champion %>
+              <%= link_to "<i class='fa fa-search-plus'></i>".html_safe, preview_team_path(team), method: :get, remote: true, class:"btn btn-default btn-block" %>
+            <% else %>
+              <%= link_to "<i class='fa fa-search-plus'></i>".html_safe, restricted_content_subscription_plan_path(1), method: :get, remote: true, class:"btn btn-default btn-block" %>
+            <% end %>
+          </div>
+          <div class="col-sm-12 col-xs-6" data-toggle="tooltip" title="<%=t 'teams.apply_for' %>">
+            <% unless team.candidates.include?(current_user) %>
+              <% unless current_user.team_applications.present? %>
+                <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, new_team_application_path(team: team.id), method: :get, remote: true, class:"btn btn-primary btn-block" %>
+              <% else %>
+                <% if can? :manage, Champion %>
+                  <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, new_team_application_path(team: team.id), method: :get, remote: true, class:"btn btn-primary btn-block" %>
+                <% else %>
+                  <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, restricted_content_subscription_plan_path(1, limit:"applications"), method: :get, remote: true, class:"btn btn-primary btn-block" %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <%= link_to "<i class='fa fa-remove'></i>".html_safe, team.team_applications.where(user: current_user).first, method: :delete, data: {confirm: "Souhaitez-vous supprimer votre candidature ?"}, class:"btn btn-primary btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,22 @@
+
+Merci de ta confiance !
+
+<% if @subscription.renewal_price.nil? %>Tu as souscrit à une formule premium<% else %>Tu as renouvelé ton abonnement premium<% end %>, voici le détail de ton achat:
+___________________________________________________________________
+
+Client: <%= @user.first_name %> <%= @user.last_name %> - <%= @user.address %>.
+
+
+Formule:  <%= @subscription.subscription_plan.title %>
+Durée:    <%= @subscription.end_date.present? ? "#{@duration} mois" : "A vie"  %>
+Paiement: <%= @subscription.payment_method.capitalize %>
+
+
+Prix HT:   <%= @price_ht.round(2) %>€
+TVA (20%): <%= @tva.round(2) %>€
+Prix TTC:  <%= @price_ttc.round(2) %>€
+
+___________________________________________________________________
+
+Arena Esport SAS, Impasse du goulet d'en bas, 22940 Saint-Julien.
+SIRET: 819 928 086 00019 | TVA: FR 70 819928086

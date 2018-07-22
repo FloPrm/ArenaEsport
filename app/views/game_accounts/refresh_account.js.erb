@@ -1,0 +1,2 @@
+$('#game_accounts').html("<%= j (render 'users/game_accounts') %>");
+//$('#show-refresh').html("<p class='explain'>Il y a <%= j (time_ago_in_words(@user.game_accounts.where(active:true).first.updated_at)) %></p>");

@@ -1,0 +1,11 @@
+<div class="panel-heading">
+  <i class="fa fa-retweet"></i>&nbsp;&nbsp;<h4 style="margin:0px;display:inline-block">Lane Swap</h4>
+</div>
+<div class="panel-body">
+  <p>Acceptez-vous d'échanger votre rôle avec
+    <b><%= @asker.user.game_accounts.where(active:true).first.name %></b>
+    (<%= @asker.role.capitalize[0...3] %>) ?
+  </p>
+  <%= link_to "<i class='fa fa-check'></i>".html_safe, swap_teaming_path(asker: @asker.id, asked: @asked.id, answer: true), method: :put, class:"btn btn-success", remote: true %>
+  <%= link_to "<i class='fa fa-remove'></i>".html_safe, swap_teaming_path(asker: @asker.id, asked: @asked.id, answer: false), method: :put, class:"btn btn-danger", remote: true %>
+</div>

@@ -1,0 +1,5 @@
+<% @team.compositions.order('win desc').each do |composition| %>
+  <div id="compo-<%= composition.id %>">
+    <%= render(composition) %>
+  </div>
+<% end %>

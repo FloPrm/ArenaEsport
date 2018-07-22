@@ -1,0 +1,75 @@
+<% if @team.game.compositions == true %>
+<div class="panel panel-default" style="margin-top:20px;">
+  <div class="panel-heading text-center">
+    <h4>Compositions</h4>
+  </div>
+  <div id="compos" class="panel-body" style="height:350px;overflow-x:hidden;overflow-y:scroll;">
+    <%= render 'compositions/compositions' %>
+  </div>
+  <div class="panel-footer">
+    <%= link_to "<i class='fa fa-plus'></i>".html_safe, new_composition_path(team: @team.id), method: :get, remote: true, class:"btn btn-default" %>
+  </div>
+</div>
+<% end %>
+<div class="row" style="margin-top:20px;">
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h4>Notes</h4>
+      </div>
+      <div id="notes" class="panel-body" style="height:300px;overflow-x:hidden;overflow-y:scroll;">
+        <%= render 'notes/notes' %>
+      </div>
+      <div class="panel-footer">
+        <%= simple_form_for(Note.new, remote: true) do |f| %>
+          <%= hidden_field_tag(:team, @team.id) %>
+          <div class="input-group">
+            <input type="text" class="form-control" name="note[body]" id="note_body" maxlength="500" autocomplete="off">
+            <span class="input-group-btn">
+              <%= button_tag(type: "submit", class: "btn btn-default", style:"padding:5px 12px;") do %>
+                 <i class="fa fa-plus"></i>
+              <% end %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div id="tools" class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h4><%=t 'teams.links' %> & <%=t 'teams.tools' %></h4>
+      </div>
+      <div class="panel-body text-center" style="height:360px;overflow-x:hidden;overflow-y:scroll;">
+        <% if @team.game_id == 1 %>
+        <h5><i class="fa fa-id-card-o" style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'teams.guides_builds' %></h5>
+          <a href="http://www.eclypsia.com/fr/lol/guide/champion" target="_blank" class="btn btn-default btn-block"><%=t 'language.french' %></a>
+          <a href="http://champion.gg/" target="_blank" class="btn btn-default btn-block"><%=t 'language.english' %></a>
+          <hr>
+        <h5><i class="fa fa-bar-chart" style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'layout.statistics' %></h5>
+          <a href="http://euw.op.gg/" target="_blank" class="btn btn-default btn-block"><%=t 'layout.players' %></a>
+          <a href="https://euw.op.gg/statistics/champion/" target="_blank" class="btn btn-default btn-block">Champions</a>
+          <hr>
+        <h5><i class="fa fa-gears" style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'teams.tools' %></h5>
+          <a href="http://map.riftkit.net/" target="_blank" class="btn btn-default btn-block"><%=t 'teams.map' %></a>
+          <a href="http://www.replay.gg/" target="_blank" class="btn btn-default btn-block">Replays</a>
+        <% elsif @team.game_id == 2 %>
+        <h5><i class="fa fa-id-card-o" style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'teams.guides_builds' %></h5>
+          <a href="http://www.eclypsia.com/fr/overwatch/guides" target="_blank" class="btn btn-default btn-block"><%=t 'language.french' %></a>
+          <a href="https://www.icy-veins.com/overwatch/" target="_blank" class="btn btn-default btn-block"><%=t 'language.english' %></a>
+          <hr>
+        <h5><i class="fa fa-bar-chart" style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'layout.statistics' %></h5>
+          <a href="https://masteroverwatch.com/" target="_blank" class="btn btn-default btn-block"><%=t 'layout.players' %></a>
+          <a href="https://masteroverwatch.com/heroes" target="_blank" class="btn btn-default btn-block">Héros</a>
+          <hr>
+        <h5><i class="fa fa-gears" style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'teams.tools' %></h5>
+          <a href="http://www.overwatchly.com/teambuilder" target="_blank" class="btn btn-default btn-block">Team Builder</a>
+          <a href="http://www.overwatchly.com/vods" target="_blank" class="btn btn-default btn-block">V.O.D</a>
+          <a href="https://www.reddit.com/r/OverwatchUniversity/comments/5etw3z/aim_compendium/?st=j1w1e9sj&sh=4fdbd13d" target="_blank" class="btn btn-default btn-block"><%=t 'teams.better_aim' %></a>
+        <% else %>
+        <p class="text-muted text-center" style="margin-top:150px;">Prochainement</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

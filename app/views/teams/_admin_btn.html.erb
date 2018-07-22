@@ -1,0 +1,11 @@
+<% if @team.start_date == nil %>
+  <%= link_to "Start!", start_team_path, method: :put, class: "btn btn-primary" %>
+<% end %>
+
+<% if @team.start_date != nil && remplacants? %>
+  <%= link_to "#{t 'teams.replacement'}", remplacement_team_path, method: :put, remote: true, class: "btn btn-primary", id: "remplacement-btn" %>
+<% end %>
+
+<% if @team.end_date == nil && @team.start_date != nil %>
+  <%= link_to "#{t 'teams.disband'}", dissolution_team_path(@team, user: current_user.id), method: :put, class: "btn btn-default", data: {confirm: "Etes-vous sûr ?"} %>
+<% end %>

@@ -1,0 +1,7 @@
+<% if !@poll.choices.nil? %>
+  <% if @poll.pollings.where(user:current_user).empty? && @poll.result < 2 %>
+    <%= render 'polls/choices' %>
+  <% else %>
+    <%= render 'polls/votes' %>
+  <% end %>
+<% end %>

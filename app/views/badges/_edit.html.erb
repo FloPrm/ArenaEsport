@@ -1,0 +1,57 @@
+<style type="text/css">
+
+</style>
+
+<%= simple_form_for(@badge, method: :put) do |f| %>
+<div id="badge-editor" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Editer un badge</h3>
+    </div>
+    <div class="modal-body text-center">
+      <div class="row">
+        <div class="col-sm-5">
+          <input type="text" value="<%= @badge.name %>" class="form-control" placeholder="Nom" name="badge[name]" id="badge_name" maxlength="30">
+        </div>
+        <div class="col-sm-7">
+          <input type="text" value="<%= @badge.description %>" class="form-control" placeholder="Description" name="badge[description]" id="badge_description" maxlength="150">
+        </div>
+      </div>
+      <hr>
+
+      <div class="row">
+        <div class="col-xs-5 text-center" style="padding:50px;">
+          <%= render(:partial =>'badges/badge', locals: {reload: true, badge: @badge}) %>
+        </div>
+        <div class="col-xs-7 text-center">
+            <h5 style="margin-top:0px;">Icone</h5>
+            <input type="text" value="<%= @badge.icon %>" class="form-control" placeholder="Icone" name="badge[icon]" id="badge_icon" maxlength="50">
+            <input type="text" value="<%= @badge.icon_color %>" class="form-control" placeholder="Couleur" name="badge[icon_color]" id="badge_icon_color" maxlength="150">
+            <input type="text" value="<%= @badge.icon_style %>" class="form-control" placeholder="Style" name="badge[icon_style]" id="badge_icon_style" maxlength="150">
+          <h5>Fond</h5>
+          <input type="text" value="<%= @badge.bg_color %>" class="form-control" placeholder="Couleur" name="badge[bg_color]" id="badge_bg_color" maxlength="100">
+        </div>
+      </div>
+      <hr>
+      <div class="row" style="height:140px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+        <% @vectors.each do |vector|%>
+          <div class="col-sm-2">
+            <label>
+              <input type="radio" name="badge[bg]" value="<%= vector.split('/').last.split('.').first %>" <%= 'checked="checked"' if @badge.bg == vector.split('/').last.split('.').first %> >
+              <%= image_tag "badges/#{vector.split('/').last}", class:"img-thumbnail", style:"width:100px;" %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Enregistrer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

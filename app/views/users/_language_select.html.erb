@@ -1,0 +1,14 @@
+<div class="language-select">
+  <div class="col-xs-6">
+    <label>
+      <input type="radio" name="user[<%= attribute %>]" value="french" <%= "checked='checked'" if !user_signed_in? or (user_signed_in? && user.lang_p == "french") %>>
+      <%= image_tag "flags/fr.png", class:"img-responsive" %>
+    </label>
+  </div>
+  <div class="col-xs-6">
+    <label>
+      <input type="radio" name="user[<%= attribute %>]" value="english" <%= "checked='checked'" if (user_signed_in? && user.lang_p == "english") %>>
+      <%= image_tag "flags/gb.png", class:"img-responsive" %>
+    </label>
+  </div>
+</div>

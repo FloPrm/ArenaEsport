@@ -1,0 +1,5 @@
+<% if user.country.present? %>
+<div style="display:inline-block" data-toggle="tooltip" title="<%= user.country_name.capitalize %>">
+  <%= image_tag "flags/svg/#{user.country.downcase}.svg", height: height, alt: user.country %>
+</div>
+<% end %>

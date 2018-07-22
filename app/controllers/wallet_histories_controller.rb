@@ -1,0 +1,2 @@
+class WalletHistoriesController < ApplicationController
+end

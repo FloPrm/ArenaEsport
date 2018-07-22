@@ -1,0 +1,94 @@
+<style type="text/css">
+
+</style>
+
+<div id="index-teams" class="container">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Equipes</h3>
+    </div>
+    <div class="panel-body" style="min-height:450px;">
+      <%= search_form_for @search do |f| %>
+        <div class="panel panel-default" style="padding:5px 30px;margin-bottom:20px;">
+          <div class="row">
+              <div class="col-sm-2"></div>
+              <div class="col-sm-8">
+                <div class="col-sm-4">
+                  <%= f.search_field :name_cont, placeholder:"Nom", class:"form-control" %>
+                </div>
+                <div class="col-sm-4 text-center" style="padding-top:5px;">
+                  <%= f.select :game_id_eq, options_from_collection_for_select(Game.all, :id, :title, @search.game_id_eq), prompt:"-- Jeu --" %>
+                </div>
+                <div class="col-sm-4" style="padding-top:5px;">
+                  <%= f.submit %>
+                  <%= link_to "Reset", teams_path, class:"btn btn-basic", style:"margin-left:5px;" %>
+                </div>
+              </div>
+              <div class="col-sm-2"></div>
+          </div>
+        </div>
+      <% end %>
+      <ul class="nav nav-tabs nav-justified" style="margin-bottom:20px;">
+        <li role="presentation" class="active"><a id="tofit">Tofit</a></li>
+        <li role="presentation"><a id="precompo">Precompo</a></li>
+        <li role="presentation"><a id="incomplete">Incomplet</a></li>
+        <li role="presentation"><a id="complete">Complet</a></li>
+        <li role="presentation"><a id="dead">Dissoutes</a></li>
+      </ul>
+      <div id="team-tabs" style="height:400px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+        <%= render 'teams/indextofit' %>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3" style="margin-top:10px;">
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-5 text-center">
+
+        </div>
+        <div class="col-sm-4 text-right" style="margin-top:10px;">
+          <% if can? :manage, :all %>
+            <%= link_to '<i class="fa fa-plus"></i> Nouvelle equipe'.html_safe, new_team_path, {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window', class: "btn btn-primary"} %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- <%= link_to '<i class="fa fa-plus"></i> Nouvelle equipe'.html_safe, new_team_path, class: "btn btn-primary" %> -->
+</div>
+
+<script type="text/javascript">
+
+$('#tofit').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'teams/indextofit') %>");
+});
+
+$('#precompo').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'teams/indexprecompo') %>");
+});
+
+$('#incomplete').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'teams/indexincomplete') %>");
+});
+
+$('#complete').on('click', function(){
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'teams/indexcomplete') %>");
+});
+
+$('#dead').on('click', function(){
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#team-tabs').html("<%= j (render 'teams/indexdead') %>");
+});
+
+</script>

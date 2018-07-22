@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Notes</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Joueur</th>
+            <th>Equipe</th>
+            <th>Compo</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @notes.order('created_at desc').each do |note| %>
+            <tr>
+              <td><%= note.created_at.strftime("%d/%m/%y") %></td>
+              <td><%= link_to note.user.account.name, user_preview_user_path(note.user), method: :get, remote: true %></td>
+              <td><% if note.composition.nil? %>
+                <%= link_to note.team.name, note.team %>
+                <% else %>
+                <%= link_to note.composition.team.name, note.composition.team %>
+                <% end %>
+              </td>
+              <td><% if !note.composition.nil? %>
+                <%= note.composition.title %>
+                <% end %>
+              </td>
+              <td><%= note.body %></td>
+              <td><%= link_to "<i class='fa fa-remove'></i>".html_safe, note, method: :delete, data: {confirm: "Etes-vous sûr de vouloir supprimer cette note ?"} %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3" style="margin-top:10px;">
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-center">
+          <%= will_paginate @notes, :previous_label => "Précédent", :next_label => "Suivant", inner_window: 2, outer_window: 1 %>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+    </div>
+  </div>
+</div>

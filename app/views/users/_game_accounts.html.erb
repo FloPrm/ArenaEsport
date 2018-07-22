@@ -1,0 +1,45 @@
+  <table class="table table-striped" id="index-game-accounts">
+    <thead>
+      <tr>
+        <th><%=t 'layout.player_name' %></th>
+        <th><%=t 'games.one' %></th>
+        <th class="text-center">Solo</th>
+        <th class="text-center">Flex</th>
+        <th class="text-center">Refresh</th>
+        <th><%=t 'layout.active' %></th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @user.game_accounts.order(:active).reverse_order.each do |game_account|%>
+        <% @account = game_account %>
+        <tr>
+          <td><%=game_account.name%></td>
+          <td><%=game_account.game.title%></td>
+          <td class="table-rank"><%= render 'users/rank' %></td>
+          <td class="table-rank"><%= render 'users/rank_flex' %></td>
+          <td class="text-center"><span class="explain"><%=t 'layout.time_ago', time_ago: time_ago_in_words(game_account.updated_at) %></span></td>
+          <td>
+            <% if game_account.active %>
+              <%=t 'layout.yes' %>
+            <%else%>
+              <%=t 'layout.no' %>
+            <%end%>
+          </td>
+          <td>
+          <% if current_user == @user or (can? :manage, User) %>
+            <% if !game_account.active and (@user.state == 0 or @user.state == nil) %>
+              <%= link_to "#{t 'btn.activate'}", activate_game_account_game_account_path(@user, game_account: game_account) %>
+            <% end %>
+          <% end %>
+          </td>
+          <td><%= link_to '<i class="fa fa-refresh"></i>'.html_safe, refresh_account_game_account_path(:game_account => game_account.id, :id => game_account.user_id), data: { disable_with: "<i class='fa fa-refresh fa-spin'></i>".html_safe }, remote: true %></td>
+          <% unless @user.state == 2 or @user.game_accounts.count == 1 %>
+            <% if can? :manage, :all %>
+              <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, game_account, method: :delete, data: { confirm: 'Etes-vous sûr ?' } %></td>
+            <% end %>
+          <% end %>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>

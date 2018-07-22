@@ -1,0 +1,12 @@
+<% if params[:tab] == "roster" %>
+  $('#team-tabs').html("<%= j (render 'teams/roster') %>");
+<% elsif params[:tab] == "chat" %>
+  $('#team-tabs').html("<%= j (render 'teams/chat') %>");
+  $(".chatbox-body").scrollTop($(".chatbox-body")[0].scrollHeight);
+<% elsif params[:tab] == "strategy" %>
+  $('#team-tabs').html("<%= j (render 'teams/strategy') %>");
+<% elsif params[:tab] == "mentorat" %>
+  $('#team-tabs').html("<%= j (render 'teams/mentorat') %>");
+<% elsif params[:tab] == "history" %>
+  $('#team-tabs').html("<%= j (render 'histories/history') %>");
+<% end %>

@@ -1,0 +1,14 @@
+<section>
+	<h1>Quitter l'équipe</h1>
+
+	<h4>Quelle est la raison de votre départ ?</h4>
+
+	<form>
+  		<input type="radio" name="leave" value="1" checked> Mauvaise entente avec les autres membres<br>
+  		<input type="radio" name="leave" value="2"> Mauvais fonctionnement en équipe<br>
+	  	<input type="radio" name="leave" value="other"> Autre<br>
+  		<textarea name="leave"></textarea>
+	</form> 
+	<% team = current_user.teamings.where(:active => true).first.team%>
+	<%=link_to "Quitter l'équipe",remove_user_team_path(team, :user => current_user), class: 'btn btn-default'%>
+</section>

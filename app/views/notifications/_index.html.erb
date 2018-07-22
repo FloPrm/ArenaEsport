@@ -1,0 +1,29 @@
+<style type="text/css">
+  .team_notifs i { background-color: #2980b9 !important; }
+  .team_notifs2 i { background-color: #34495e !important; }
+  .friendship_notifs i { background-color: #f39c12 !important; }
+  .mentorat_notifs i { background-color: #16a085 !important; }
+  .premade_notifs i { background-color: #f39c12 !important; }
+</style>
+<span id="user-id" data-id="<%= current_user.id %>"></span>
+<div class="dropdown-menu" id="notifs-dropdown">
+  <div class="col-sm-12" id="notifs-dropdown-heading">
+    <div class="col-xs-6">
+      <h5 style="text-align:center; margin:0px;"><%=t 'notifications.many' %></h5>
+    </div>
+    <div class="col-xs-6" style="margin-top: -5px;">
+      <%= link_to "#{t 'notifications.mark_as_read'}", mark_as_read_notification_path(current_user), method: :put, remote: true, id:"notifs-link" %>
+    </div>
+  </div>
+  <% if @notifications.empty? %>
+    <p style="text-align:center; margin-top:50%"><%=t 'notifications.none' %></p>
+  <% else %>
+    <div style="height:86%; width:100%;overflow-x:hidden;overflow-y:scroll;">
+    <ul id="notifications" style="padding:0px; width:95%">
+    <% @notifications.order(:created_at).reverse_order.limit(10).each do |notification|%>
+      <%= render(notification) %>
+    <% end %> <!-- @notifications.each -->
+  </ul>
+  </div>
+  <% end %> <!-- @notifications.empty? -->
+</div>

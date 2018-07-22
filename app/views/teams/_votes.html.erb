@@ -1,0 +1,26 @@
+<% if !@asker.nil? %>
+  <div id="swap" class="panel panel-primary">
+    <%= render 'teamings/swap' %>
+  </div>
+<% elsif current_user.teamings.where(team_id: @team, active:true).exists? && !@election.nil? %>
+  <% if !@team.teamings.where(active: true, captain: true).exists? && @election.result.nil? %>
+    <div id="election" class="panel panel-primary">
+      <%= render 'votes/election' %>
+    </div>
+  <% else %>
+    <%= render 'histories/events' %>
+  <% end %>
+<% else %>
+    <% if !@election.nil? && @election.result.nil? %>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <i class="ra ra-queen-crown"></i>&nbsp;&nbsp;<h4 style="display:inline-block"><%=t 'teams.election' %></h4>&nbsp;&nbsp;<i class="ra ra-queen-crown"></i>
+        </div>
+        <div class="panel-body empty-vote" style="color:black;">
+          <p>Votes: <b><%= @election.votes %></b>/<%= @team.members.count %></p>
+        </div>
+      </div>
+    <% else %>
+      <%= render 'histories/events' %>
+    <% end %>
+<% end %>

@@ -1,0 +1,15 @@
+<%= simple_form_for(@champion, remote: true) do |f| %>
+
+  <div class="row col-sm-10" style="margin-bottom: 20px;">
+    <div class="col-sm-4">
+      <%= f.input :name, label: false, required: true, placeholder: "Nom" %>
+    </div>
+    <div class="col-sm-4">
+      <%= f.input :game_id, as: :select, collection: Game.all, label_method: :title, value_method: :id, label: false, include_blank: false %>
+    </div>
+    <div class="col-sm-4">
+      <%= submit_tag "Ajouter", class: "btn btn-primary" %>
+    </div>
+  </div>
+
+<% end %>

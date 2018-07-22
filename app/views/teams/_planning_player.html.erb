@@ -1,0 +1,81 @@
+<tr>
+  <% teaming = @team.teamings.where(active: true, role: teaming_role, num_role: num_role).first %>
+  <% user = teaming.user %>
+  <% game_account = user.account %>
+  <% planning = Planning.where(user_id: user.id, team_id: @team.id).first %>
+
+  <td style="border: 2px solid white; border-right: 2px solid #ececec;"><% if can? :manage, :all %><i class="fa fa-<%= teaming.advices ? 'check' : 'remove' %>" style="color:<%= teaming.advices ? '#7ab934;' : '#c0392b;' %>"></i><% end %> <%= game_account.name %></td>
+  <% if planning.lun == nil %>
+  <td></td>
+  <% elsif planning.lun == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.lun == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.lun == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if planning.mar == nil %>
+  <td></td>
+  <% elsif planning.mar == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.mar == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.mar == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if planning.mer == nil %>
+  <td></td>
+  <% elsif planning.mer == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.mer == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.mer == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if planning.jeu == nil %>
+  <td></td>
+  <% elsif planning.jeu == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.jeu == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.jeu == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if planning.ven == nil %>
+  <td></td>
+  <% elsif planning.ven == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.ven == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.ven == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if planning.sam == nil %>
+  <td></td>
+  <% elsif planning.sam == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.sam == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.sam == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if planning.dim == nil %>
+  <td></td>
+  <% elsif planning.dim == 0 %>
+  <td style="background-color:#e06666;"></td>
+  <% elsif planning.dim == 1 %>
+  <td style="background-color:#f6b26b;"></td>
+  <% elsif planning.dim == 2 %>
+  <td style="background-color:#93c47d;"></td>
+  <% end %>
+
+  <% if current_user == user or current_user.role == "admin" %>
+  <td style="border: 2px solid white; border-left: 2px solid #ececec; text-align:center;"><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_planning_path(id: planning.id, team: @team.id), remote: true %></td>
+ <% end %>
+</tr>

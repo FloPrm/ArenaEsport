@@ -1,0 +1,12 @@
+<h4 class="text-center"><%=t 'polls.results' %></h4>
+<hr style="margin:5px;">
+<% for i in 0..(@poll.choices.count-1) %>
+  <% @pollings =  @poll.pollings.where(vote: i).count %>
+  #<%= i+1 %> - <%= @poll.choices[i] %> <br>
+  <% @percent = 100 * @pollings / @poll.pollings.count %>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="<%= @percent %>" aria-valuemin="0" aria-valuemax="100" style="width:<%= @percent %>%;">
+      <%= @percent %>% &nbsp;-&nbsp; (<%= @pollings %> <%= @pollings > 1 ? "votes" : "vote" %>)
+    </div>
+  </div>
+<% end %>

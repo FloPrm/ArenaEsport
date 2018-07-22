@@ -1,0 +1,9 @@
+<% @account.champions.each do |c| %>
+  <% champion = Champion.where(name:c).first %>
+  <% name = champion.name.capitalize %>
+  <% if !champion.nil? %>
+    <span data-toggle="tooltip" title="<%= name %>"><%= image_tag champion.icon, style:"width:#{size}px;display:inline-block;margin-right:5px;" %></span>
+  <% else %>
+    <span style="display:inline-block; margin-right:5px;"><%= c.capitalize %></span>
+  <% end %>
+<% end %>

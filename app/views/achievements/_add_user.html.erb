@@ -1,0 +1,14 @@
+<% @achievement = achievement %>
+<div style="display:inline-block;">
+<%= simple_form_for(@achievement, url: add_user_achievement_path(@achievement), method: :put, remote: true) do |f| %>
+  <div class="input-group" style="display:inline-block;margin-left:10px;width:200px;">
+    <input type="text" class="form-control" placeholder="Nom d'invocateur" name="user" id="achievement_user" style="width:150px;">
+    <span class="input-group-btn" style="display:inline-block;margin-left:-3px;">
+      <button type="submit" class="btn btn-default" style="padding:5px 12px;">
+        <i class='fa fa-plus'></i>
+      </button>
+    </span>
+  </div>
+<% end %>
+</div>
+<div id="notice-achievement" style="padding:0px;font-size:12px;display:inline-block;"></div>

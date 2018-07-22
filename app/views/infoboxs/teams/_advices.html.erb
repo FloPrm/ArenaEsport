@@ -1,0 +1,13 @@
+<%= render "infoboxs/hello" %>
+<p style="margin-top:5px;"><%=raw t 'ares.teams.advices_intro', name: @team.name %></p>
+<ul>
+  <li><%=t 'ares.teams.advice1' %></li>
+  <li><%=t 'ares.teams.advice2' %></li>
+  <li><%=t 'ares.teams.advice3' %></li>
+  <li><%=t 'ares.teams.advice4' %></li>
+  <% @discord = current_user.lang_p == 'french' ? current_user.account.game.discord : current_user.account.game.discord_eu %>
+  <li><%=raw t 'ares.teams.advice5', link: link_to(@discord,@discord) %> ⊂[◉‿◉] </li>
+</ul>
+<div class="text-center" style="margin-top:20px;">
+<%= link_to "#{t 'ares.teams.understood'}", advices_validation_teaming_path, method: :put, remote: true, class: "btn btn-primary" %>
+</div>

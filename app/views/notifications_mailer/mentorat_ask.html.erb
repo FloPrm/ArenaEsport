@@ -1,0 +1,12 @@
+<br>
+<p><%=t 'hello' %> <b><%= @mentor.name %></b></p>
+<p style="text-align:justify;">
+  <% if @mentorat.team.nil? %>
+    <%=raw t 'mails.mentorat_ask.player', name: @student.name %>
+  <% else %>
+    <%=raw t 'mails.mentorat_ask.team', name: @student.name %>
+  <% end %>
+</p>
+<p><%=raw t 'mails.signatures.mentorat', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %></p>
+<%= render 'notifications_mailer/signature' %>
+<br>

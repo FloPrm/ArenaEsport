@@ -1,0 +1,38 @@
+<section class="row" style="padding:0px;">
+
+  <section class="col-lg-3 hidden-sm hidden-xs">
+  </section>
+
+  <section class="container col-lg-6 col-sm-12 col-xs-12" style="margin:auto;">
+    <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+    <%= render 'layouts/error_messages', object: f.object %>
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <!-- <%= devise_error_messages! %> -->
+        <h3>Mot de passe oublie ?</h3>
+      </div>
+
+      <div class="panel-body">
+          <div class="form-inputs text-center">
+            <div class="field">
+              <%= f.label 'Email' %>
+              <%= f.input :email, label: false, required: true, autofocus: true %>
+            </div>
+            <div>
+              <%= link_to "Se connecter", new_session_path(resource_name) %> |
+              <%= link_to "S'inscrire", new_registration_path(resource_name) %>
+            </div>
+          </div>
+      </div>
+
+      <div class="panel-footer">
+        <%= submit_tag "Envoyer les instructions", class: "btn btn-primary btn-lg btn-block"%>
+      </div>
+    </div>
+  <% end %>
+  </section>
+
+  <section class="col-lg-3 hidden-sm hidden-xs">
+  </section>
+
+</section>

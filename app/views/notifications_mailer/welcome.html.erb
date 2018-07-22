@@ -1,0 +1,10 @@
+<br>
+<p><%=t 'hello' %> <b><%= @user.account.name %></b></p>
+<p><%=t 'mails.welcome.l1' %></p>
+<p style="text-align:justify"><%=raw t 'mails.welcome.l2', link1: link_to(t('mails.welcome.l2_link1'), edit_user_url(@user)), link2: link_to(t('mails.welcome.l2_link2'), recruitment_center_url) %></p>
+<p style="text-align:justify"><%=raw t 'mails.welcome.l3', link: link_to(t('mails.welcome.l3_link'), mentors_url) %></p>
+
+<p><%=raw t 'mails.welcome.l4', link: link_to(@user.account.game.discord, @user.account.game.discord) %></p>
+
+<%= render 'notifications_mailer/signature' %>
+<br>

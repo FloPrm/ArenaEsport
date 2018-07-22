@@ -1,0 +1,171 @@
+<div class="col-sm-5 text-center">
+<% unless @account.nil? %>
+  <div class="field">
+    <%= render 'users/avatar' %>
+  </div>
+
+  <div class="field">
+    <span class="label label-default"><%= @account.p_role %></span>
+      <% unless @account.s_role.blank?%>
+        <% @account.s_role.each do |role| %>
+          <span class="label label-default" style="background:#a2a2a2;"><%= role[0...3] %></span>
+        <% end %>
+      <% end %>
+  </div>
+
+  <div class="field">
+    <% @account.champions.each do |c| %>
+      <% if !Champion.where(name:c).first.nil? %>
+        <%= image_tag Champion.where(name:c).first.icon, style: "width:50px;display:inline-block;margin-right:5px;" %>
+      <% else %>
+        <span style="display:inline-block; margin-right:5px;"><%= c.capitalize %></span>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= render 'users/rank' %> <%= render 'users/rank_flex' %>
+  </div>
+
+  <div class="field">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="user-dispos"><%=t 'layout.week' %></th>
+            <th class="user-dispos"><%=t 'layout.weekend' %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- RENDER DISPOS SEMAINE & WEEKEND -->
+            <%= render(partial: 'users/dispos', locals: {reload: true, player: @user}) %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+  <div class="row text-center" style="clear:both">
+    <div class="col-xs-6">
+      <p style="font-size:18px;"><i class="fa fa-skype"></i>&nbsp;&nbsp;<% unless @user.skype.nil? or @user.skype.empty? %><%= @user.skype %><% else %> - <% end %></p>
+    </div>
+    <div class="col-xs-6">
+      <p style="font-size:18px;"><i class="fa fa-microphone"></i>&nbsp;&nbsp;<% unless @user.discord.nil? or @user.discord.empty? %><%= @user.discord %><% else %> - <% end %></p>
+    </div>
+  </div>
+<% else %>
+  <div class="field">
+    <i class="fa fa-group" style="font-size:50px;color:white;background-color:#c0392b;border-radius:50%;padding:20px;"></i>
+  </div>
+  <% @joueurs = @team.members %>
+  <% @game_accounts = @team.accounts %>
+  <div class="field">
+    <% if current_user.account.game.has_soloq %>
+      <% @soloQ = @game_accounts.sort_by(&:"#{:mmr}").last %>
+      <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @soloQ})%></td>
+    <% end %>
+    <% if current_user.account.game.has_teamq %>
+      <% @flexQ = @game_accounts.sort_by(&:"#{:flex_mmr}").last %>
+      <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @flexQ})%></td>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <% @week_starts = @joueurs.pluck(:week_start) %>
+    <% @week_ends = @joueurs.pluck(:week_end) %>
+    <% @we_starts = @joueurs.pluck(:we_start) %>
+    <% @we_ends = @joueurs.pluck(:we_end) %>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="user-dispos"><%=t 'layout.week' %></th>
+            <th class="user-dispos"><%=t 'layout.weekend' %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- RENDER DISPOS SEMAINE & WEEKEND -->
+            <%= render 'teams/dispos' %>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%=t 'layout.role' %></th>
+            <th><%=t('layout.player').capitalize %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% nb = @team.game.nb_players%>
+          <% for i in 0..(nb -1)%>
+           <% if @team.players[i] == 2 %>
+            <% @teaming = @team.teamings.where(active:true, num_role:i).first %>
+            <tr>
+              <td><span class="label label-default"><%= @teaming.role[0...3] %></span></td>
+              <td class="text-left"><%= "<i class='ra ra-queen-crown'></i>".html_safe if @teaming.captain == true %> <%= @teaming.user.account.name %></td>
+            </tr>
+           <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+
+<% end %>
+</div>
+<div class="col-sm-1"></div>
+<div class="col-sm-6">
+  <div class="row text-center" style="margin-bottom:40px;">
+    <div class="col-sm-4">
+      <div class="box-stat">
+        <div class="col-sm-4 stat-left">
+          <i class="fa fa-clock-o"></i>
+        </div>
+        <div class="col-sm-8 stat-right">
+          <% unless @mentorat.hours.nil? %>
+            <%= @mentorat.hours %>
+          <% else %>
+          -
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-8">
+      <div class="box-stat" style="max-width:300px;">
+        <div class="col-sm-4 stat-left">
+          <i class="fa fa-graduation-cap"></i>
+        </div>
+        <div class="col-sm-8 stat-right" style="text-transform:none;font-size:20px;">
+          <%= @mentorat.teacher.game_account.name unless @mentorat.teacher.nil? %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <h4><%=t 'mentorats.difficulties' %></h4>
+    <div class="box-text" style="margin:initial;width:100%;">
+      <%= @mentorat.problem.html_safe unless @mentorat.problem.nil? or @mentorat.problem.empty? %>
+    </div>
+  </div>
+
+  <% unless @mentorat.mentor.present? %>
+    <%= link_to "#{t 'mentorats.follow'}", claim_mentorat_path(@mentorat), method: :put, class:"btn btn-primary btn-lg btn-block", style:"margin-top:50px;" %>
+    <p class="explain" style="margin-top:10px;text-align:justify">
+      <% unless @mentorat.team.present? %>
+        <%=raw t 'mentorats.follow_user' %>
+      <% else %>
+        <%=raw t 'mentorats.follow_team' %>
+      <% end %>
+    </p>
+  <% end %>
+
+</div>

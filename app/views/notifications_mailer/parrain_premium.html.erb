@@ -1,0 +1,14 @@
+<br>
+<p>Salut <b><%= @user.account.name %></b></p>
+<p>Ton filleul <b><%= @filleul.account.name %></b> a pris un abonnement Premium peu de temps après ton parrainage.
+<% if @type == "subscription" %>
+Tu recois donc un abonnement <b><%= link_to @subscription.subscription_plan.title, subscription_plan_url(@subscription.subscription_plan_id) %></b> d'une durée de <b>1 mois</b> pour te remercier.
+<% elsif @type == "extend" %>
+Ton abonnement a donc été étendu de <b><%= @duration %></b> jours pour te remercier.
+<% elsif @type == "upgrade" %>
+Ton abonnement a donc été amélioré en <b><%= link_to @subscription.subscription_plan.title, subscription_plan_url(@subscription.subscription_plan_id) %></b> et été étendu de <b><%= @duration %></b> jours pour te remercier.
+<% end %>
+</p>
+<p>Il en sera de même pour tous les futurs parrainages que tu réaliseras et dont les joueurs deviendront Premium dans le mois suivant leur inscription.</p>
+<%= render 'notifications_mailer/signature' %>
+<br>

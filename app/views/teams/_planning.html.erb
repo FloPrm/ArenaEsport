@@ -1,0 +1,30 @@
+<style type="text/css">
+
+</style>
+
+<% date = Date.today.beginning_of_week %>
+
+<table id="planning-table" class="table table-condensed">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%=(t 'layout.mon')[0..2]%> <%= date.strftime("%d")%></th>
+      <th><%=(t 'layout.tue')[0..2]%> <%= (date+1.day).strftime("%d")%></th>
+      <th><%=(t 'layout.wed')[0..2]%> <%= (date+2.day).strftime("%d")%></th>
+      <th><%=(t 'layout.thu')[0..2]%> <%= (date+3.day).strftime("%d")%></th>
+      <th><%=(t 'layout.fri')[0..2]%> <%= (date+4.day).strftime("%d")%></th>
+      <th><%=(t 'layout.sat')[0..2]%> <%= (date+5.day).strftime("%d")%></th>
+      <th><%=(t 'layout.sun')[0..2]%> <%= (date+6.day).strftime("%d")%></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% nb = @team.game.nb_players %>
+    <% for i in 0..(nb -1) %>
+      <% @teaming = @team.teamings.where(role: @team.roles[i], num_role:i, active: true).first %>
+      <% if @team.players[i] == 2 && @teaming.user.state == 2 %>
+        <%= render(:partial =>'teams/planning_player', locals: {reload: true, teaming_role: @team.roles[i], num_role:i})%>
+      <% end %>
+    <% end %>
+
+  </tbody>
+</table>

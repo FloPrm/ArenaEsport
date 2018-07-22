@@ -1,0 +1,26 @@
+<table class="table table-striped" id="index_teams">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Dissolution</th>
+      <% if can? :manage, :all %>
+      <th colspan="2"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @teams.where.not(end_date: nil).order(:end_date).reverse_order.limit(15).each do |team| %>
+      <tr>
+        <td><%= link_to team.name, team %></td>
+        <% if team.end_date != nil %>
+        <td><%= team.end_date.strftime("%d/%m/%y") %></td>
+        <% end %>
+        <% if can? :manage, :all %>
+        <td><%= link_to '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'.html_safe, edit_team_path(team), remote: true %></td>
+        <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

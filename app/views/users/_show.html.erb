@@ -1,0 +1,219 @@
+<style type="text/css">
+
+</style>
+
+<div class="row">
+  <!-- AVATAR / ICONE -->
+  <div class="col-sm-3 text-center">
+    <%= render 'users/avatar' %>
+    <!-- On peut aussi utiliser une icone user-circle de font-awesome dans le cas ou il n'y a pas d'avatar
+    <i class="fa fa-user-circle" style="font-size: 5em;" aria-hidden="true"></i> -->
+  </div>
+
+  <!-- HEADER LEFT PART -->
+  <% unless @account.nil? %>
+    <div class="col-sm-3" style="margin: 0 auto;">
+      <p><span class="label label-default"><%= @account.p_role %></span>
+        <% unless @account.s_role.blank?%>
+          <% @account.s_role.each do |role| %>
+            <span class="label label-default" style="background:#a2a2a2;"><%= role[0...3] %></span>
+          <% end %>
+        <% end %>
+        <div id="show-rank"><%= render 'users/rank' %> <%= render 'users/rank_flex' %></div>
+      </p>
+      <% if @account.game.characters == true %>
+      <div style="margin-top:15px;">
+          <%= render partial:'users/top3', locals:{size:50} %>
+      </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="col-sm-3" style="margin: 0 auto;">
+      <p style="margin-top:40px;"><span id="show-rank"><span class="label label-default">Aucun compte</span></span></p>
+    </div>
+  <% end %>
+  <!-- HEADER RIGHT PART -->
+
+  <div class="col-sm-3">
+    <div style="height:130px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+      <% @user.badges.sort.reverse.each do |badge| %>
+        <div class="col-sm-4">
+          <%= render(:partial =>'badges/badge', locals: {reload: true, badge: badge}) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-sm-3" style="padding:0px;">
+    <div id="karma" class="text-center" style="margin-bottom:20px;">
+      <%= render 'karmas/count' %>
+    </div>
+    <div id="friender" class="text-center">
+      <%= render 'friendships/friender' %>
+    </div>
+  </div>
+</div>
+<hr>
+<% if can? :manage, Article %>
+<!-- ADMIN PART -->
+<div class="row" style="margin:0px;">
+  <div class="col-sm-3">
+    <p><b><%=t 'layout.user_name' %>:</b> <%= @user.user_name %></p>
+    <% if can? :manage, :all %>
+    <p><b>Email:</b> <%= @user.email %></p>
+    <p><b>Skype:</b> <%= @user.skype %></p>
+    <% end %>
+    <p><b>Langue:</b> <%= @user.language.capitalize %></p>
+  </div>
+  <div class="col-sm-3">
+    <% if can? :manage, :all %>
+    <p><b>Age:</b> <%= @user.birth_date.find_age %> ans</p>
+    <% end %>
+    <% if @user.state == 2 %>
+    <p><b><%=t 'teams.one' %>:</b> <%= link_to @user.team.name, @user.team %></p>
+    <% elsif @user.state == 1 %>
+    <p><b><%=t 'layout.status' %>:</b> <%=t 'layout.search' %></p>
+    <p>Depuis le <b><%= l(@user.date_search.to_date, format: "%d %B") %></b> (<%= (Time.now.to_date - @user.date_search.to_date).to_i %> jours)</p>
+    <% else %>
+    <p><b><%=t 'layout.status' %>:</b> Off</p>
+    <% end %>
+  </div>
+  <% if @user.premade.present? %>
+    <div class="col-sm-2">
+      <b>Premade:</b>
+      <ul>
+        <% @user.premades.each do |premade| %>
+          <li><%= link_to premade.name, user_preview_user_path(premade.user), remote: true %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% elsif @user.team_applications.present? %>
+    <div class="col-sm-2">
+      <b><%=t 'team_applications.title' %>:</b>
+      <ul>
+        <% @user.team_applications.each do |candidature| %>
+          <li><%= link_to candidature.team.name, candidature.team %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="col-sm-4">
+    <div style="height:96px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+      <table class="table-condensed">
+        <tbody>
+          <% @user.teamings.joins(:team).where.not(:teams => {start_date: nil}).order('created_at desc').each do |teaming| %>
+            <tr>
+              <td class="text-center"><%= teaming.created_at.strftime("%d/%m/%y") %></td>
+              <td class="text-center"><span class="label label-default"><%= teaming.role[0...3] %></span></td>
+              <td><%= link_to teaming.team.name, teaming.team %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% unless @user.admin_note.nil? or @user.admin_note.empty? %>
+<div class="alert alert-info">
+  <b>Note:</b>&nbsp; <%= @user.admin_note %>
+</div>
+<% end %>
+<hr>
+<% end %>
+
+<% if params[:team_application].present? %>
+<h4 class="text-center"><%=t 'team_applications.one' %></h4>
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6">
+    <div class="box-text" style="min-height:120px;">
+      <%= @team_application.content %>
+    </div>
+  </div>
+  <div class="col-sm-3"></div>
+</div>
+<hr>
+<% end %>
+
+<!-- TOP PART -->
+<div class="row" style="margin:0px;">
+  <div class="col-sm-6">
+    <div class="field">
+      <h4><%=t 'layout.schedule' %></h4>
+      <table class="table" style="width:50%;">
+        <thead>
+          <tr>
+            <th class="user-dispos"><%=t 'layout.week' %></th>
+            <th class="user-dispos"><%=t 'layout.weekend' %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- RENDER DISPOS SEMAINE & WEEKEND -->
+            <%= render(partial: 'users/dispos', locals: {reload: true, player: @user}) %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="field">
+      <h4><%=t 'users.goal'.pluralize %></h4>
+      <% unless @account.nil? %>
+        <% if @account.objectifs != [] %>
+          <ul style="list-style-type:square;margin-top:15px;">
+          <% @account.objectifs.each do |objectif|%>
+            <% GameAccount::OBJECTIFS.each do |k,v|%>
+              <% if objectif == v %>
+              <li>
+                <%= eval(k) %>
+              </li>
+              <% end %>
+            <% end %>
+          <% end %>
+          </ul>
+        <% else %>
+          <p>-</p>
+        <% end %>
+      <% else %>
+        <p>-</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<!-- BOTTOM PART -->
+<div class="row" style="margin:0px;">
+  <div class="col-sm-6">
+    <div class="field">
+      <h4><%=t 'users.schedule_spe' %></h4>
+      <div class="box-text" style="min-height:120px;">
+        <%= @user.horaire %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="field">
+      <h4><%=t 'layout.other' %></h4>
+      <div class="box-text" style="min-height:120px;">
+        <% unless @account.nil? %>
+          <%= @account.autre %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% if @user.discord.present? %>
+  <div class="row">
+    <div class="col-sm-4">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td style="border:0"><h4>Discord</h4></td>
+            <td style="border:0"><%= @user.discord %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% end %>
+</div>

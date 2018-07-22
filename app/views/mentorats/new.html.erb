@@ -1,0 +1,129 @@
+<style type="text/css">
+  .field textarea {
+    width: 70%;
+    height: 250px;
+    padding: 5px;
+  }
+
+  .input-group {
+    margin-left: 10%;
+  }
+</style>
+
+<%= simple_form_for(@mentorat) do |f| %>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'mentorats.new' %></h3>
+    </div>
+
+    <div class="panel-body text-center">
+      <div class="row" style="margin-bottom:40px;">
+        <div class="col-sm-3">
+          <div class="field">
+            <% if @mentorat.hours.nil? %>
+              <% @mentorat.hours = 1 %>
+            <% end %>
+            <h4><%=t 'mentorats.hours_asked' %></h4>
+            <p class="explain"><%=t 'mentorats.hours_explain' %></p>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+              <input type="number" value="<%= @mentorat.hours %>" class="form-control" name="mentorat[hours]" id="mentorat_hours" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" min="1" max="20">
+
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="field">
+            <h4><%=t 'mentorats.mentor_asked' %></h4>
+            <p class="explain" style="color:#c0392b;"><%=t 'mentorats.mentor_explain' %></p>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
+              <input type="text" class="form-control" value="<%= @account.name %>" name="mentorat[teacher]" id="mentorat_teacher" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="field">
+            <h4>Discord</h4>
+            <p class="explain"><%=t 'mentorats.contact_explain' %></p>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
+              <input type="text" class="form-control" value="<%= current_user.discord %>" placeholder="<%=t 'users.discord_placeholder' %>" name="user[discord]" id="user_discord" maxlength="50">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="field">
+            <h4>Skype</h4>
+            <p class="explain"><%=t 'mentorats.contact_explain' %></p>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-skype"></i></span>
+              <input type="text" class="form-control" value="<%= current_user.skype %>" placeholder="<%=t 'users.skype_placeholder' %>" name="user[skype]" id="user_skype" maxlength="50">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <h4><%=t 'mentorats.difficulties' %></h4>
+        <p class="explain"><%=t 'mentorats.difficulties_explain' %></p>
+        <%= f.input :problem, as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini' } }, label: false, maxlength: 2000 %>
+        <span id="problem_status" data-maximum-length="2000" class="explain" style="font-size:14px;"></span>
+      </div>
+    </div>
+
+    <% if params[:team].present? %>
+      <%= hidden_field_tag(:team, params[:team]) %>
+    <% end %>
+
+    <div class="panel-footer text-center">
+      <%= submit_tag "#{t 'btn.send'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary" %>
+      <%= link_to "#{t 'btn.back'}", mentors_path, class:"btn btn-default" %>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<script type="text/javascript">
+  function maxLengthCheck(object) {
+    if (object.value.length > object.max.length)
+      object.value = object.value.slice(0, object.max.length)
+  }
+
+  function isNumeric (evt) {
+    var theEvent = evt || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode (key);
+    var regex = /[0-9]|\./;
+    if ( !regex.test(key) ) {
+      theEvent.returnValue = false;
+      if(theEvent.preventDefault) theEvent.preventDefault();
+    }
+  }
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var status1 = $('#problem_status');
+  var maxLen1 = status1.data("maximum-length");
+  var editor1 = CKEDITOR.instances.mentorat_problem;
+
+  status1.text(maxLen1 + " caractères restants")
+
+  editor1.on('key', function(event) {
+    var characters1 = this.getData().length;
+
+    status1.text(maxLen1 - characters1+' caractères restants');
+
+    // Applique un style CSS au texte du span 'status' si la limite est dépassée
+
+    if(maxLen1 < characters1) {
+      status1.css('color','red');
+    }
+    else {
+      status1.css('color','black')
+    }
+  });
+});
+</script>

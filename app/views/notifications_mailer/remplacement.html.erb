@@ -1,0 +1,36 @@
+<p><%=t 'hello' %> <b><%= @game_account.name %></b></p>
+<% if @status == "membre" %>
+<p><%=t 'mails.remplacement.membre' %></p>
+<% elsif @status == "remplacant" %>
+<p><%=t 'mails.remplacement.remplacant' %></p>
+<% end %>
+<hr>
+<div style="text-align:center;">
+  <h2><%= @team.name %></h2>
+</div>
+<br>
+<div style="width:250px;margin:0 auto;">
+  <% nb = @team.game.nb_players%>
+  <% for i in 0..(nb -1)%>
+    <% @teaming = @team.teamings.where(active:true, role:@team.roles[i], num_role:i).first %>
+    <p><b><%= @team.roles[i].capitalize %>:</b>
+    <% if @team.players[i] == 2 %>
+      <% @account = @teaming.user.account %>
+      <%= @account.name %>&nbsp;
+      <% if @status == "membre" && @remplacants.include?(@teaming.user) %>(<%=t 'layout.new' %>)<% end %>
+    <% elsif @team.players[i] == 1 %>
+      -
+    <% else %>
+    ...<%=t 'teams.replacement' %>...
+    <% end %>
+    </p>
+  <% end %>
+</div>
+<br>
+<hr>
+<p>
+<%=raw t 'mails.signatures.team', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %>
+<%=raw t 'mails.signatures.team_discord', link: link_to(@game.discord, @game.discord, target: "_blank") %>
+</p>
+
+<%= render 'notifications_mailer/signature' %>

@@ -1,0 +1,67 @@
+<div id="tournaments-widget">
+  <% if @tournaments.where(frequency: 1).where(date: Time.now.beginning_of_week.to_date..Time.now.end_of_week.to_date).present? %>
+    <h5><%=t 'tournaments.this_week' %></h5>
+    <table class="table" style="width:100%;margin-bottom:0px;">
+      <tbody>
+        <% @tournaments.where(frequency: 1).where(date: Time.now.beginning_of_week.to_date..Time.now.end_of_week.to_date).each do |tournament| %>
+          <% @tournament = tournament %>
+          <tr>
+            <td><%= link_to @tournament.name, tournament_path(@tournament), remote: true %></td>
+            <td class="table-rank"><%= render 'tournaments/rank' %></td>
+            <td class="text-center">
+              <% Tournament::BATTLE.each do |k,v| %>
+                <%= k if @tournament.battle == v %>
+              <% end %>
+            </td>
+            <td class="text-center">
+              <% Tournament::DAYS.each do |k,v| %>
+                <%= eval(k) if @tournament.day == v %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <hr style="margin:10px;">
+    <h5><%=t 'tournaments.recurring' %></h5>
+  <% end %>
+
+  <table class="table" style="width:100%;margin-bottom:0px;">
+    <tbody>
+      <% @tournaments.where('frequency > ?', 1).where('mmr >= ?', current_user.account.mmr).order(:mmr).order(:day).each do |tournament| %>
+        <% @tournament = tournament %>
+        <tr>
+          <td><%= link_to @tournament.name, tournament_path(@tournament), remote: true %></td>
+          <td class="table-rank"><%= render 'tournaments/rank' %></td>
+          <td class="text-center">
+            <% Tournament::BATTLE.each do |k,v| %>
+              <%= k if @tournament.battle == v %>
+            <% end %>
+          </td>
+          <td class="text-center">
+            <% Tournament::DAYS.each do |k,v| %>
+              <%= eval(k) if @tournament.day == v %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <% @tournaments.where('frequency > ?', 1).where('mmr < ?', current_user.account.mmr).order(:mmr).reverse_order.each do |tournament| %>
+        <% @tournament = tournament %>
+        <tr class="disabled">
+          <td><%= link_to @tournament.name, tournament_path(@tournament), remote: true %></td>
+          <td class="table-rank"><%= render 'tournaments/rank' %></td>
+          <td class="text-center">
+            <% Tournament::BATTLE.each do |k,v| %>
+              <%= k if @tournament.battle == v %>
+            <% end %>
+          </td>
+          <td class="text-center">
+            <% Tournament::DAYS.each do |k,v| %>
+              <%= eval(k) if @tournament.day == v %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,76 @@
+<style type="text/css">
+  .panel .col-sm-4 .panel-body { height: 140px; }
+</style>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'gems.title' %></h3>
+    </div>
+    <div class="panel-body" style="height:500px">
+      <div class="row">
+        <div class="col-sm-1 col-xs-3 text-center">
+          <i class="ra ra-gem" style="color:#3498db;font-size:40px;"></i>
+        </div>
+        <div class="col-sm-11 col-xs-9">
+          <p class="text-center"><%=t 'gems.description' %></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <h4><i class="fa fa-handshake-o"></i>&nbsp; <%=t 'gems.referral' %></h4>
+            </div>
+            <div class="panel-body">
+              <p style="text-align:justify"><%=t 'gems.referral_content' %></p>
+            </div>
+            <div class="panel-footer">
+              <%= render 'invitations/parrainage' %>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <h4><i class="ra ra-castle-flag"></i>&nbsp; <%=t 'gems.achievements' %></h4>
+            </div>
+            <div class="panel-body">
+              <p style="text-align:justify"><%=t 'gems.achievements_content' %></p>
+            </div>
+            <div class="panel-footer">
+              <%= link_to "#{t 'btn.see_more'}", achievements_path, class:"btn btn-primary btn-block" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <h4><i class="fa fa-credit-card"></i>&nbsp; <%=t 'gems.purchase' %></h4>
+            </div>
+            <div class="panel-body">
+              <p style="text-align:justify"><%=t 'gems.purchase_content' %></p>
+            </div>
+            <div class="panel-footer">
+              <%= link_to "#{t 'gems.coming_soon'}", pricing_path, class:"btn btn-primary btn-block", disabled: "disabled" %>
+            </div>
+          </div>
+        </div>
+      </div><!-- END ROW -->
+      <hr>
+      <p class="explain text-center"><%=t 'gems.warning' %></p>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var clipboard = new Clipboard('.clipboard');
+      clipboard.on('success', function(e) {
+          console.log(e);
+      });
+      clipboard.on('error', function(e) {
+          console.log(e);
+      });
+});
+</script>

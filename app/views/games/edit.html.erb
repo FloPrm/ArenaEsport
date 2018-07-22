@@ -1,0 +1,120 @@
+<style type="text/css">
+  .form-control { margin: 0 auto; text-align: center; width: 80%; }
+</style>
+
+<%= simple_form_for(@game) do |f| %>
+<%= f.error_notification %>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Modifier <%= @game.title %></h3>
+    </div>
+    <div class="panel-body text-center">
+
+      <div class="row">
+        <div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-4">
+          <p>
+            <h5>Nom</h5>
+            <input type="text" value="<%= @game.title %>" class="form-control" name="game[title]" id="game_title" maxlength="35">
+          </p>
+        </div>
+        <div class="col-sm-4">
+          <p>
+            <h5>Actif</h5>
+            <%= f.input :active, as: :select, label: false, include_blank: false %>
+          </p>
+        </div>
+      </div>
+      <br>
+
+      <div class="row">
+        <div class="col-sm-3">
+          <h5>Roles</h5>
+          <%= link_to "Ajouter", roles_game_path(@game, type:"add"), class:"btn btn-basic", method: :put, remote: true %>
+          <div id="roles">
+            <%= render 'games/roles' %>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <p>
+            <h5>MMR Mentorat</h5>
+            <input type="number" value="<%= @game.mentorat_mmr %>" class="form-control" name="game[mentorat_mmr]" id="game_mentorat_mmr" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" min="1" max="20">
+          </p>
+
+          <p>
+            <h5>Joueur</h5>
+            <input type="text" value="<%= @game.player_name %>" class="form-control" placeholder="ex: invocateur, battletag..." name="game[player_name]" id="game_player_name" maxlength="30">
+          </p>
+
+          <p>
+            <h5>Personnage</h5>
+            <input type="text" value="<%= @game.character_name %>" class="form-control" placeholder="ex: champion, héros..." name="game[character_name]" id="game_character_name" maxlength="30">
+          </p>
+
+          <p>
+            <h5>Discord</h5>
+            <input type="text" value="<%= @game.discord %>" class="form-control" name="game[discord]" id="game_discord" maxlength="50">
+          </p>
+
+          <p>
+            <h5>Discord EU</h5>
+            <input type="text" value="<%= @game.discord_eu %>" class="form-control" name="game[discord_eu]" id="game_discord_eu" maxlength="50">
+          </p>
+        </div>
+        <div class="col-sm-5">
+          <div class="row">
+            <div class="col-sm-6">
+              <p>
+                <%= f.label "Nombre de joueurs" %>
+                <%= f.input :nb_players, collection: 2..15, label: false %>
+              </p>
+              <p>
+                <%= f.label :has_soloq %><br />
+                <%= f.check_box :has_soloq %>
+              </p>
+              <p>
+                <%= f.label :compositions %><br />
+                <%= f.check_box :compositions %>
+              </p>
+            </div>
+            <div class="col-sm-6">
+              <p>
+                <%= f.label :adaptable %><br />
+                <%= f.check_box :adaptable %>
+              </p>
+              <p>
+                <%= f.label :has_teamq %><br />
+                <%= f.check_box :has_teamq %>
+              </p>
+              <p>
+                <%= f.label :compo_bans %><br />
+                <%= f.check_box :compo_bans %>
+              </p>
+              <p>
+                <%= f.label :characters %><br />
+                <%= f.check_box :characters %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+		</div>
+    <div class="panel-footer text-center">
+      <%= submit_tag "Enregistrer", class: "btn btn-primary" %>
+      <%= link_to "Retour", @game, class:"btn btn-default" %>
+    </div>
+	</div>
+</div>
+<% end %>
+
+<script type="text/javascript">
+document.getElementById("clickMe").onclick = function () {
+  $("#roles").append("</br><input multiple=\"multiple\" name=\"game[roles][]\" id=\"game_roles\" type=\"text\">");
+};
+
+
+</script>

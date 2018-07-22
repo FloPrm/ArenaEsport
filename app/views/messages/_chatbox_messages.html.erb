@@ -1,0 +1,10 @@
+<% if current_user.team.members.where(role: "captain_p").present?
+  @history = 150
+else
+  @history = 50
+end %>
+
+<% current_user.team_messages.last(@history).each do |message| %>
+  <% @message = message %>
+  <%= render(@message) %>
+<% end %>

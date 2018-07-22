@@ -1,0 +1,41 @@
+<% if account.present? %>
+<% @account = GameAccount.find(account.id) %>
+
+<% if @account.tier.blank? %>
+  <% get_game_rank_game_account_url(@account) %>
+<% end %>
+
+<% if !@account.flex_tier.blank? %>
+
+  <% case @account.flex_tier
+  when "DIAMOND"
+    @bg = "background:#57a2dd;"
+  when "PLATINUM"
+    @bg = "background:#4d9e82;"
+  when "GOLD"
+    @bg = "background:#e7c244;"
+  when "SILVER"
+    @bg = "background:#93a99e;"
+  when "BRONZE"
+    @bg = "background:#a27c4e;"
+  else
+    @bg = "background:#777;"
+  end %>
+
+  <% case @account.game_id
+  when 1
+    @rank = @account.flex_tier + " " + @account.flex_division
+  else
+    @rank = @account.flex_tier
+  end %>
+
+  <span class="label label-rank" style="<%= @bg %> margin-right:3px;" data-toggle="tooltip" title="FlexQ"><%= @rank %></span>
+
+<% else %>
+  <% if @account.game_id.blank? %>
+    <span class="label label-rank" data-toggle="tooltip" title="FlexQ">Nom incorrect</span>
+  <% else %>
+    <span class="label label-rank" data-toggle="tooltip" title="FlexQ">Unranked</span>
+  <% end %>
+<% end %>
+<% end %>

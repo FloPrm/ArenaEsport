@@ -1,0 +1,46 @@
+<%= simple_form_for(@planning, method: :put) do |f| %>
+
+<div id="edit-planning-modal" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%=t 'plannings.mine' %></h3>
+    </div>
+    <div class="modal-body">
+
+      <table class="table">
+        <thead>
+          <th><%=(t 'layout.mon')[0..2]%></th>
+          <th><%=(t 'layout.tue')[0..2]%></th>
+          <th><%=(t 'layout.wed')[0..2]%></th>
+          <th><%=(t 'layout.thu')[0..2]%></th>
+          <th><%=(t 'layout.fri')[0..2]%></th>
+          <th><%=(t 'layout.sat')[0..2]%></th>
+          <th><%=(t 'layout.sun')[0..2]%></th>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= f.input :lun, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+            <td><%= f.input :mar, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+            <td><%= f.input :mer, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+            <td><%= f.input :jeu, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+            <td><%= f.input :ven, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+            <td><%= f.input :sam, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+            <td><%= f.input :dim, label: false, collection: Planning::STATES.map{ |k,v| [eval(k),v]}, include_blank: false %></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <%= hidden_field_tag(:team, @planning.team.id) %>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "#{t 'btn.save'}", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.close' %></button>
+    </div>
+  </div>
+</div>
+
+<% end %>

@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= sort_link @search, :email, "Email" %> (<%= @whitelists.count %>)</th>
+      <th><%= sort_link @search, :created_at, "Ajouté" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @whitelists.order(:created_at).reverse_order.each do |whitelist| %>
+    <tr>
+      <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, whitelist_path(whitelist), method: :delete, remote: true %></td>
+      <td><%= whitelist.email %></td>
+      <td><%= whitelist.created_at.strftime("%d/%m/%y - %H:%M") %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

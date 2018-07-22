@@ -1,0 +1,205 @@
+<style type="text/css">
+  .icon-menu .panel i { font-size: 60px; }
+  .icon-menu .panel { height: 150px; text-align: center; padding: 50px 0px;}
+</style>
+
+<section class="container">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="text-center">Admin panel</h3>
+    </div>
+    <div class="panel-body" style="padding:50px 10px;min-height:400px;">
+      <div style="margin-bottom:50px;">
+        <!-- ROW STAT 1 -->
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="box-stat">
+              <div class="col-xs-4 stat-left">
+                <i class="fa fa-user"></i>
+              </div>
+              <div class="col-xs-8 stat-right">
+                <%= @users.count %> (+ <%= @users.where(created_at: Time.now.beginning_of_week-7.days..Time.now.end_of_week-7.days).count %>)
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="box-stat">
+              <div class="col-xs-4 stat-left">
+                <i class="fa fa-group"></i>
+              </div>
+              <div class="col-xs-8 stat-right">
+                <%= @teams.count %> (+ <%= @teams.where(created_at: Time.now.beginning_of_week-7.days..Time.now.end_of_week-7.days).count %>)
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="box-stat">
+              <div class="col-xs-4 stat-left">
+                <i class="fa fa-list"></i>
+              </div>
+              <div class="col-xs-8 stat-right">
+                <%= @teamings.count %> (+ <%= @teamings.where(created_at: Time.now.beginning_of_week-7.days..Time.now.end_of_week-7.days).count %>)
+              </div>
+            </div>
+        </div>
+      </div>
+      <div style="padding:30px;margin:30px 0px;">
+        <!-- ROW 1 -->
+        <div class="row icon-menu">
+          <div class="col-sm-2">
+            <a href="<%= users_path %>">
+              <div class="panel">
+                <i class="fa fa-user"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= teams_path %>">
+              <div class="panel">
+                <i class="fa fa-group"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= teamings_path %>">
+              <div class="panel">
+                <i class="fa fa-list"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= premades_path %>">
+              <div class="panel">
+                <i class="fa fa-handshake-o"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= parrainages_path %>">
+              <div class="panel">
+                <i class="fa fa-user-plus"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= team_applications_path %>">
+              <div class="panel">
+                <i class="fa fa-pencil-square-o"></i>
+              </div>
+            </a>
+          </div>
+        </div>
+        <!-- ROW 2 -->
+        <div class="row icon-menu">
+          <div class="col-sm-2">
+            <a href="<%= messages_path %>">
+              <div class="panel">
+                <i class="fa fa-envelope"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= karmas_path %>">
+              <div class="panel">
+                <i class="fa fa-thumbs-up"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= polls_path %>">
+              <div class="panel">
+                <i class="fa fa-check-square-o"></i>
+              </div>
+            </a>
+          </div>
+          <% if can? :manage, :all %>
+          <div class="col-sm-2">
+            <a href="<%= subscription_plans_path %>">
+              <div class="panel">
+                <i class="fa fa-shopping-cart"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= subscriptions_path %>">
+              <div class="panel">
+                <i class="fa fa-credit-card"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= achievements_path %>">
+              <div class="panel">
+                <i class="ra ra-scroll-unfurled"></i>
+              </div>
+            </a>
+          </div>
+          <% end %>
+        </div>
+
+        <% if can? :manage, :all %>
+        <!-- ROW 3 -->
+        <div class="row icon-menu">
+          <div class="col-sm-2">
+            <a href="<%= games_path %>">
+              <div class="panel">
+                <i class="fa fa-gamepad"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= tournaments_path %>">
+              <div class="panel">
+                <i class="fa fa-trophy"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= champions_path %>">
+              <div class="panel">
+                <i class="ra ra-helmet"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= compositions_path %>">
+              <div class="panel">
+                <i class="fa fa-cubes"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= notes_path %>">
+              <div class="panel">
+                <i class="fa fa-pencil-square"></i>
+              </div>
+            </a>
+          </div>
+          <div class="col-sm-2">
+            <a href="<%= badges_path %>">
+              <div class="panel">
+                <i class="ra ra-castle-flag"></i>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- ROW 4 -->
+        <div class="row icon-menu">
+          <div class="col-sm-2">
+            <a href="/analytics">
+              <div class="panel">
+                <i class="fa fa-line-chart"></i>
+              </div>
+            </a>
+          </div>
+        </div>
+        <% end %>
+
+      </div>
+
+    </div> <!-- End icon menu part -->
+  </div>
+</div>
+</section>

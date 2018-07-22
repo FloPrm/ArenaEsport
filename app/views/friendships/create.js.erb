@@ -1,0 +1,9 @@
+$('#friendship_friend').val('');
+$('#notice-friend').html("<%= flash[:friend] %>");
+$('#pending-friends').html("<%= j (render 'friendships/pending') %>");
+<% unless @user.nil? %>
+$('#friender').html("<%= j (render(:partial => 'friendships/friender', locals: {reload: true})).html_safe %>");
+<% end %>
+<% unless @team.nil? %>
+$('#team-tabs').html("<%= j (render 'teams/roster') %>");
+<% end %>

@@ -1,0 +1,10 @@
+<h2 style="margin-bottom:0px;"><%= @price_ttc.round(2) %>€</h2>
+<div class="text-center">
+  <%=t 'layout.or' %> &nbsp;&nbsp; <h4 style="display:inline-block" data-toggle="tooltip" title="Gems: monnaie virtuelle"><%= @gem_price %> <i class="ra ra-gem" style="color:#3498db"></i></h4>
+</div>
+<p class="text-muted text-center"><%=t 'subscriptions.engagement' %></p>
+<hr>
+<b><%=t 'subscriptions.ht' %></b> <%= @price_ht.round(2) %>€
+<hr>
+<b><%=t 'subscriptions.vat' %></b> (20%) <%= @tva.round(2) %>€
+<hr>

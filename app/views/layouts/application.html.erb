@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Arena Esport - 1st EUW recruitment tool for League Of Legends and Overwatch</title>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="//maps.google.com/maps/api/js?key=AIzaSyDKp6wmssq4bVYptOmYRI0JcFGM5yU0CKs"></script>
+<script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.16/dist/clipboard.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Press+Start+2P&subset=cyrillic,greek,latin-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Dosis:400,700" rel="stylesheet">
+
+<%= favicon_link_tag 'favicon.ico' %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= action_cable_meta_tag if user_signed_in? %>
+  <%= csrf_meta_tags %>
+  <%= javascript_include_tag Ckeditor.cdn_url %>
+
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '247847069013860'); // Insert your pixel ID here.
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=247847069013860&ev=PageView&noscript=1"
+/></noscript>
+<!-- DO NOT MODIFY -->
+<!-- End Facebook Pixel Code -->
+</head>
+
+<% unless controller?("home") && action?("index") %>
+  <body class="index" style="padding-top:90px;">
+    <%= render "layouts/header" %>
+
+    <!-- Message d'erreur -->
+    <% flash.each do |key, value| %>
+      <% if key == "notice" or key == "alert" %>
+        <div class="alert alert-<%= key %>" style="text-align:center">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%= value %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div id="main">
+      <%= yield %>
+      <%= render 'messages/chatbox' %>
+    </div>
+<% else %>
+  <body class="index" style="padding-top:65px;">
+    <%= render "layouts/header" %>
+
+    <div id="main">
+      <%= yield %>
+    </div>
+<% end %>
+
+    <div id="modal-window" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    <div id="modal-large" class="modal modal-fullscreen fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+    <%= render "layouts/footer" %>
+  </body>
+</html>
+
+<script type="text/javascript">
+$(document).keyup(function (event) {
+  if (event.which === 27) {
+    $('#modal-window').modal('hide');
+    $('#modal-large').modal('hide');
+  }
+});
+</script>
+<% if user_signed_in? && current_user.state == 2 %>
+<script type="text/javascript">
+function hasClass(element, cls) {
+    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
+
+$(document).ready(function(){
+  var chatBox = document.getElementById('chatbox-main');
+  $('.chatbox-header').on('click', function() {
+    if(chatBox.style.display == "none") {
+      chatBox.style.display = "block";
+      $(".chatbox-body").scrollTop($(".chatbox-body")[0].scrollHeight);
+    }
+    else {
+      chatBox.style.display = "none"
+    }
+  });
+});
+</script>
+<% end %>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var $_Tawk_API={},$_Tawk_LoadStart=new Date();
+(function(){
+var
+s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/57276f03406fda521bc524d9/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+<script type="text/javascript">
+    window.smartlook||(function(d) {
+    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+    c.charset='utf-8';c.src='https://rec.smartlook.com/recorder.js';h.appendChild(c);
+    })(document);
+    smartlook('init', 'e74f8669fe580037f1900066421c3f3fdc62bee7');
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-99676132-1', 'auto');
+  ga('send', 'pageview');
+</script>

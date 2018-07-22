@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  team_id: 
+  lun: 1
+  mar: 1
+  mer: 1
+  jeu: 1
+  ven: 1
+  sam: 1
+  dim: 1
+
+two:
+  user_id: 
+  team_id: 
+  lun: 1
+  mar: 1
+  mer: 1
+  jeu: 1
+  ven: 1
+  sam: 1
+  dim: 1

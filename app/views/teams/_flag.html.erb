@@ -1,0 +1,17 @@
+<% countries = team.members.pluck(:country).reject(&:nil?).uniq %>
+<% unless countries.first.nil? %>
+<% if countries.size == 1
+  flag = countries.first.downcase
+elsif countries.size == 2
+  if countries.include?("FR") && countries.include?("BE")
+    flag = "fr-be"
+  elsif countries.include?("FR") && countries.include?("CH")
+    flag = "fr-ch"
+  else
+    flag = "europe"
+  end
+else
+  flag = "europe"
+end %>
+<%= image_tag "flags/svg/#{flag}.svg", height:height %>
+<% end %>

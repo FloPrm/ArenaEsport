@@ -1,0 +1,85 @@
+<style type="text/css">
+
+.btn-default {
+  background-color: #1a1a1a;
+  border-color: #333333;
+  margin-top: 15px;
+}
+
+#partners p { text-align: justify; margin: 50px 0px; }
+
+.description-bloc { padding: 50px; }
+
+</style>
+
+<div id="partners" class="container text-center" style="padding-bottom: 100px;">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1><%=t 'home.our_partners' %></h1>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-5">
+            <a href="https://battlefy.com/owlysix" target="_blank">
+              <img src="<%= asset_url("assets/logos/owlysix.png") %>" class="img-responsive img-centered">
+            </a>
+          </div>
+          <div class="col-sm-7 description-bloc">
+            <h2>Owly Six</h2>
+            <p><%=t 'home.owlysix' %></p>
+            <a href="https://battlefy.com/owlysix" class="btn btn-primary" target="_blank"><%=t 'layout.website' %></a><br><br>
+            <ul class="list-inline social-buttons" style="display: inline-block;">
+                <li><a href="https://twitter.com/OwlySix" target="_blank"><i class="fa fa-twitter"></i></a>
+                </li>
+                <li><a href="https://www.facebook.com/OwlySix/" target="_blank"><i class="fa fa-facebook"></i></a>
+                </li>
+            </ul>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <a href="http://mantic0re.fr" target="_blank">
+              <img src="<%= asset_url("assets/logos/manticore.png") %>" class="img-responsive img-centered">
+            </a>
+          </div>
+          <div class="col-sm-8 description-bloc">
+            <h2>Mantic0re</h2>
+            <p><%=t 'home.manticore' %></p>
+            <a href="http://mantic0re.fr/" class="btn btn-primary" target="_blank"><%=t 'layout.website' %></a><br><br>
+            <ul class="list-inline social-buttons" style="display: inline-block;">
+                <li><a href="https://twitter.com/eS_Mantic0re" target="_blank"><i class="fa fa-twitter"></i></a>
+                </li>
+                <li><a href="https://www.facebook.com/AssociationMantic0re/" target="_blank"><i class="fa fa-facebook"></i></a>
+                </li>
+            </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1>Soutiens</h1>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-4">
+          <a href="https://www.stakrn.com/fr/" target="_blank">
+            <img src="<%= asset_url("assets/logos/stakrn.png") %>" class="img-responsive img-centered">
+          </a>
+        </div>
+        <div class="col-sm-8 description-bloc">
+          <h2>Stakrn</h2>
+          <p><%=t 'home.stakrn' %></p>
+          <a href="https://www.stakrn.com/fr/" class="btn btn-primary" target="_blank"><%=t 'layout.website' %></a><br><br>
+          <ul class="list-inline social-buttons" style="display: inline-block;">
+              <li><a href="https://twitter.com/Stakrn_" target="_blank"><i class="fa fa-twitter"></i></a>
+              </li>
+              <li><a href="https://www.facebook.com/Stakrn/" target="_blank"><i class="fa fa-facebook"></i></a>
+              </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

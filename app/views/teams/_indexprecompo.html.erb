@@ -1,0 +1,70 @@
+<table class="table table-striped" id="index_teams">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Nom</th>
+      <% Game.first.roles.each do |role| %>
+        <th><%=role.capitalize[0...3] %></th>
+      <%end%>
+      <th class="text-center">Age</th>
+      <th class="text-center">Min</th>
+      <th class="text-center">Max</th>
+      <th class="team-dispos">Semaine</th>
+      <th class="team-dispos">Weekend</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @teams.where(start_date: nil, end_date: nil).order(:updated_at).each do |team| %>
+      <% @joueurs = User.joins(:teamings).where(:teamings => { team_id: team.id, active: true }) %>
+      <tr>
+        <td><%= render partial:"teams/flag", locals:{team: team, height:20} %></td>
+        <td class="<%= "text-gold1" if team.members.pluck(:role).include?("captain_p") %>"><%= link_to team.name[0..15], team %></td>
+        <% nb = team.game.nb_players%>
+        <% for i in 0..(nb -1)%>
+          <td><% if team.players[i] == 0 %>
+              <i class="glyphicon glyphicon-remove" aria-hidden="true" style="color:#c0392b"></i>
+            <% elsif team.players[i] == 1 %>
+              <i class="fa fa-question" style="color:#2980b9;"></i>
+            <% else %>
+              <i class="glyphicon glyphicon-ok" aria-hidden="true" style="color:#27ae60"></i>
+            <% end %>
+          </td>
+        <%end%>
+
+        <!-- Affichage âge Min & Max pour l'équipe -->
+        <% @ages = [] %>
+        <% @joueurs.where('birth_date < ?', Date.today).each do |user| @ages << user.birth_date.find_age end %>
+        <% if @joueurs.where('birth_date < ?', Date.today).count > 0 %>
+        <td><%= @ages.sort.first %> à <%= @ages.sort.last %></td>
+        <% else %>
+        <td>-</td>
+        <% end %>
+
+        <% if @joueurs.any? %>
+          <% @game_accounts = team.accounts %>
+          <% @min = @game_accounts.sort_by(&:"#{:mmr}").first %>
+          <% @max = @game_accounts.sort_by(&:"#{:mmr}").last %>
+
+          <td style="text-align:right;"><%= render(:partial =>'teams/rank', locals: {reload: true, account: @min})%></td>
+          <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @max})%></td>
+        <% else %>
+          <td>-</td>
+          <td>-</td>
+        <% end %>
+
+        <% @week_starts = @joueurs.pluck(:week_start) %>
+        <% @week_ends = @joueurs.pluck(:week_end) %>
+        <% @we_starts = @joueurs.pluck(:we_start) %>
+        <% @we_ends = @joueurs.pluck(:we_end) %>
+
+        <%= render 'teams/dispos' %>
+
+        <% if can? :manage, :all %>
+        <td><%= link_to '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'.html_safe, edit_team_path(team), remote: true %></td>
+        <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

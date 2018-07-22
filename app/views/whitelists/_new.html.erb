@@ -1,0 +1,12 @@
+<%= simple_form_for(@whitelist, remote: true) do |f| %>
+
+  <div class="row col-sm-10" style="margin-bottom: 20px;">
+    <div class="col-sm-6">
+      <%= f.input :email, label: false, required: true, placeholder: "Adresse email" %>
+    </div>
+    <div class="col-sm-6">
+      <%= submit_tag "Ajouter", class: "btn btn-primary" %>
+    </div>
+  </div>
+
+<% end %>

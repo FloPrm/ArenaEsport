@@ -1,0 +1,7 @@
+<span style="font-size:18px;"><%=t 'hello' %>
+<b><% if current_user.first_name.present? %>
+<%= current_user.first_name %>
+<% elsif current_user.account.present? %>
+<%= current_user.account.name %>
+<% end %></b>
+</span>

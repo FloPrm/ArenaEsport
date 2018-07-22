@@ -1,0 +1,4 @@
+<% @team.messages.order('created_at asc').each do |message| %>
+  <% @message = message %>
+  <%= render(@message) %>
+<% end %>

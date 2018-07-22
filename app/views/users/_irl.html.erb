@@ -1,0 +1,60 @@
+<style>
+      #map {
+        width: 100%;
+        height: 300px;
+        background-color: grey;
+      }
+</style>
+
+<br>
+<div class="col-lg-6">
+
+  <dl class="dl-horizontal">
+    <dt>Prénom</dt>
+    <dd><%if @user.first_name != nil%>
+      <%= @user.first_name %>
+    <%else%>
+      -
+    <%end%></dd>
+
+    <dt>Nom</dt>
+    <dd><%if @user.last_name != nil%>
+      <%= @user.last_name %>
+    <%else%>
+      -
+    <%end%></dd>
+
+    <dt>Email</dt>
+    <dd><%= @user.email%></dd>
+
+    <dt>Âge</dt>
+    <dd><% if @user.birth_date != nil %>
+      <%= @user.birth_date.find_age %>
+      ans
+    <%else%>
+      -
+    <%end%></dd>
+
+    <dt>Localisation</dt>
+    <dd><% if @user.address != nil %>
+    <%= @user.address %>
+    <% else %>
+      -
+    <% end %></dd>
+  </dl>
+
+</div>
+
+<div class="col-lg-6">
+	<div id="map"></div>
+</div>
+
+<script type="text/javascript">
+handler = Gmaps.build('Google');
+handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+markers = handler.addMarkers(<%=raw @hash.to_json %>);
+handler.bounds.extendWith(markers);
+handler.fitMapToBounds();
+handler.getMap().setZoom(8);
+});
+</script>

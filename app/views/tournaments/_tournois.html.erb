@@ -1,0 +1,25 @@
+<style type="text/css">
+  #events .disabled { color: grey; }
+  #events .disabled a { pointer-events: none; color:inherit; }
+  #events .table > tbody > tr:first-child > td { border-top: 0px; }
+</style>
+
+<div class="panel panel-default">
+  <div class="panel-heading text-center">
+    <h3><%=t 'tournaments.title' %></h3>
+  </div>
+
+  <div class="panel-body" style="min-height:210px;padding:6px 10px">
+    <% unless !@tournaments.present? %>
+      <%= render 'tournaments/widget' %>
+    <% else %>
+      <div style="color:grey;text-align:center;padding-top:80px;">
+        <%=t 'tournaments.none' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="panel-footer">
+    <br>
+  </div>
+</div>

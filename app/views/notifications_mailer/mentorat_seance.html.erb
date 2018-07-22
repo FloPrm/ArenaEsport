@@ -1,0 +1,42 @@
+<p><%=t 'hello' %> <b><%= @student.name %></b></p>
+<% if @type == "solo" %>
+<p><%=raw t 'mails.mentorat_seance.player', name: @mentor.name %></p>
+<% elsif @type == "team" %>
+<p><%=raw t 'mails.mentorat_seance.team', name: @mentor.name %></p>
+<% end %>
+<hr>
+<div style="text-align:center;">
+  <h3><%= @seance.title %></h3>
+</div>
+<table style="width:100%;">
+  <thead>
+    <tr>
+      <th style="text-align:center;"><%=t 'layout.date' %></th>
+      <th style="text-align:center;"><%=t 'layout.hour' %></th>
+      <th style="text-align:center;"><%=t 'layout.duration' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:center;width:33%;"><%= l(@seance.date, format: "%A %d %B") %></td>
+      <td style="text-align:center;width:33%;"><%= @seance.hour.strftime("%H:%M") %></td>
+      <td style="text-align:center;width:33%;"><% Seance::DURATION.each do |k,v| %>
+      <%= k if v == @seance.duration %>
+      <% end %></td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<div style="text-align:center;">
+  <h4><%=t 'mentors.proceedings' %></h4>
+</div>
+<%= @seance.content.html_safe unless @seance.content.nil? %>
+<hr>
+<p>
+  <% if @type == "solo" %>
+    <%=raw t 'mails.signatures.mentorat', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %>
+  <% elsif @type == "team" %>
+    <%=raw t 'mails.signatures.team', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %>
+  <% end %>
+</p>
+<%= render 'notifications_mailer/signature' %>

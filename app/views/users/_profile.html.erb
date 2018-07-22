@@ -1,0 +1,65 @@
+<br>
+<dl class="dl-horizontal">
+  <dt>Pseudo</dt>
+  <dd><%= @user.user_name%></dd>
+
+	<dt>Nom d'invocateur</dt>
+	<dd><%if @account.blank?%>
+		Non renseigné
+	<%else%>
+		<%= @account.name %>
+	<%end%></dd>
+
+	<dt>Rang</dt>
+	<dd><%if !@account.blank? && @account.tier.blank?%>
+      <% get_game_rank_game_account_url(@account) %>
+  <%end%>
+  <%if @account.blank?%>
+		-
+	<% else %>
+			<% if !@account.tier.blank? %>
+			<div style="text-transform:uppercase; font-size:17px;">
+				<% if @account.tier == "DIAMANT" %>
+					<span class="label label-default" style="background:#57a2dd;"><%= @account.tier + " " + @account.division%></span>
+				<% elsif @account.tier == "PLATINUM" %>
+					<span class="label label-default" style="background:#4d9e82;"><%= @account.tier + " " + @account.division%></span>
+				<% elsif @account.tier == "GOLD" %>
+					<span class="label label-default" style="background:#e7c244;"><%= @account.tier + " " + @account.division%></span>
+				<% elsif @account.tier == "SILVER" %>
+					<span class="label label-default" style="background:#93a99e;"><%= @account.tier + " " + @account.division%></span>
+				<% elsif @account.tier == "BRONZE" %>
+					<span class="label label-default" style="background:#a27c4e;"><%= @account.tier + " " + @account.division%></span>
+				<% else %>
+				<span class="label label-default"><%= @account.tier + " " + @account.division%></span>
+				<% end %>
+		</div>
+		<%else%>
+			Pseudo incorrect
+		<%end%>
+	<% end %></dd>
+
+	<dt>Rôle Main</dt>
+	<dd><%if !@account.blank?%>
+		<%if @account.p_role != nil%>
+			<%= @account.p_role.humanize %>
+		<%else%>
+			-
+		<%end%>
+	<%else%>
+		-
+	<%end%></dd>
+
+	<dt>Rôle(s) Secondaire(s)</dt>
+	<dd><%if !@account.blank? %>
+		<%if @account.s_role != nil%>
+			<%= @account.s_role %>
+		<%else%>
+			-
+		<%end%>
+	<%else%>
+		-
+	<%end%></dd>
+
+	<dt>Comptes liés</dt>
+	<dd><%=@user.game_accounts.count%></dd>
+</dl>

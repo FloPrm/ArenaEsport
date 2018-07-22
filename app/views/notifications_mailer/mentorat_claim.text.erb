@@ -1,0 +1,18 @@
+<%=t 'hello' %> <%= @student.name %>
+
+<% if @type == "solo" %>
+<%= strip_tags(t('mails.mentorat_claim.p1', name: @mentor.name)) %>
+
+<%=t 'mails.mentorat_claim.p2' %>
+
+<%= strip_tags(t('mails.signatures.mentorat', link: (t('mails.signatures.connect') + " (#{root_url})"))) %>
+<% elsif @type == "team" %>
+<%= strip_tags(t('mails.mentorat_claim.t1', name: @mentor.name)) %>
+
+<%=t 'mails.mentorat_claim.t2' %>
+
+<%= strip_tags(t('mails.signatures.team', link: (t('mails.signatures.connect') + " (#{root_url})"))) %>
+<% end %>
+
+<%=t 'mails.signature_1' %>
+<%=t 'mails.signature_2' %>

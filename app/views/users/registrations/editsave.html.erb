@@ -1,0 +1,121 @@
+<section>
+<h2>Modifier mon profil</h2>
+(tous les champs ne sont pas là mais l'idée est là)<br>
+
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="field"><%= f.label :user_name %><br />
+    <%= f.text_field :user_name, autofocus: true %>
+  </div>
+
+  <div class="field"><%= f.label :first_name %><br />
+    <%= f.text_field :first_name, autofocus: true %>
+  </div>
+
+  <div class="field"><%= f.label :last_name %><br />
+    <%= f.text_field :last_name, autofocus: true %>
+  </div>
+
+  <div class="file_field"><%= f.label :avatar, "Image de profil" %><br />
+    <%= f.file_field :avatar %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+
+  <div class="field"><%= f.label 'Date de naissance'%><br />
+  <% if @user.birth_date.nil?
+      start_year = Date.today.year - 12
+      start_month = Date.today.month
+      start_day = Date.today.day
+    else
+      start_year = @user.birth_date.year
+      start_month = @user.birth_date.month
+      start_day = @user.birth_date.day
+    end
+  %>
+  <%= f.input :birth_date, :as => :date, :start_year => Date.today.year - 12,
+    :end_year => 1900,
+    :order => [ :day, :month, :year], :required => true, label: false %>
+  </div>
+
+  <div class="field">
+  <%= f.label 'Localisation'%>
+  <%= f.input :address, label: false, placeholder: "Ville, Pays..." %>
+  </div>
+
+  <% if @user.role == "admin"%>
+    <h4>Droits site</h4>
+
+    <label for="inputRole" class="sr-only">Droits site</label>
+    <%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+    <br>
+    <br>
+  <%end%>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>En attente de confirmation pour : <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password %> <i>(à laisser vide si vous ne voulez pas le modifier)</i><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password %> <i>(votre mot de passe actuel est requis pour appliquer les changements)</i><br />
+    <%= f.password_field :current_password, autocomplete: "off" %>
+  </div>
+
+
+<section class="container">
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= f.error_notification %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="text-center">Edit <%= resource_name.to_s.humanize %></h3>
+  </div>
+  <div class="panel-body">
+
+    <div class="field">
+      <%= f.label "Mot de passe" %> <i>(à laisser vide si vous ne voulez pas le modifier)</i><br />
+      <%= f.password_field :password, label: false, autocomplete: false %>
+    </div>
+
+
+      <div class="form-inputs">
+        <%= f.input :username, required: true %>
+        <%= f.input :email, required: true, autofocus: true %>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+        <% end %>
+
+        <%= f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false %>
+        <%= f.input :password_confirmation, required: false %>
+        <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true %>
+      </div>
+
+      <%= f.input :u_location %>
+      <%= f.input :u_games, as: :check_boxes, collection: Game.order(:name), value_method: :id, include_hidden: false, multiple: true, checked: @user.games.ids  %>
+
+  </div>
+  <div class="panel-footer">
+    <%= submit_tag "Mettre à jour", class: "btn btn-primary btn-lg btn-block"%>
+    <h5>Supprimer mon compte</h5>
+    <p>Tu n'es pas satisfait de ton expérience ? <%= link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+
+    <%= link_to "Back", :back %>
+  </div>
+</div>
+<% end %>
+
+</section>

@@ -1,0 +1,9 @@
+<% @game.roles = ["", ""] if @game.roles.nil? %>
+<% for i in 0..(@game.roles.size-1) %>
+  <div style="display:block;clear:both;">
+    <input type="text" value="<%= @game.roles[i] %>" class="form-control" style="width:90%;display:inline-block;margin-right:5px;margin-top:5px;text-transform:lowercase;" name="game[roles][]" id="game_roles_<%= i %>" maxlength="50">
+    <% if @game.roles.count > 2 %>
+      <%= link_to "<i class='fa fa-remove'></i>".html_safe, roles_game_path(@game, type:"remove", num_role: i), method: :put, remote: true %>
+    <% end %>
+  </div>
+<% end %>

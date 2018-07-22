@@ -1,0 +1,10 @@
+production:
+  adapter: redis
+  url: redis://rediscloud:Hp5s4TZ9qkfNQSKs@redis-18035.c9.us-east-1-4.ec2.cloud.redislabs.com:18035
+
+development:
+  adapter: redis
+  url: redis://localhost:6379
+
+test:
+  adapter: async

@@ -1,0 +1,34 @@
+<style type="text/css">
+	.hidden { display: none; }
+
+  .btn-default {
+  color: #fff;
+  background-color: #1a1a1a;
+  border-color: #333333;
+  margin-top: 15px;
+  }
+</style>
+
+<%= simple_form_for(@contact) do |f| %>
+  <%= f.error_notification %>
+
+  <h4>Nom</h4>
+  <label for="inputName" class="sr-only">Nom</label>
+  <%= f.text_field :name, class: 'form-control', placeholder: 'Nom', style: 'width: 40%;', required: true%>
+
+  <h4>Adresse Mail</h4>
+  <label for="inputMail" class="sr-only">Email</label>
+  <%= f.text_field :email, class: 'form-control', placeholder: 'Email', style: 'width: 40%;', required: true%>
+
+  <h4>Message</h4>
+  <label for="inputMessage" class="sr-only">Message</label>
+  <%= f.text_area :message, class: 'form-control', placeholder: 'Message', style: 'width: 40%;', required: true%>
+
+  <div class="hidden">
+      <%= f.input :nickname, :hint => 'Leave this field blank!'%>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-default' %>
+  </div>
+<% end %>

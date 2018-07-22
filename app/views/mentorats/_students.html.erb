@@ -1,0 +1,97 @@
+
+  <div class="col-sm-5">
+    <!-- BOX ELEVES -->
+    <div class="panel panel-default" style="box-shadow:none;height:400px;">
+      <div class="panel-heading text-center">
+        <h4><%=t 'mentorats.students' %></h4>
+      </div>
+      <div class="panel-body" style="padding:0px;">
+        <% unless @students.present? %>
+        <div style="text-align:center;padding-top:150px;">
+            <%=t 'mentorats.no_students' %>
+        </div>
+        <% else %>
+          <div style="height:350px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+            <% unless @actifs.empty? && @actifs_t.empty? %>
+              <% unless @actifs_t.empty? %>
+                <% @actifs_t.each do |team| %>
+                  <%= link_to team do %>
+                    <div class="row" style="padding:10px 0px;width:100%">
+                      <div class="col-xs-1"></div>
+                      <div class="col-xs-3">
+                        <i class="fa fa-group" style="font-size:30px;color:white;background-color:#c0392b;border-radius:50%;padding:15px;"></i>
+                      </div>
+                      <div class="col-xs-5 text-center" style="padding:20px;">
+                        <%= team.name %>
+                      </div>
+                      <div class="col-xs-3">
+                        <div class="row" style="padding-top:15px;">
+                          <div class="col-xs-6">
+                            <%= link_to "<i class='fa fa-calendar'></i>".html_safe, new_seance_path(mentorat: team.mentorat.id), class:"btn btn-primary", remote: true %>
+                          </div>
+                          <div class="col-xs-6">
+                            <%= link_to "<i class='fa fa-remove'></i>".html_safe, stop_mentorat_path(team.mentorat), class:"btn btn-default", method: :put, data: {confirm: "Etes-vous sûr de vouloir mettre fin au suivi ?"} %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <% unless @actifs.empty? %>
+                <% @actifs.each do |student| %>
+                  <% @user = student %>
+                  <%= link_to student.mentorat do %>
+                    <div class="row" style="padding:10px 0px;width:100%">
+                      <div class="col-xs-1"></div>
+                      <div class="col-xs-3">
+                        <%= render 'users/avatar' %>
+                      </div>
+                      <div class="col-xs-5 text-center" style="padding:20px;">
+                        <%= student.account.name %>
+                      </div>
+                      <div class="col-xs-3">
+                        <div class="row" style="padding-top:15px;">
+                          <div class="col-xs-6">
+                            <%= link_to "<i class='fa fa-calendar'></i>".html_safe, new_seance_path(mentorat: student.mentorat.id), class:"btn btn-primary", remote: true %>
+                          </div>
+                          <div class="col-xs-6">
+                            <%= link_to "<i class='fa fa-remove'></i>".html_safe, stop_mentorat_path(student.mentorat), class:"btn btn-default", method: :put, data: {confirm: "#{t 'mentorats.confirm_stop'}"} %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% else %>
+            <div style="text-align:center;padding-top:150px;">
+              <%=t 'mentorats.no_active_students' %>
+            </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-7" style="padding-right:0px;">
+    <!-- BOX SEANCES -->
+    <div class="panel panel-default" style="box-shadow:none;height:400px;">
+      <div class="panel-heading text-center">
+        <h4><%=t 'mentorats.sessions' %></h4>
+      </div>
+      <div class="panel-body" style="padding:0px;">
+        <% unless @seances.present? %>
+        <div style="text-align:center;padding-top:150px;">
+          <%=t 'mentorats.no_sessions' %>
+        </div>
+        <% else %>
+        <div style="height:350px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+          <div id="mentor-seances">
+            <%= render 'mentors/seances' %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>

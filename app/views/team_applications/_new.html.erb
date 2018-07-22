@@ -1,0 +1,54 @@
+<style type="text/css">
+  #new-team-application textarea { width: 90%; height: 150px; margin: 0 auto; padding: 10px;}
+  #new-team-application .alert { width: 90%; margin: 0 auto; }
+</style>
+
+<%= simple_form_for(@team_application) do |f| %>
+<div id="new-team-application" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%=t 'teams.apply_for' %></h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <%=t 'team_applications.new_text', name: @team.name%>&nbsp;
+
+      <select id="duration" name="num_role" style="text-transform:capitalize;">
+        <% nb = @team.game.nb_players %>
+        <% for i in 0..(nb -1)%>
+          <% if @team.players[i] == 0 %>
+            <option value="<%= i %>"><%= @team.roles[i] %></option>
+          <% end %>
+        <% end %>
+      </select>
+
+      <br><br>
+
+      <%= f.input :content, as: :text, label: false, placeholder:"#{t 'team_applications.new_placeholder'}", maxlength:1000 %>
+      <%= hidden_field_tag(:team, params[:team]) %>
+
+      <div class="alert alert-info text-left" style="marg">
+        <%=t 'team_applications.remarks' %>
+        <ul>
+          <li><%=t 'team_applications.remarks1', age: @average.to_i %></li>
+          <li><%=t 'team_applications.remarks2', week: @week, we: @we %></li>
+          <li><% if @gameplay > 3 %><%=t 'team_applications.gameplay1', gameplay:"Tryhard" %>
+              <% elsif @gameplay > 2.5 %><%=t 'team_applications.gameplay2', gameplay:"Tryhard" %>
+              <% elsif @gameplay < 2 %><%=t 'team_applications.gameplay1', gameplay:"Fun" %>
+              <% elsif @gameplay <= 2.5 %><%=t 'team_applications.gameplay2', gameplay:"Fun" %>
+              <% end %>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Envoyer", data: { disable_with: "Envoi..." }, class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

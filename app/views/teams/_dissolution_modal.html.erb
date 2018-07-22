@@ -1,0 +1,26 @@
+<%= simple_form_for(dissolution_modal_team_path, url: dissolution_team_path, method: :put) do |f| %>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%=t 'teams.leave' %></h3>
+    </div>
+    <div class="modal-body" style="padding-bottom:20px;">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <h5 style="text-align:center;"><%=t 'teams.leave_reason' %></h5>
+        <%= f.input :reason, as: :radio_buttons, label: false, collection: Teaming::LEAVE.map{ |k,v| [eval(k),v]}, required: true, checked: 4 %>
+      </div>
+      <div class="col-sm-3"></div>
+
+      <%= hidden_field_tag "user", @user.id %>
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "#{t 'btn.confirm'}", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.cancel' %></button>
+    </div>
+  </div>
+</div>
+<% end %>

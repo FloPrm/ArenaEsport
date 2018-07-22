@@ -1,0 +1,36 @@
+<section>
+<h1>Listing Articles</h1>
+
+<table style="width: 70%;">
+  <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Date</th>
+      <th>Auteur</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @articles.each do |article| %>
+      <tr>
+        <td><%= article.title%></td>
+        <td><%= article.created_at.to_date%></td>
+        <td><%= article.user.user_name%></td>
+        <td><%= link_to 'Voir', article %></td>
+        <% if user_signed_in? %>
+          <% if current_user == article.user_id or can? :manage, Article %>
+            <td><%= link_to 'Modifier', edit_article_path(article) %></td>
+            <td><%= link_to 'Supprimer', article, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <%end%>        
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<% if can? :update, Article%>
+  <%= link_to 'Écrire un article', new_article_path %>
+<%end%>
+</section>

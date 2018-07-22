@@ -1,0 +1,24 @@
+  <td class="team-dispos">
+    <% unless @week_starts.sort.last.nil? %>
+      <% unless (@week_starts.sort.last == 0 or @week_ends.sort.first == 0) or (@week_starts.sort.last >= @week_ends.sort.first) %>
+        <% User::JOUR.each do |k,v| %><%= k if @week_starts.sort.last == v %><% end %> -
+        <% User::SOIR.each do |k,v| %><%= k if @week_ends.sort.first == v %><% end %>
+      <% else %>
+        Pause
+      <% end %>
+    <% else %>
+    -
+    <% end %>
+  </td>
+  <td class="team-dispos">
+    <% unless @we_starts.sort.last.nil? %>
+      <% unless (@we_starts.sort.last == 0 or @we_ends.sort.first == 0) or (@we_starts.sort.last >= @we_ends.sort.first) %>
+        <% User::JOUR.each do |k,v| %><%= k if @we_starts.sort.last == v %><% end %> -
+        <% User::SOIR.each do |k,v| %><%= k if @we_ends.sort.first == v %><% end %>
+      <% else %>
+        Pause
+      <% end %>
+    <% else %>
+    -
+    <% end %>
+  </td>

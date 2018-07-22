@@ -1,0 +1,195 @@
+<style type="text/css">
+  .box-text {
+    width: 100%;
+    margin: initial;
+  }
+
+  .suivi {
+    color: white;
+    background: grey;
+    border-radius: 50%;
+    margin: 0px 5px;
+  }
+
+  #show-mentor ul { list-style-type:disc; }
+
+  #show-mentor .panel-heading div,
+  #show-mentor .panel-heading img { margin-top: -10px; }
+
+</style>
+
+<div id="show-mentor" class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%= @account.name %> <%= render partial:"users/language", locals:{user: @user, height:25} %></h3>
+    </div>
+    <div class="panel-body" style="min-height:560px;padding-top:30px;padding-bottom:10px;">
+      <div class="col-sm-5 text-center" style="padding-top:20px;">
+        <div class="field">
+          <%= render 'users/avatar' %>
+          <%= render 'mentors/certification' %>
+        </div>
+
+        <div class="field">
+          <span class="label label-default"><%= @account.p_role %></span>
+            <% unless @account.s_role.blank?%>
+              <% @account.s_role.each do |role| %>
+                <span class="label label-default" style="background:#a2a2a2;"><%= role[0...3] %></span>
+              <% end %>
+            <% end %>
+        </div>
+
+        <div class="field">
+          <% @account.champions.each do |c| %>
+            <% if !Champion.where(name:c).first.nil? %>
+              <%= image_tag Champion.where(name:c).first.icon, style: "width:50px;display:inline-block;margin-right:5px;" %>
+            <% else %>
+              <span style="display:inline-block; margin-right:5px;"><%= c.capitalize %></span>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="field">
+          <%= render 'users/rank' %> <%= render 'users/rank_flex' %>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="user-dispos"><%=t 'layout.week' %></th>
+                  <th class="user-dispos"><%=t 'layout.weekend' %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <!-- RENDER DISPOS SEMAINE & WEEKEND -->
+                  <%= render(partial: 'users/dispos', locals: {reload: true, player: @mentor}) %>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+
+        <div class="field">
+          <h4><%=t 'mentors.monitoring' %></h4>
+          <% unless @mentor.suivi == [] or @mentor.suivi.nil?%>
+            <% @mentor.suivi.each do |suivi| %>
+              <% if suivi == "individuel" %>
+                <i class="suivi fa fa-user" style="padding:10px 12px;" data-toggle="tooltip" title="<%=t 'mentors.individual' %>"></i>
+              <% else %>
+                <i class="suivi fa fa-group" style="padding:10px;" data-toggle="tooltip" title="<%=t('teams.one').capitalize %>"></i>
+              <% end %>
+            <% end %>
+          <% else %>
+          -
+          <% end %>
+        </div>
+
+      </div>
+      <div class="col-sm-7 text-center">
+        <div class="field">
+          <h4><%=t 'layout.about' %></h4>
+          <div class="box-text">
+            <%= @mentor.about.html_safe unless @mentor.about.nil? or @mentor.about.empty? %>
+          </div>
+        </div>
+
+        <div class="field">
+          <h4><%=t 'mentors.proceedings' %></h4>
+          <div class="box-text">
+            <%= @mentor.cours.html_safe unless @mentor.cours.nil? or @mentor.cours.empty? %>
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom:10px;">
+          <div class="col-sm-4">
+            <div class="stat-box">
+              <div class="stat-number">
+                <%= @students.count > 0 ? @students.count : "0" %>
+              </div>
+            </div>
+            <h5><%=t 'mentorats.students' %></h5>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-box">
+              <div class="stat-number">
+                <% unless !@mentor.seances.where(status:1).present? %>
+                  <%= @hours > 0 ? @hours : "0" %>
+                <% else %>
+                  0
+                <% end %>
+              </div>
+            </div>
+            <h5><%=t 'mentorats.hours' %></h5>
+          </div>
+          <div class="col-sm-4">
+            <div class="stat-box">
+              <div class="stat-number">
+                <%= @mentor.note > 0 ? @mentor.note : "0" %>
+              </div>
+            </div>
+            <h5><%=t 'mentors.rating' %></h5>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-5 text-left">
+          <%= link_to "#{t 'btn.back'}", mentors_path, class:"btn btn-default", style:"margin-right:10px;" %>
+          <% if @mentor.user == current_user or current_user.role == "admin" %>
+            <%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_mentor_path(@mentor), class:"btn btn-default text-right" %>
+          <% end %>
+        </div>
+        <div class="col-sm-7 text-center">
+          <% unless current_user == @user %>
+            <% unless current_user.mentorat.present? %>
+              <!-- Doit être laissé en link_to car les button_to exigent de déclarer l'action en method: :get et empechent de passer des paramètres -->
+              <%= button_to "#{t 'mentorats.request'}", new_mentorat_path, params: { teacher: @mentor.id }, method: :get, class:"btn btn-primary btn-block" %>
+            <% else %>
+              <% unless current_user.mentorat.mentor.present? %>
+                <% unless current_user.mentorat.teacher == @mentor %>
+                  <%= button_to "#{t 'mentorats.request'}", change_teacher_mentorat_path(current_user, teacher: @mentor.id), method: :put, class:"btn btn-primary btn-block" %>
+                <% else %>
+                  <a href="#" disabled="disabled" class="btn btn-primary btn-block"><i class="fa fa-user"></i> <%=t 'mentorats.request_sent' %></a>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% if @mentor.suivi.include?("equipe") %>
+              <% if current_user.teamings.where(active:true, captain: true).present? && current_user.team.members.where(state:2).count >= current_user.team.game.nb_players-1 %>
+                <div style="margin-top:10px;">
+                  <% unless current_user.team.mentorat.present? %>
+                    <%= button_to "#{t 'mentorats.request'}", new_mentorat_path, params: { teacher: @mentor.id, team: current_user.team.id }, method: :get, class:"btn btn-default btn-block" %>
+                  <% else %>
+                    <% unless current_user.team.mentorat.mentor.present? %>
+                      <% unless current_user.team.mentorat.teacher == @mentor %>
+                        <%= button_to "#{t 'mentorats.team_mentoring'}", change_teacher_mentorat_path(current_user, teacher: @mentor.id, team: current_user.team.id), method: :put, class:"btn btn-default btn-block" %>
+                      <% else %>
+                        <a href="#" disabled="disabled" class="btn btn-default btn-block"><i class="fa fa-group"></i> <%=t 'mentorats.request_sent' %></a>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if (current_user.mentorat.present? && current_user.mentorat.feedbacks.where(mentor_id: @mentor.id, average:nil).present?) or Feedback.where(user_id:current_user.id, mentor_id:@mentor.id, average:nil).present? %>
+    <div id="edit-feedback">
+      <%= render 'feedbacks/edit' %>
+    </div>
+  <% end %>
+
+  <div id="feedbacks">
+    <%= render 'feedbacks/feedbacks' %>
+  </div>
+</div>

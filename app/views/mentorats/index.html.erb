@@ -1,0 +1,56 @@
+<style type="text/css">
+
+</style>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'layout.mentor_hq' %></h3>
+    </div>
+    <div class="panel-body" style="min-height:400px;">
+      <ul class="nav nav-tabs nav-justified" style="margin-bottom:20px;">
+        <li role="presentation" class="active"><a id="libre"><%=t 'mentorats.availables' %></a></li>
+        <li role="presentation"><a id="suivi"><%=t 'mentorats.followed' %></a></li>
+        <li role="presentation"><a id="students"><%=t 'mentorats.my_students' %></a></li>
+      </ul>
+      <div id="mentorat-tabs" style="height:400px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+        <%= render 'mentorats/libre' %>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-4">
+          <%= link_to "#{t('mentors.list').capitalize}", mentors_path, class:"btn btn-default btn-block" %>
+        </div>
+        <div class="col-sm-4 text-center">
+
+        </div>
+        <div class="col-sm-4 text-right">
+          <%= link_to "#{t 'layout.my_profile'}", mentor_path(current_user.mentor), class:"btn btn-default btn-block" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+$('#libre').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#mentorat-tabs').html("<%= j (render 'mentorats/libre') %>");
+});
+
+$('#suivi').on('click', function(){
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#mentorat-tabs').html("<%= j (render 'mentorats/suivi') %>");
+});
+
+$('#students').on('click', function(){
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $('#mentorat-tabs').html("<%= j (render 'mentorats/students') %>");
+});
+
+</script>

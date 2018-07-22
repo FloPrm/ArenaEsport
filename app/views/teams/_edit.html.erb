@@ -1,0 +1,29 @@
+<style type="text/css">
+  #edit-team input {
+    text-align: center;
+  }
+</style>
+
+<%= simple_form_for(@team, method: :put) do |f| %>
+<div id="edit-team" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Editer une equipe</h3>
+    </div>
+    <div class="modal-body text-center">
+      <div class="field">
+        <h4>Nom de l'équipe</h4>
+        <input type="text" value="<%= @team.name %>" class="form-control" style="width:50%;margin:0 auto;" placeholder="Nom" name="team[name]" id="team_name" maxlength="35" autofocus>
+      </div>
+      <br>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Envoyer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,37 @@
+<style type="text/css">
+  select { width: 90px; }
+</style>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Premades</h3>
+    </div>
+    <div class="panel-body">
+      <%= search_form_for @search do |f| %>
+      <div class="panel panel-default" style="padding:5px 30px;position:relative;margin:0 auto;width:100%;">
+        <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-6">
+              <div class="col-sm-6">
+                <%= f.search_field :user1_name_or_user2_name_or_user3_name_cont, placeholder:"Invocateur", class:"form-control" %>
+              </div>
+              <div class="col-sm-6 text-center" style="padding-top:5px;">
+                <%= f.submit %>
+                <%= link_to "Reset", premades_path, class:"btn btn-basic", style:"margin-left:5px;" %>
+              </div>
+            </div>
+            <div class="col-sm-3">
+
+            </div>
+        </div>
+      </div>
+      <% end %>
+      <hr>
+      <%= render 'premades/index' %>
+    </div>
+    <div class="panel-footer text-left">
+      <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+    </div>
+  </div>
+</div>

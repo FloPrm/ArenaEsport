@@ -1,0 +1,16 @@
+<div style="display:inline-block;">
+<%= simple_form_for(@team, url: add_user_team_path, method: :get, remote: true) do |f| %>
+  <% @game = current_user.account.game %>
+  <div class="input-group" style="display:inline-block;width:200px;">
+    <input type="text" class="form-control" placeholder="Inviter un joueur" name="account" id="team_account" style="width:150px;">
+    <span class="input-group-btn" style="display:inline-block;margin-left:-3px;">
+      <button type="submit" class="btn btn-default" style="padding:9px 12px 10px;margin-top:-2px;">
+        <i class='fa fa-plus'></i>
+      </button>
+    </span>
+  </div>
+<%= hidden_field_tag(:role, role) %>
+<%= hidden_field_tag(:num_role, num_role) %>
+<% end %>
+</div>
+<div id="notice-team-<%= num_role.to_s %>" style="padding:0px;font-size:12px;display:inline-block;"></div>

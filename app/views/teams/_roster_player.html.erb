@@ -1,0 +1,122 @@
+<tr>
+  <% teaming = @team.teamings.where(active: true, role: teaming_role, num_role: num_role).first
+  user = teaming.user
+  nb_players = @team.game.nb_players
+  %>
+  <% unless user.blank? %>
+    <% @account = user.account %>
+
+    <% if @account.name != nil %>
+      <% if captain? %>
+      <td id="swaper">
+        <% unless num_role == 0 %>
+        <div><%= link_to "<i class='fa fa-chevron-up'></i>".html_safe, swaper_teaming_path(current_user, direction:"up", team:@team.id, num_role:num_role), method: :put, remote: true %></div>
+        <% end %>
+        <% unless num_role == nb_players-1 %>
+        <div><%= link_to "<i class='fa fa-chevron-down'></i>".html_safe, swaper_teaming_path(current_user, direction:"down", team:@team.id, num_role:num_role), method: :put, remote: true %></div>
+        <% end %>
+      </td>
+      <% end %>
+      <td><div id="status-user-<%= user.id %>" class="<%= user.status == 1 ? 'status-online' : 'status-offline' %> status-dot"></div></td>
+      <td>
+        <% if user.premade.present? %><span class="label label-premade" data-toggle="tooltip" title="Premade"><%= user.premade.id %><%= "-#{user.premade.users.count}" if current_user.role == "admin" %></span>&nbsp;<% end %>
+        <% if can? :manage, :all %>
+          <% if user.pending_invitations.where(action:"team").present? %>
+            <%= link_to user.pending_invitations.where(action:"team").first.team do %>
+              <i class="fa fa-group" style="margin-left:5px;margin-right:5px;" data-toggle="tooltip" title="Invitation d'équipe en attente"></i>
+            <% end %>
+          <% end %>
+          <% unless user.admin_note.nil? or user.admin_note.empty? %>
+            <i class="fa fa-info-circle" style="color:#2980b9;" data-toggle="tooltip" title="Note Admin"></i>
+          <% end %>
+        <% end %>
+        <%= "<i class='ra ra-queen-crown'></i>".html_safe if teaming.captain == true %>
+        <%= link_to @account.name, user_preview_user_path(id: user), method: :get, remote: true %></td>
+    <% else %>
+      <td><%= "<i class='ra ra-queen-crown'></i>".html_safe if teaming.captain == true %> <%= link_to user.user_name, user_preview_team_path(user: user, id: @team.id), method: :get, remote: true %></td>
+    <% end %>
+
+    <td class="text-right" style="text-transform: uppercase;"><span class="label label-default" style="<%= "background-color:#a2a2a2" if @account.p_role != teaming.role && (current_user.can? :manage, Team) %>"><%= teaming.role[0...3] %></span></td>
+
+    <%if @team.game.has_soloq %>
+      <td class="table-rank"><%= render 'users/rank' %></td>
+    <%end%>
+
+    <%if @team.game.has_teamq %>
+      <td class="table-rank"><%= render 'users/rank_flex' %></td>
+    <%end%>
+
+    <% if can? :manage, :all %>
+      <% if user.birth_date != nil %>
+      <% age = user.birth_date.find_age.to_i %>
+      <% if age < 18
+        color = "#c0392b"
+      elsif age >= 18 && age < 21
+        color = "#333"
+      elsif age >= 21
+        color = "green"
+      end %>
+      <td style="color:<%= color %>"><b><%= age %></b></td>
+      <% else %>
+      <td>-</td>
+      <% end %>
+    <% end %>
+    <% if @team.game.characters == true %>
+    <td class="text-center">
+      <%= render partial: 'users/top3', locals:{size:30} %>
+    </td>
+    <td class="text-center"><%= link_to "<i class='fa fa-search-plus'></i>".html_safe, game_info_url(@account), target:"_blank" %></td>
+    <% else %>
+    <td class="text-center"><%= truncate(user.horaire, length:45) { link_to "Tout", user_preview_user_path(user), method: :get, remote: true } %></td>
+    <% end %>
+    <!-- RENDER DISPO SEMAINE & WEEKEND -->
+    <%= render(partial: 'users/dispos', locals: {reload: true, player: user}) %>
+    <!-- BOUTON EDITER FORMULAIRE -->
+    <% if current_user == user or current_user.role == "admin" %>
+      <td>
+        <%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_user_path(user, team: @team.id), remote: true %>
+      </td>
+    <% end %>
+    <% if @team.teamings.where(user_id:current_user,active:true).exists? %>
+      <% if current_user != user && @team.teamings.where(user_id:current_user,active:true).first.swap.nil? %>
+        <td>
+          <%= link_to '<i class="fa fa-retweet"></i>'.html_safe, swap_teaming_path(asker: current_user.teamings.where(active:true).first, asked: teaming, id: @team.id), method: :put, data: {confirm: "Voulez-vous demander un swap de lane ?"}, remote: true %>
+        </td>
+      <% end %>
+      <!-- BOUTON DONNER DROITS CAPITAINE -->
+      <% if current_user != user && current_user.teamings.where(active:true).first.captain == true %>
+        <td>
+          <%= link_to '<i class="ra ra-queen-crown"></i>'.html_safe, swap_captain_teaming_path(captain: current_user, user: user, id: @team.id), method: :put, data: {confirm: "Souhaitez vous transmettre vos droits de capitaine de l'équipe ?"} %>
+        </td>
+      <% end %>
+    <% end %>
+
+    <!-- BOUTON DEMANDER / RETIRER AMI -->
+    <% if current_user != user %>
+      <% unless current_user.blocked_friends.include?(user) or user.blocked_friends.include?(current_user)%>
+        <% if !current_user.friends.include?(user) %>
+          <% if current_user.pending_friends.include?(user) %>
+            <td>
+              <i class="fa fa-user-plus" style="color:rgba(0, 0, 0, 0.4);"></i>
+            </td>
+          <% else %>
+            <td>
+              <%= link_to "<i class='fa fa-user-plus'></i>".html_safe, friendships_path(asker: current_user.id, asked: user.id, id: @team.id, team: @team.id), method: :post, remote: true, id:"request" %>
+            </td>
+          <% end %>
+        <% else %>
+          <td>
+            <%= link_to "<i class='fa fa-user-times'></i>".html_safe, remove_friendship_path(asker: current_user.id, asked: user.id, id: @team.id, team: @team.id), method: :put, remote: true, id:"requested", data: {confirm: "Etes-vous sûr de vouloir retirer ce joueur de vos amis ?"} %>
+          </td>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if current_user != user && captain? %>
+      <td><%= link_to remove_user_team_path(@team, :user => user), remote: true, data: { confirm: 'Exclure ce joueur ?' } do %>
+        <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+        <% end %>
+      </td>
+    <% end %>
+  <%end%>
+</tr>

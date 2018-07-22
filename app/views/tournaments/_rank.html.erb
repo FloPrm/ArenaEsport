@@ -1,0 +1,9 @@
+<% if @tournament.mmr == 5000 %>
+  <span class="label label-rank" data-toggle="tooltip" title="Aucun niveau requis. Plutôt haut niveau."><%=t 'tournaments.rank_all' %></span>
+<% elsif @tournament.mmr == 3000 %>
+  <span class="label label-rank" data-toggle="tooltip" title="Aucun niveau requis. Plutôt haut niveau."><%=t 'tournaments.rank_all' %></span>
+<% elsif @tournament.mmr == 1760 %>
+  <span class="label label-rank" style="background:#4d9e82;" data-toggle="tooltip" title="Platinum max toutes saisons confondues"><%=t 'tournaments.rank_plat' %></span>
+<% elsif @tournament.mmr == 1560 %>
+  <span class="label label-rank" style="background:#e7c244;" data-toggle="tooltip" title="Gold max toutes saisons confondues"><%=t 'tournaments.rank_gold' %></span>
+<% end %>

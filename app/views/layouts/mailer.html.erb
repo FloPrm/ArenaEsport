@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <style type="text/css">
+      h1, h2, h3 { 
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: 700;
+      }
+      html { font-family: Helvetica, Arial, sans-serif; font-size: 14px !important; }
+      p { font-size: 14px !important; }
+      .space-list li { margin-bottom: 10px; }
+    </style>
+    <a href="<%= unsubscribe_url(email: @email) %>" style="position:absolute;top:20px;left:45%;text-decoration:none;color:#777;font-size:12px;"><%=t 'mails.stop' %></a>
+    <table style="width:100%;padding:40px;background:#eee;">
+      <tbody>
+        <tr>
+          <td align="center" valign="top">
+            <table width="600" style="background-color:#fff;">
+              <tbody>
+                <tr>
+                  <td style="height:50px;background-color:#2d2d2d;" align="center" valign="middle">
+                    <a href="http://arena-esport.com" target="_blank">
+                      <img src="https://image.noelshack.com/fichiers/2017/10/1488904805-logo-arena-cont-400px.png" height="50" alt="Arena Esport" style="display:inline-block;margin-top:2px;">
+                    </a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:30px;">
+                    <%= yield %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="height:50px;background-color:#2d2d2d;" align="center" valign="middle"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

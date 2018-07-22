@@ -1,0 +1,30 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Jeu</th>
+      <th>Owner</th>
+      <th class="text-center">Niveau</th>
+      <th class="text-center">Jour</th>
+      <th>Heure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tournaments.each do |tournament| %>
+      <% @tournament = tournament %>
+    <tr>
+      <td><%= link_to tournament.name, tournament_path(tournament), remote: true %></td>
+      <td><%= tournament.game.title unless tournament.game.nil? %></td>
+      <td><%= tournament.owner %></td>
+      <td class="table-rank"><%= render 'tournaments/rank' %></td>
+      <td class="text-center">
+        <% Tournament::DAYS.each do |k,v| %>
+          <%= eval(k) if tournament.day == v %>
+        <% end %>
+      </td>
+      <td><%= tournament.hour.strftime("%H:%M") unless tournament.hour.nil? %></td>
+      <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_tournament_path(tournament), remote: true %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

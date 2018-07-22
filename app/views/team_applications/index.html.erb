@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Candidatures</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Joueur</th>
+            <th>Equipe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @team_applications.order('created_at desc').each do |candidature| %>
+            <% @user = candidature.user %>
+            <% @account = @user.account %>
+            <% @team = candidature.team %>
+            <tr>
+              <td><%= candidature.created_at.strftime("%d/%m/%y - %H:%M") %></td>
+              <td><%= link_to @account.name, user_preview_user_path(@user,team_application: candidature.id), method: :get, remote: true %></td>
+              <td><%= link_to @team.name, preview_team_path(@team), method: :get, remote: true %></td>
+              <td><%= link_to "<i class='fa fa-remove'></i>".html_safe, candidature, method: :delete, data: {confirm: "Souhaitez-vous supprimer votre candidature ?"} %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3" style="padding-top:10px;">
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-center">
+          <%= will_paginate @team_applications, :previous_label => "Précédent", :next_label => "Suivant", inner_window: 2, outer_window: 1 %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

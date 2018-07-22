@@ -1,0 +1,34 @@
+<% if @team.present? %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-2"></div>
+      <div class="col-xs-8">
+        <h4><%=t 'histories.events' %></h4>
+      </div>
+      <div class="col-xs-2" style="padding:8px;">
+        <%= link_to '<i class="fa fa-plus"></i>'.html_safe, new_history_path(team: @team.id, remote: false), remote: true %>
+      </div>
+    </div>
+  </div>
+  <div id="team-events" class="panel-body text-left" style="height:98px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+    <% if @events.present? %>
+      <table class="table">
+        <tbody>
+          <% @events.each do |event| %>
+            <tr>
+              <td><b><%= l(event.date, format: "%A")[0...3] %></b></td>
+              <td><% unless event.content.nil? %><b><%= event.user.account.name %>:</b>&nbsp;<% end %><%= event.content %></td>
+              <% if can? :update, event %>
+              <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_history_path(event, remote: false), remote: true %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p style="color:grey;margin-top:20px;text-align:center;"><%=t 'histories.none' %></p>
+    <% end %>
+  </div>
+</div>
+<% end %>

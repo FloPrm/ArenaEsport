@@ -1,0 +1,41 @@
+<style type="text/css">
+  #second-step input { width:40%; margin:0 auto; text-align: center; }
+</style>
+<div id="second-step" class="container">
+  <%= simple_form_for(@game_account) do |f| %>
+  <%= render 'layouts/error_messages', object: f.object %>
+  <div class="panel panel-default">
+    <div class="panel-heading text-center">
+      <h3><%=t 'game_accounts.2step_title'%></h3>
+    </div>
+    <div class="panel-body text-center">
+
+      <div class="field">
+        <h4><%=t 'games.one' %></h4>
+        <%= f.collection_select :game, Game.where(active:true), :id, :title %>
+      </div>
+
+      <div class="field">
+          <h4><%=t 'layout.player_name' %></h4>
+          <input type="text" class="form-control" placeholder="<%=t 'game_accounts.2step_placeholder'%>" name="game_account[name]" id="game_account_name" maxlength="30" autofocus>
+      </div>
+
+      <%= hidden_field_tag(:activation_code, @activation_code) %>
+
+    </div>
+    <div class="panel-footer" style="text-align:center">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <%= submit_tag "#{t 'btn.confirm'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary btn-lg btn-block"%>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+
+</script>

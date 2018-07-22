@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  about: MyText
+  cours: MyText
+  suivi: MyString
+  user_id: 
+
+two:
+  about: MyText
+  cours: MyText
+  suivi: MyString
+  user_id: 

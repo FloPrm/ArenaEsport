@@ -1,0 +1,28 @@
+<% if current_user != @user %>
+  <% if !@user.blocked_friends.include?(current_user) %>
+    <% if !current_user.friends.include?(@user) %>
+      <% if current_user.requested_friends.include?(@user) %>
+        <%= link_to "Accepter", accept_friendship_path(asker: @user, asked: current_user), method: :put, remote: true, class:"btn btn-success" %>
+        <%= link_to "Refuser", decline_friendship_path(asker: @user, asked: current_user), method: :put, remote: true, class:"btn btn-danger" %>
+      <% elsif current_user.pending_friends.include?(@user) %>
+        <button href="#" class="btn btn-default" disabled="disabled">Demande envoyée</button>
+      <% else %>
+        <% unless current_user.blocked_friends.include?(@user) %>
+          <%= link_to "<i class='fa fa-user-plus'></i>".html_safe, friendships_path(asker: current_user, asked: @user), method: :post, remote: true, class:"btn btn-default", id:"request" %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= link_to "<i class='fa fa-user-times'></i>".html_safe, remove_friendship_path(id:1, asker: current_user, asked: @user), method: :put, remote: true, data: {confirm: "Retirer le joueur de votre liste d'amis ?"}, class:"btn btn-default", id:"requested" %>
+    <% end %>
+  <% else %>
+    <button href="#" class="btn btn-default" disabled="disabled">Bloqué</button>
+  <% end %>
+<% end %>
+
+<% if current_user != @user %>
+  <% if current_user.blocked_friends.include?(@user) %>
+    <%= link_to "<i class='fa fa-check-circle'></i>".html_safe, unblock_friendship_path(id:1, asker: current_user, asked: @user), method: :put, remote: true, data: {confirm: "Débloquer le joueur ?"}, class:"btn btn-default" %>
+  <% else %>
+    <%= link_to "<i class='fa fa-ban'></i>".html_safe, block_friendship_path(id:1, asker: current_user, asked: @user), method: :put, remote: true, data: {confirm: "Bloquer le joueur ?"}, class:"btn btn-default" %>
+  <% end %>
+<% end %>

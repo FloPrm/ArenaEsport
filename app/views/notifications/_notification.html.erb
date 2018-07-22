@@ -1,0 +1,230 @@
+<% @notification = notification %>
+<% account = @notification.emetteur.account unless @notification.emetteur.nil? %>
+<% unless account.nil? %>
+  <%= link_to mark_read_notification_path(@notification) do %>
+    <li class="<%= 'read' if @notification.read_at != nil %>">
+    <div class="row" style="padding-bottom:4px;">
+      <div class="col-xs-3" style="text-align:right;">
+        <% if @notification.category == "team" %>
+          <div class="team_notifs">
+            <% if @notification.action == "départ" %>
+              <i class="fa fa-sign-out"></i>
+            <% elsif @notification.action == "exclusion" %>
+              <i class="fa fa-user-times"></i>
+            <% elsif @notification.action == "dissolution" %>
+              <i class="ra ra-skull"></i>
+            <% elsif @notification.action == "history" %>
+              <i class="fa fa-calendar"></i>
+            <% else %>
+              <i class="fa fa-group"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "team_application" %>
+          <div class="team_notifs">
+            <% if @notification.action == "new" %>
+              <i class="fa fa-id-card"></i>
+            <% elsif @notification.action == "validated" %>
+              <i class="fa fa-check-square-o"></i>
+            <% elsif @notification.action == "rejected" %>
+              <i class="fa fa-remove" style="padding: 12px 15px"></i>
+            <% elsif @notification.action == "not-selected" %>
+              <i class="fa fa-remove" style="padding: 12px 15px"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "invitation" %>
+          <div class="team_notifs">
+            <i class="fa fa-group"></i>
+          </div>
+        <% elsif @notification.category == "swap" %>
+          <div class="team_notifs2">
+            <% if @notification.action == "swap-yes" %>
+              <i class="fa fa-check"></i>
+            <% elsif @notification.action == "swap-no" %>
+              <i class="fa fa-remove" style="padding: 12px 15px"></i>
+            <% elsif @notification.action == "captain-changed" or @notification.action == "captain-given" %>
+              <i class="ra ra-queen-crown"></i>
+            <% else %>
+              <i class="fa fa-retweet"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "vote" %>
+          <div class="team_notifs2">
+            <% if @notification.action == "élu" %>
+              <i class="ra ra-beer"></i>
+            <% elsif @notification.action == "pas-élu" %>
+              <i class="fa fa-remove" style="padding: 12px 15px"></i>
+            <% else %>
+              <i class="ra ra-queen-crown"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "friendship" %>
+          <div class="friendship_notifs">
+            <% if @notification.action == "request" %>
+              <i class="fa fa-user-plus"></i>
+            <% elsif @notification.action == "accept" %>
+              <i class="fa fa-handshake-o"></i>
+            <% elsif @notification.action == "parrainage" %>
+              <i class="fa fa-user-circle-o"></i>
+            <% else %>
+              <i class="fa fa-user"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "premade" %>
+          <div class="premade_notifs">
+            <% if @notification.action == "accept" %>
+              <i class="fa fa-handshake-o"></i>
+            <% else %>
+              <i class="fa fa-group"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "mentorat" %>
+          <div class="mentorat_notifs">
+            <% if @notification.action == "claim" or @notification.action == "mentor-stop" or @notification.action == "student-stop" %>
+              <i class="fa fa-handshake-o"></i>
+            <% else %>
+              <i class="fa fa-graduation-cap"></i>
+            <% end %>
+          </div>
+        <% elsif @notification.category == "seance" %>
+          <div class="mentorat_notifs">
+            <% if @notification.action == "new" %>
+              <i class="fa fa-calendar"></i>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-xs-9">
+        <% if @notification.category == "team" %>
+          <% if @notification.action == "remplacement" %>
+            <p><%=t 'notifications.team.remplacement'%></p>
+          <% elsif @notification.action == "placement" %>
+            <p><%=t 'notifications.team.placement'%></p>
+          <% elsif @notification.action == "invité" %>
+            <p><%=t 'notifications.team.invite', name: account.name %></p>
+          <% elsif @notification.action == "exclusion" %>
+            <p><%=t 'notifications.team.exclusion'%></p>
+          <% elsif @notification.action == "départ" %>
+            <p><%=t 'notifications.team.depart'%></p>
+            <% leaver = Teaming.where(user_id: @notification.emetteur_id, team_id: @notification.notifiable_id).last %>
+            <% unless leaver.nil? %>
+              <% unless leaver.reason.nil? %>
+                <% Teaming::LEAVE.each do |k,v| %>
+                  <% if leaver.reason == v %>
+                  <p><u><%=t 'notifications.reason'%></u> <%= eval(k) %></p>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% elsif @notification.action == "dissolution" %>
+            <!-- Fix rollbar item 226 -->
+            <% if @notification.notifiable.present? %>
+            <p><%=t 'notifications.team.dissolution', name: @notification.notifiable.name %></p>
+            <% end %>
+          <% elsif @notification.action == "history" %>
+            <p><%=t 'notifications.team.history'%></p>
+          <% end %>
+        <% elsif @notification.category == "swap" %>
+          <% if @notification.action == "asked-swap" %>
+            <p><%=t 'notifications.swap.asked-swap'%></p>
+          <% elsif @notification.action == "asker-swap" %>
+            <p><%=t 'notifications.swap.asker-swap'%></p>
+          <% elsif @notification.action == "swap-no" %>
+            <p><%=t 'notifications.swap.swap-no'%></p>
+          <% elsif @notification.action == "swap-yes" %>
+            <p><%=t 'notifications.swap.swap-yes'%></p>
+          <% elsif @notification.action == "captain-changed" %>
+            <p><%=t 'notifications.swap.captain-changed'%></p>
+          <% elsif @notification.action == "captain-given" %>
+            <!-- fix rollbar item 226 -->
+            <% if @notification.notifiable.present? %>
+            <p><%=t 'notifications.swap.captain-given', name: @notification.notifiable.name %></p>
+            <% end %>
+          <% end %>
+        <% elsif @notification.category == "vote" %>
+          <% if @notification.action == "élection" %>
+            <p><%=t 'notifications.vote.election'%></p>
+          <% elsif @notification.action == "élu" %>
+            <p><%=t 'notifications.vote.elu'%></p>
+          <% elsif @notification.action == "pas-élu" %>
+            <p><%=t 'notifications.vote.pas-elu'%></p>
+          <% end %>
+        <% elsif @notification.category == "friendship" %>
+          <% if @notification.action == "request" %>
+            <p><%=t 'notifications.friendship.request', name: account.name %></p>
+          <% elsif @notification.action == "accept" %>
+            <p><%=t 'notifications.friendship.accept', name: account.name %></p>
+          <% elsif @notification.action == "parrainage" %>
+            <p>
+              <% unless account.nil? %>
+                <%= account.name %>
+              <% else %>
+                <%= @notification.emetteur.user_name %>
+              <% end %>
+            <%=t 'notifications.friendship.parrainage'%>
+            </p>
+          <% end %>
+        <% elsif @notification.category == "invitation" %>
+          <% if @notification.action == "team" %>
+            <p><%=t 'notifications.invitation.team', name: account.name %></p>
+          <% elsif @notification.action == "premade" %>
+            <p><%=t 'notifications.invitation.premade', name: account.name %></p>
+          <% end %>
+        <% elsif @notification.category == "premade" %>
+          <% if @notification.action == "accept" %>
+            <p><%=t 'notifications.premade.accept', name: account.name %></p>
+          <% elsif @notification.action == "leave" %>
+            <p><%=t 'notifications.premade.leave', name: account.name %></p>
+          <% elsif @notification.action == "leave-search" %>
+            <p><%=t 'notifications.premade.leave-search', name: account.name %></p>
+          <% elsif @notification.action == "leave-team" %>
+            <p><%=t 'notifications.premade.leave-team', name: account.name %></p>
+          <% end %>
+        <% elsif @notification.category == "mentorat" %>
+          <% if @notification.action == "demande" %>
+            <!--16/03/17 : fix rollbar #13 -->
+            <%unless @notification.notifiable.nil? %>
+              <p><%=t 'notifications.mentorat.demande', name: account.name %></p>
+            <%end%>
+          <% elsif @notification.action == "demande-team" %>
+            <p><%=t 'notifications.mentorat.demande-team', name: @notification.notifiable.team.name %></p>
+          <% elsif @notification.action == "claim" %>
+            <p><%=t 'notifications.mentorat.claim', name: account.name %></p>
+          <% elsif @notification.action == "claim-team" %>
+            <p><%=t 'notifications.mentorat.claim-team', name: account.name %></p>
+          <% elsif @notification.action == "mentor-stop" %>
+            <p><%=t 'notifications.mentorat.mentor-stop', name: @notification.notifiable.game_account.name %></p>
+          <% elsif @notification.action == "mentor-stop-team" %>
+            <p><%=t 'notifications.mentorat.mentor-stop-team', name: @notification.notifiable.game_account.name %></p>          <% elsif @notification.action == "mentor-stop-empty" %>
+          <% elsif @notification.action == "mentor-stop-empty-team" %>
+            <p><%=t 'notifications.mentorat.mentor-stop-empty-team', name: @notification.notifiable.game_account.name %></p>
+          <% elsif @notification.action == "student-stop" %>
+            <p><% if @notification.notifiable.team.nil? %>
+                <%=t 'notifications.mentorat.student-stop', name: @notification.notifiable.game_account.name %>
+              <% else %>
+                <%=t 'notifications.mentorat.student-stop-team', name: @notification.notifiable.team.name %>
+              <% end %>
+            </p>
+          <% end %>
+        <% elsif @notification.category == "seance" %>
+          <% if @notification.action == "new" %>
+            <p><%=t 'notifications.seance.new', name: account.name %></p>
+          <% end %>
+        <% elsif @notification.category == "team_application" %>
+          <% if @notification.action == "new" %>
+            <p><%=t 'notifications.team_application.new', name: account.name %></p>
+          <% elsif @notification.action == "validated" %>
+            <p><%=t 'notifications.team_application.validated' %></p>
+          <% elsif @notification.action == "rejected" %>
+            <p><%=t 'notifications.team_application.rejected' %>
+            <% unless @notification.content.nil? %><u><%=t 'notifications.reason' %>:</u> <%= @notification.content %><% end %>
+            </p>
+          <% elsif @notification.action == "not-selected" %>
+            <p><%=t 'notifications.team_application.not-selected' %></p>
+          <% end %>
+        <% end %>
+        <span class="explain"><%=t 'layout.time_ago', time_ago: time_ago_in_words(@notification.created_at) %></span>
+      </div>
+    </div>
+    </li>
+  <% end %> <!-- @notification.link-->
+<% end %>

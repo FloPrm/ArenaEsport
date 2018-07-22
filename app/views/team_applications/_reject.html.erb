@@ -1,0 +1,33 @@
+<%= simple_form_for(@team_application, url: answer_team_application_path, method: :put, remote: true) do |f| %>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%=t 'team_applications.refuse' %></h3>
+    </div>
+    <div class="modal-body" style="padding-bottom:20px;">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <h5 style="text-align:center;"><%=t 'team_applications.reason' %></h5>
+        <ul class="radio" style="list-style:none;">
+          <% @reasons.each do |k,v| %>
+          <li>
+            <label for="<%= v %>">
+            <input type="radio" name="reason" id="<%= v %>" value="<%= k %>" <%= 'checked="checked"' if v == 1 %> /><%= k %></label>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="col-sm-3"></div>
+
+      <%= hidden_field_tag "answer", false %>
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "#{t 'btn.confirm'}", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.cancel' %></button>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,16 @@
+  <td class="user-dispos">
+    <% unless (player.week_start == 0 or player.week_end == 0) or (player.week_start >= player.week_end) %>
+      <% User::JOUR.each do |k,v| %><%= k if player.week_start == v %><% end %> -
+      <% User::SOIR.each do |k,v| %><%= k if player.week_end == v %><% end %>
+    <% else %>
+      Absent
+    <% end %>
+  </td>
+  <td class="user-dispos">
+    <% unless (player.we_start == 0 or player.we_end == 0) or (player.we_start >= player.we_end) %>
+      <% User::JOUR.each do |k,v| %><%= k if player.we_start == v %><% end %> -
+      <% User::SOIR.each do |k,v| %><%= k if player.we_end == v %><% end %>
+    <% else %>
+      Absent
+    <% end %>
+  </td>

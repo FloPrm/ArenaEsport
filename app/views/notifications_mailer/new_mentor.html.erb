@@ -1,0 +1,18 @@
+<br>
+<p><%=t 'hello' %> <b><%= @mentor.game_account.name %></b></p>
+<p><%=t 'mails.new_mentor.l1' %></p>
+<p><%=t 'mails.new_mentor.l2' %></p>
+<ul class="space-list" style="text-align: justify;">
+  <li><%=raw t 'mails.new_mentor.p1' %></li>
+  <li><%=raw t 'mails.new_mentor.p2' %></li>
+  <li><%=raw t 'mails.new_mentor.p3' %></li>
+  <li><%=raw t 'mails.new_mentor.p4' %></li>
+  <li><%=raw t 'mails.new_mentor.p5' %></li>
+  <li><%=raw t 'mails.new_mentor.p6' %></li>
+  <li><%=raw t 'mails.new_mentor.p7' %></li>
+  <li><%=raw t 'mails.new_mentor.p8' %></li>
+  <li><%=raw t 'mails.new_mentor.p9' %></li>
+</ul>
+<p><%=raw t 'mails.signatures.mentor', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %></p>
+<%= render 'notifications_mailer/signature' %>
+<br>

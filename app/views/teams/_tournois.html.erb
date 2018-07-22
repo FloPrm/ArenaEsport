@@ -1,0 +1,26 @@
+<div id="team-tournaments" class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%=t 'tournaments.title' %></h4>
+  </div>
+  <div class="panel-body" style="height:100px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+    <% if @tournaments.present? %>
+      <table class="table table-condensed" style="width:100%;margin-bottom:0px;">
+        <tbody>
+          <% @tournaments.where('battle = ? or battle = ?',1,4).where('frequency > ?', 1).where('mmr >= ?', @mmr).order(:mmr).order(:day).each do |tournament| %>
+            <% @tournament = tournament %>
+            <tr>
+              <td><%= link_to @tournament.name, tournament_path(@tournament), remote: true %></td>
+              <td class="text-center">
+                <% Tournament::DAYS.each do |k,v| %>
+                  <%= eval(k) if @tournament.day == v %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+    <p style="color:grey;margin-top:20px;text-align:center;">Aucun tournoi disponible</p>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<% unless Karma.where(voter_id:current_user.id, voted_id:@user.id).present? or @user == current_user %>
+  <%= link_to "<i class='fa fa-thumbs-up'></i>".html_safe, new_karma_path(vote:1, voter_id:current_user.id, voted_id: @user.id), remote: true, style:"color:#93c47d; : " %>
+<% end %>
+<% @karma = @user.received_karmas.present? ? @user.received_karmas.pluck(:vote).inject(:+) : 0 %>
+<h4 data-toggle="tooltip" title="Karma" style="color:<%= @karma >= 0 ? '#93c47d' : '#c0392b' %>"><%= @karma.nil? ? "0" : @karma %></h4>
+<% unless Karma.where(voter_id:current_user.id, voted_id:@user.id).present? or @user == current_user %>
+  <%= link_to "<i class='fa fa-thumbs-down'></i>".html_safe, new_karma_path(vote:-1, voter_id:current_user.id, voted_id: @user.id), remote: true, style:"color:#c0392b;" %>
+<% end %>
+<h5>Karma</h5>

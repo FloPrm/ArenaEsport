@@ -1,0 +1,18 @@
+<% countries = team.members.pluck(:lang_p).reject(&:nil?).uniq
+freq = countries.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+best = countries.max_by { |v| freq[v] }
+%>
+<% unless countries.first.nil? %>
+<% if countries.size == 1
+  if best == "french"
+    flag = "fr"
+  elsif best == "english"
+    flag = "uk"
+  end
+elsif countries.size == 2 && countries.include?("french") && countries.include?("english")
+  flag = "europe"
+end %>
+<div style="display:inline-block" data-toggle="tooltip" title="<%= best.capitalize %>">
+  <%= image_tag "flags/svg/#{flag}.svg", height:height %>
+</div>
+<% end %>

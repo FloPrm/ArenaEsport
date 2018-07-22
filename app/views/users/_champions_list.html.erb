@@ -1,0 +1,11 @@
+<% @game_account.champions.take(3).each do |c| %>
+<div style="display:inline-block;margin-right:10px;">
+  <%= link_to '<i class="fa fa-remove"></i>'.html_safe, remove_champion_user_path(@user, champion:c), method: :put, remote: true %>
+  <% if !Champion.where(name:c).first.nil? %>
+    <%= image_tag Champion.where(name:c).first.icon, style: "width:50px;" %>
+  <% else %>
+    <%= c.capitalize %>
+  <% end %>
+</div>
+<% end %>
+</ul>

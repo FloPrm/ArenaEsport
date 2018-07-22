@@ -1,0 +1,57 @@
+<% @invitation = Invitation.new %>
+<% if current_user.premade.present? %>
+  <div class="field">
+  <% if current_user.premades.count == 1 %>
+    <p>
+      <%= link_to "<i class='fa fa-remove'></i>".html_safe, leave_premade_path(current_user), method: :put, data: {confirm: "Souhaitez-vous quitter la premade ?"} %>
+      <b>Premade: </b>
+      <% current_user.premades.each do |premade| %>
+      <%= link_to premade.name, user_preview_user_path(id: premade.user), remote: true %>
+      <% end %>
+    </p>
+  <% else %>
+    <%= link_to "<i class='fa fa-remove'></i>".html_safe, leave_premade_path(current_user), method: :put, data: {confirm: "Souhaitez-vous quitter la premade ?"} %>
+    <b>Premades:</b>
+    <ul style="list-style-type:square;">
+      <% current_user.premades.each do |premade| %>
+      <li><%= link_to premade.name, user_preview_user_path(id: premade.user), remote: true %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  </div>
+<% else %>
+  <div class="field">
+    <p><b>Premade: </b> -</p>
+  </div>
+<% end %>
+<% @game = current_user.account.game %>
+<% if current_user.premade.present? %>
+  <% unless current_user.premades.count >= 2 %>
+    <%= simple_form_for(@invitation, remote: true) do |f| %>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="<%=t 'layout.invite_friend' %>" name="friend" id="premade_friend">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default" style="padding:5px 12px;">
+            <i class='fa fa-plus'></i>
+          </button>
+        </span>
+      </div>
+      <%= hidden_field_tag(:type, "premade") %>
+      <%= hidden_field_tag(:asker, current_user.id) %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= simple_form_for(@invitation, remote: true) do |f| %>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="<%=t 'layout.invite_friend' %>" name="friend" id="premade_friend">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default" style="padding:5px 12px;">
+          <i class='fa fa-plus'></i>
+        </button>
+      </span>
+    </div>
+  <%= hidden_field_tag(:type, "premade") %>
+  <%= hidden_field_tag(:asker, current_user.id) %>
+  <% end %>
+<% end %>
+<div id="notice-premade" class="col-sm-12" style="padding:0px;font-size:12px;"></div>

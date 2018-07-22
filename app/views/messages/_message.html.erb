@@ -1,0 +1,6 @@
+<% @message = message %>
+<p id="message-<%= @message.id %>">
+  <b style="<%= 'color:#c0392b;' if message.user.can? :manage, Article %>"><% if @message.user.can? :manage, :all %>[Staff]<% elsif @message.user.can? :manage, Article %>[Modo]<% end %>
+    <%= link_to @message.user.account.name, user_preview_user_path(@message.user), method: :get, remote: true, style: (message.user.can? :manage, Article) ? "" : "color:black;" %> :</b> <%= auto_link(@message.body, :html => { :target => '_blank' }) %>
+  <br><span class="explain" style="font-size:12px;"><%=t 'messages.timestamp', date: @message.created_at.strftime("%d/%m"), hour: @message.created_at.strftime("%H:%M") %></span>
+</p>

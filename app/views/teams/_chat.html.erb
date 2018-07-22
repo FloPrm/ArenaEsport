@@ -1,0 +1,17 @@
+<div id="chatbox" class="chatbox-body" style="height:292px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+  <%= render 'messages/team_messages' %>
+</div>
+<hr>
+<div class="chatbox-footer" style="padding:5px;">
+  <%= simple_form_for(Message.new, remote: true) do |f| %>
+    <%= hidden_field_tag(:team, @team.id) %>
+    <div class="input-group">
+      <input type="text" class="form-control" name="message[body]" id="message_body" maxlength="500" autocomplete="off">
+      <span class="input-group-btn">
+        <%= button_tag(type: "submit", class: "btn btn-default", style:"padding:5px 12px;") do %>
+           <i class="fa fa-reply"></i>
+        <% end %>
+      </span>
+    </div>
+  <% end %>
+</div>

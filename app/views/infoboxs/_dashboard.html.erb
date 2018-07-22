@@ -1,0 +1,85 @@
+<%= render "infoboxs/hello" %>
+<p style="margin-top:5px;"><%=t 'ares.dashboard.intro' %></p>
+<hr style="margin:10px 0px;">
+<div class="col-sm-12">
+  <div class="col-sm-6">
+    <h5><%=t 'ares.dashboard.situation' %></h5>
+    <ul>
+      <li>
+      <% if current_user.state == 2 %>
+        <%=raw t 'ares.dashboard.team_2', link: link_to(current_user.team.name, current_user.team) %>
+      <% elsif current_user.state == 1 %>
+        <%=t 'ares.dashboard.team_1' %><br>
+        <i class="fa fa-clock-o"></i> <%=t 'ares.dashboard.waiting_time' %> <b>3</b> <%=t 'layout.days' %>
+      <% else %>
+        <%=t 'ares.dashboard.team_0' %> ¯\_[◉‿◉]_/¯
+      <% end %>
+      </li>
+      <% if current_user.state == 1 && current_user.team_applications.present? %>
+      <% @applications = current_user.team_applications %>
+      <li>
+        <% if @applications.count > 1 %>
+          <%=t 'ares.dashboard.many_applications' %>
+          <ul>
+            <% @applications.each do |application| %>
+              <li><%= application.team.name %> <%= link_to "<i class='fa fa-remove'></i>".html_safe, application, method: :delete, data:{confirm: "#{t 'layout.are_you_sure'}"} %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <%=raw t 'ares.dashboard.one_application', name: @applications.last.team.name %> <%= link_to "<i class='fa fa-remove'></i>".html_safe, @applications.last, method: :delete, data:{confirm: "#{t 'layout.are_you_sure'}"} %>
+        <% end %>
+      </li>
+      <% end %>
+      <% if current_user.mentorat.present? %>
+        <% @mentorat = current_user.mentorat %>
+        <% if @mentorat.status == 0 %>
+          <li>
+          <%=t 'ares.dashboard.no_mentor' %><br>
+          <% if @mentorat.teacher.present? %>
+            <%=raw t 'ares.dashboard.teacher', link: link_to(@mentorat.teacher.game_account.name, @mentorat.teacher) %>
+          <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+  <div class="col-sm-6">
+    <h5><%=t 'ares.dashboard.recommandations' %></h5>
+    <ul>
+      <% if current_user.state == 0 %>
+        <li><%=raw t 'ares.dashboard.search_team', link: link_to(t('ares.dashboard.search_team_link'), search_team_user_path(@user), method: :put) %> ⊂[◉‿◉]</li>
+      <% elsif current_user.state == 1 %>
+        <% if current_user.team_applications.empty? %>
+        <li><%=raw t 'ares.dashboard.apply', link: link_to(t('ares.dashboard.apply_link'), recruitment_center_path)%></li>
+        <% end %>
+        <% if current_user.active_subscription.nil? %>
+        <li><%=raw t 'ares.dashboard.premium', link: link_to("Premium", pricing_path) %></li>
+        <% end %>
+      <% end %>
+      <% if current_user.mentorat.nil? %>
+        <li>
+          <%=raw t 'ares.dashboard.receive_help', link: link_to("Mentor", mentors_path)%>
+          <% if mmr_gold_mini? && current_user.mentor.nil? %>
+          <%=raw t 'ares.dashboard.offer_help', link: link_to(t('ares.dashboard.offer_help_link'), new_mentor_path)%>
+          <% end %>
+        </li>
+      <% else %>
+        <% if current_user.mentorat.status == 2 %>
+          <li><%=raw t 'ares.dashboard.no_mentor_now', link: link_to("Mentor", mentors_path)%></li>
+        <% end %>
+      <% end %>
+      <% if Poll.where(result:1).present? %>
+        <% @need_vote = 0 %>
+        <% Poll.where(result:1).each do |poll|
+          if poll.voters.include?(current_user)
+          elsif !poll.language.nil? && poll.language == "" or poll.language == current_user.language
+            @need_vote += 1
+          end
+        end %>
+        <% if @need_vote > 0 %>
+          <li><%=raw t 'ares.dashboard.polls', link: link_to(t('ares.dashboard.polls_link'), polls_path)%></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>

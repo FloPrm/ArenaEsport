@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%= @poll.title %></h3>
+    </div>
+    <div class="panel-body">
+      <div class="box-text">
+        <%= @poll.body.html_safe unless @poll.body.nil? %>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-4"></div>
+        <div id="poll_results" class="col-sm-4">
+          <%= render 'polls/results' %>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-xs-6">
+          <%= link_to "#{t 'btn.back'}", polls_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-xs-6 text-right">
+          <% if @poll.user == current_user or (can? :manage, Article) %>
+            <%= link_to "<i class='fa fa-remove'></i>".html_safe, @poll, method: :delete, data:{confirm: "Etes-vous sûr de vouloir supprimer ce sondage ?"}, class:"btn btn-danger" %>
+            <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, edit_poll_path(@poll), class:"btn btn-default" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

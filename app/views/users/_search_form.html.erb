@@ -1,0 +1,48 @@
+<style type="text/css">
+  #users-search-form select { width: 90px; }
+</style>
+
+<%= search_form_for @search, url: users_path, method: :get, remote: true do |f| %>
+<div id="users-search-form" class="panel panel-default" style="padding:5px 30px;position:relative;margin:0 auto;">
+  <div class="row">
+    <div class="col-xs-4">
+      <%= f.search_field :user_name_cont, placeholder:"Identifiant", class:"form-control" %>
+    </div>
+    <div class="col-xs-4">
+      <%= f.search_field :email_cont, placeholder:"Email", class:"form-control" %>
+    </div>
+    <div class="col-xs-4">
+      <%= f.search_field :skype_cont, placeholder:"Skype", class:"form-control" %>
+    </div>
+  </div>
+  <hr style="margin:5px;">
+  <div class="row">
+      <div class="col-xs-4">
+        <%= f.search_field :account_name_cont, placeholder:"Invocateur", class:"form-control" %>
+      </div>
+      <div class="col-xs-4">
+        <%= f.search_field :team_name_cont, placeholder:"Team", class:"form-control" %>
+      </div>
+      <div class="col-xs-4">
+        <%= f.search_field :discord_cont, placeholder:"Discord", class:"form-control" %>
+      </div>
+  </div>
+  <hr style="margin:5px;">
+  <div class="row" style="padding-top:5px;">
+    <div class="col-xs-4">
+      <%= f.select :role_cont, User::ROLES, prompt:"-- Statut --", style:"text-transform:capitalize;" %>
+      <%= f.select :state_eq, {"Off" => 0, "Recherche" => 1, "En équipe" => 2}, prompt:"-- Etat --" %>
+      <%= f.select :lang_p_eq, User::LANGUAGES.map{ |k,v| [eval(k),v]}, prompt:"-- Lang --" %>
+    </div>
+    <div class="col-xs-4 text-center">
+      <%= f.select :account_game_id_eq, options_from_collection_for_select(Game.all, :id, :title, @search.account_game_id_eq), prompt:"-- Jeu --" %>
+      <%= f.select :account_p_role_cont, ["Toplaner", "Jungler", "Midlaner", "Adcarry", "Support", "Tank", "DPS", "Support", "Flex"], prompt:"-- Rôle --" %>
+      <%= f.select :account_tier_or_account_flex_tier_cont, ["Grandmaster", "Master", "Diamond", "Platinum", "Gold", "Silver", "Bronze", "Unranked"], prompt:"-- Rang --" %>
+    </div>
+    <div class="col-xs-4 text-right">
+      <%= f.submit %>
+      <%= link_to "Reset", users_path, class:"btn btn-basic", style:"margin-left:5px;" %>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,112 @@
+<style type="text/css">
+
+.Item.tip.__tipped__{
+  border-style: solid;
+    border-width: 1px;
+    border-color: #748187;
+    width: 10%;
+    padding: 2px; /* Marge intérieure de 2px */
+    margin-right: 20px;
+}
+
+
+ul.PastRankList{
+  display: flex;
+  list-style-type: none;
+}
+
+#refresh {
+  padding: 3px;
+}
+
+</style>
+
+<div id="ingame-infos" class="container">
+  <div class="row">
+    <div class="col-sm-2 col-xs-3">
+      <div class="ProfileIcon">
+        <%= render 'users/avatar' %>
+      </div>
+    </div>
+
+    <div class="col-sm-5 col-xs-9">
+      <div class="col-xs-7" style="padding:0px;">
+        <% if @user.game_accounts.empty? %>
+          <span><%=t 'users.complete_profile' %></span>
+        <%else%>
+        <span class="Name"><h4><%= @account.name%></h4></span>
+        <%end%>
+
+        <div style="display:inline-block;">
+          <span id="dashboard-rank"><%= render 'users/rank' %> <%= render 'users/rank_flex' %></span>
+        </div>
+
+        <% unless @user.game_accounts.empty? %>
+          <%= link_to '<i class="fa fa-refresh"></i>'.html_safe, refresh_game_account_path(current_user.game_accounts.where(:active => true).first), data: { disable_with: "<i class='fa fa-refresh fa-spin'></i>".html_safe }, remote: true, id: "refresh" %>
+        <% end %>
+
+        <span id="dashboard-refresh"><p class="explain" style="margin-top:10px;"><%=t 'users.last_refresh', time_ago: time_ago_in_words(@user.game_accounts.where(active:true).first.updated_at) %></p></span>
+      </div>
+
+      <div class="col-xs-5 text-center" style="padding-top:25px;">
+        <% unless current_user.active_subscription.present? %>
+          <%= link_to "<i class='fa fa-star' style='font-size:20px;margin-right:5px;'></i><span>Premium</span>".html_safe, pricing_path, class:"btn btn-gold" %>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-sm-5 col-xs-12" style="padding-top:10px;">
+      <% if current_user.pending_invitations.empty? %>
+        <div class="col-xs-10">
+          <%= render 'invitations/parrainage' %>
+        </div>
+      <% else %>
+        <div id="box-invitation" class="panel panel-primary text-center">
+          <%= render 'invitations/invitation' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+
+  <div style="margin-top:20px;">
+    <div class="row">
+      <div class="col-sm-12">
+        <%= render partial:"layouts/ai_box", locals:{partial:"dashboard"} %>
+      </div>
+    </div>
+    <div class="row">
+      <div id="events" class="col-sm-6">
+        <%= render 'tournaments/tournois' %>
+      </div>
+
+      <div id="team_widget" class="col-sm-6">
+        <%= render 'mon_equipe' %>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <%= render 'polls/widget' %>
+    </div>
+
+    <% if @user.mentor.present? %>
+    <div class="row">
+      <div id="mentorat_widget" class="col-sm-12">
+        <%= render 'mentorats/widget' %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var clipboard = new Clipboard('.clipboard');
+      clipboard.on('success', function(e) {
+          console.log(e);
+      });
+      clipboard.on('error', function(e) {
+          console.log(e);
+      });
+});
+</script>

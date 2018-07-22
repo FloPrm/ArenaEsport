@@ -1,0 +1,16 @@
+<section>
+
+<p>Nom : <%=@contact.name%></p>
+<p>E-Mail : <%=@contact.email%></p>
+<p>Message :</p>
+<p><%=@contact.message%></p>
+<p>Bot : 
+<%if @contact.nickname == ""%>
+	Non
+<%else%>
+	Oui
+<%end%>
+</p>
+
+<%= link_to 'Back', contacts_path %>
+</section>

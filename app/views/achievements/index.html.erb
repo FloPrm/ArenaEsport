@@ -1,0 +1,38 @@
+<style type="text/css">
+
+</style>
+
+<div class="container">
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Defis</h3>
+  </div>
+  <div class="panel-body" style="min-height:400px;">
+    <div id="index">
+      <%= render 'achievements/index' %>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-sm-3" style="margin-top:10px;">
+        <% if can? :manage, :all %>
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+          <%= link_to "Badges", badges_path, class:"btn btn-default" %>
+        <% else %>
+          <%= link_to "Retour", virtual_currency_wallet_path(current_user.wallet), class:"btn btn-default" %>
+        <% end %>
+      </div>
+      <div class="col-sm-6 text-center">
+        <%= will_paginate @achievements, :previous_label => "Précédent", :next_label => "Suivant" %>
+      </div>
+      <div class="col-sm-3 text-right" style="margin-top:10px;">
+        <% if can? :manage, :all %>
+        <%= link_to '<i class="fa fa-plus"></i> Nouveau'.html_safe, new_achievement_path, class:"btn btn-primary", remote: true %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

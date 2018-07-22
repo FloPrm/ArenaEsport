@@ -1,0 +1,25 @@
+<ul class="navbar-nav" id="iconsNav">
+  <li>
+    <div class="dropdown">
+        <a class="btn" data-toggle="dropdown" style="background-color:#222; border-color:#222;margin-top:8px;font-size:16px;">
+          <i class="fa fa-bell"></i>
+          <span class="badge" id="notifs-badge" style="<%= @notifications.unread.count > 0 ? 'display:inline-block;' : 'display:none;' %>"><%= @notifications.unread.count %></span>
+        </a>
+        <%= render 'notifications/index' %>
+    </div>
+  </li>
+  <li>
+    <div class="dropdown">
+        <a class="btn" data-toggle="dropdown" style="background-color:#222; border-color:#222;margin-top:8px;font-size:18px;">
+          <i class="fa fa-user" style="font-size:19px;"></i>
+        </a>
+        <%= render 'friendships/index' %>
+    </div>
+  </li>
+  <li style="display:none;"><a href="#" class="btn"><i class="fa fa-envelope"></i></a></li>
+  <li style="display:none;"><a href="/about" class="btn"><i class="fa fa-question" style="font-size:16px;"></i></a></li>
+  <li>
+    <a href="<%= logout_path %>" class="btn" id="logout"><i class="fa fa-power-off"></i></a>
+  </li>
+</ul>
+</ul>

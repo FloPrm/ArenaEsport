@@ -1,0 +1,16 @@
+Salut <%= @user.account.name %>
+
+Ton filleul <%= @filleul.account.name %> a pris un abonnement Premium peu de temps après ton parrainage.
+
+<% if @type == "subscription" %>
+Tu recois donc un abonnement <%= @subscription.subscription_plan.title %> d'une durée de 1 mois pour te remercier. Tu trouveras toutes les informations au sujet de cet abonnement ici : <%= subscription_plan_url(@subscription.subscription_plan_id) %>
+<% elsif @type == "extend" %>
+Ton abonnement a donc été étendu de <%= @duration %> jours pour te remercier.
+<% elsif @type == "upgrade" %>
+Ton abonnement a donc été amélioré en <%= @subscription.subscription_plan.title %> et été étendu de <%= @duration %> jours pour te remercier. Tu trouveras toutes les informations au sujet de cet abonnement ici : <%= subscription_plan_url(@subscription.subscription_plan_id) %>
+<% end %>
+
+Il en sera de même pour tous les futurs parrainages que tu réaliseras et dont les joueurs deviendront Premium dans le mois suivant leur inscription.
+
+eSpotivement,
+le Staff Arena Esport

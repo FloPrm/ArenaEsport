@@ -1,0 +1,48 @@
+<style type="text/css">
+section { padding-top: 50px; padding-bottom: 50px; }
+</style>
+
+<div class="container" style="margin-bottom:100px;position:relative;z-index:10">
+	<div class="row text-center">
+		<div class="col-sm-4">
+			<img src="<%= asset_url("assets/pricing/Free.png") %>" class="img-responsive img-centered">
+			<div class="heading-box" style="margin-bottom:50px;">
+				<h2><%=t 'subscriptions.free_title' %></h2>
+				<h3 class="subheading"><%=t 'subscriptions.free_subtitle' %></h3>
+			</div>
+			<h3><%=t 'subscriptions.unlimited' %></h3>
+			<br>
+			<% unless user_signed_in? %>
+				<a href="/users/sign_up" class="btn btn-primary btn-lg btn-block"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <%=t 'teams.apply_for' %></a>
+			<% else %>
+				<a href="#" class="btn btn-primary btn-lg btn-block" disabled><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <%=t 'teams.apply_for' %></a>
+			<% end %>
+		</div>
+		<div class="col-sm-8">
+			<div class="row">
+				<div class="col-sm-6">
+					<img src="<%= asset_url("assets/pricing/Month.png") %>" class="img-responsive img-centered">
+				</div>
+				<div class="col-sm-6">
+					<img src="<%= asset_url("assets/pricing/Lifetime.png") %>" class="img-responsive img-centered">
+				</div>
+			</div>
+			<div class="heading-box">
+				<h2><%=t 'subscriptions.premium_title' %></h2>
+				<h3 class="subheading"><%=t 'subscriptions.premium_subtitle' %></h3>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<h3>1 <%=t 'layout.month' %></h3>
+					<br>
+					<a href="<%= subscription_plan_path(id:2) %>" class="btn btn-primary btn-lg btn-block"><i class="fa fa-search-plus" aria-hidden="true"></i> <%=t 'btn.see_more' %></a>
+				</div>
+				<div class="col-sm-6">
+					<h3><%=t 'subscriptions.lifetime' %> !</h3>
+					<br>
+					<a href="<%= subscription_plan_path(id:3) %>" class="btn btn-primary btn-lg btn-block"><i class="fa fa-search-plus" aria-hidden="true"></i> <%=t 'btn.see_more' %></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

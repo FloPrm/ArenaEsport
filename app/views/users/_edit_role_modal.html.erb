@@ -1,0 +1,26 @@
+<%= simple_form_for(@user, url: edit_role_user_path, method: :patch, remote: true) do |f| %>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Modifier le role</h3>
+    </div>
+    <div class="modal-body">
+
+    <div class="text-center">
+      <br>
+      <%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+      <br>
+      <br>
+    </div>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Valider", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+<% end %>

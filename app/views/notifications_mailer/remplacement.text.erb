@@ -1,0 +1,24 @@
+<%=t 'hello' %> <%= @game_account.name %>
+<% if @status == "membre" %>
+<%=t 'mails.remplacement.membre' %>
+<% elsif @status == "remplacant" %>
+<%=t 'mails.remplacement.remplacant' %>
+<% end %>
+___________________________________________________
+
+                <%=t('teams.one').capitalize %>: <%= @team.name %>
+___________________________________________________
+
+<% nb = @team.game.nb_players%>
+<% for i in 0..(nb -1)%>
+  <% @teaming = @team.teamings.where(active:true, role:@team.roles[i]).first %>
+  <%= @team.roles[i].capitalize %>: <% if @team.players[i] == 2 %><% @account = @teaming.user.account %><%= @account.name %> <% if @status == "membre" && @remplacants.include?(@teaming.user) %>(<%=t 'layout.new' %>)<% end %><% elsif @team.players[i] == 1 %>-<% else %>...<%=t 'teams.replacement' %>...<% end %>
+
+<% end %>
+___________________________________________________
+
+<%=t 'mails.signatures.team', link: (t('mails.signatures.connect') + " (#{root_url})") %>
+<%=t 'mails.signatures.team_discord', link: @game.discord %>
+
+<%=t 'mails.signature_1' %>
+<%=t 'mails.signature_2' %>

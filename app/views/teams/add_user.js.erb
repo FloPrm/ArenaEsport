@@ -1,0 +1,4 @@
+$('#team-tabs').html("<%= j (render 'teams/roster') %>");
+$('#admin-btn').html("<%= j (render 'admin_btn') %>");
+$('#notice-team-<%= params[:num_role] %>').html("<%= flash[:add_user] %>");
+$('#listing-partial').html("");

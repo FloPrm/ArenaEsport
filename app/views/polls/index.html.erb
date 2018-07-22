@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'polls.title' %></h3>
+    </div>
+    <div class="panel-body" style="min-height:500px;">
+      <div class="row">
+        <div class="col-sm-1 col-xs-2 text-center">
+          <i class="fa fa-check-square-o" style="font-size:40px;"></i>
+        </div>
+        <div class="col-sm-8 col-xs-10">
+          <p style="text-align:justify"><%=t 'polls.explain' %></p>
+        </div>
+        <div class="col-sm-3 text-center">
+          <%= link_to "<i class='fa fa-plus'></i> #{t 'btn.new'}".html_safe, new_poll_path, method: :get, remote: true, class:"btn btn-primary" %>
+        </div>
+      </div>
+      <hr>
+      <ul class="nav nav-tabs nav-justified" style="margin-bottom:10px;">
+        <li role="presentation" class="active"><a id="tab-current"><%=t 'polls.current' %></a></li>
+        <li role="presentation"><a id="tab-over"><%=t 'polls.over' %></a></li>
+        <% if can? :manage, Article %>
+          <li role="presentation"><a id="tab-waiting"><%=t 'polls.pending' %></a></li>
+        <% end %>
+        <li role="presentation"><a id="tab-userpolls"><%=t 'polls.mines' %></a></li>
+      </ul>
+
+      <div id="poll-tabs">
+        <%= render partial: 'polls/index', locals:{result: 1, order1:"featured desc", order2:"created_at asc"}%>
+      </div>
+
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3" style="margin-top:10px;">
+          <%= link_to "#{t 'btn.back'}", dashboard_path, class:"btn btn-default" %>
+        </div>
+        <div id="users-paginate" class="col-sm-6 text-center">
+          <%= render 'polls/pagination' %>
+        </div>
+        <div class="col-sm-3 text-right" style="margin-top:10px;">
+          <%= link_to "<i class='fa fa-plus'></i> #{t 'btn.new'}".html_safe, new_poll_path, method: :get, remote: true, class:"btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+$('#tab-current').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $.ajax({
+   type: "GET",
+   url: "/polls/1/tabs" + "?tab=current"
+  });
+});
+
+$('#tab-over').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $.ajax({
+   type: "GET",
+   url: "/polls/1/tabs" + "?tab=over"
+  });
+});
+
+$('#tab-waiting').on('click', function() {
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $.ajax({
+   type: "GET",
+   url: "/polls/1/tabs" + "?tab=waiting"
+  });
+});
+
+$('#tab-userpolls').on('click', function(){
+  $('ul.nav-tabs li.active').removeClass('active')
+  $(this).parent('li').addClass('active')
+  $.ajax({
+   type: "GET",
+   url: "/polls/1/tabs" + "?tab=userpolls"
+  });
+});
+
+</script>

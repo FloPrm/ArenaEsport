@@ -1,0 +1,10 @@
+<% if !@poll.choices.nil? %>
+  <% for i in 0..(@poll.choices.count-1) %>
+    <div style="display:block;clear:both;">
+      <input type="text" value="<%= @poll.choices[i] %>" class="form-control" placeholder="Choix n°<%= i+1 %>" style="width:90%;display:inline-block;margin-right:5px;margin-top:5px;" name="poll[choices][]" id="poll_choices_<%= i %>" maxlength="50" <%= 'readonly' if @poll.result == 2 %>>
+      <% if @poll.result < 2 && @poll.choices.count > 2 %>
+        <%= link_to "<i class='fa fa-remove'></i>".html_safe, choices_poll_path(@poll, type:"remove", choice: i), method: :put, remote: true %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

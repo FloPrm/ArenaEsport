@@ -1,0 +1,22 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= sort_link @search, :name, "Nom" %> (<%= @champions.count %>)</th>
+      <th><%= sort_link @search, :created_at, "Ajout" %></th>
+      <th><%= sort_link @search, :game_id, "Jeu" %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @champions.order(:created_at).reverse_order.each do |champion| %>
+      <tr>
+        <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, champion, method: :delete, remote: true, data: {confirm: "Are you sure?"} %></td>
+        <td><%= champion.name %></td>
+        <td><%= champion.created_at.strftime("%d/%m/%y - %H:%M") %></td>
+        <td><%= champion.game.title unless champion.game.nil? %></td>
+        <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_champion_path(champion), remote: true %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

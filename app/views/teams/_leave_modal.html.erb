@@ -1,0 +1,42 @@
+<%= simple_form_for(leave_modal_team_path, url: remove_user_team_path, method: :get) do |f| %>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%=t 'teams.leave' %></h3>
+    </div>
+    <div class="modal-body" style="padding-bottom:20px;">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <h5 style="text-align:center;"><%=t 'teams.leave_reason' %></h5>
+        <%= f.input :reason, as: :radio_buttons, label: false, collection: Teaming::LEAVE.map{ |k,v| [eval(k),v]}, required: true, checked: 4 %>
+      </div>
+      <div class="col-sm-3"></div>
+      <% if @user.premade.present? && !@premades.nil? %>
+        <div class="field text-center" style="clear:both;">
+          <hr>
+          <h5><%=t 'teams.leave_premade' %></h5>
+          <%= f.input :premade, as: :boolean, checked_value: true, unchecked_value: false, label: "Oui" %>
+        </div>
+      <% end %>
+      <% if @team.start_date.to_date >= 2.days.ago %>
+        <div class="alert alert-danger" style="clear:both;">
+          <%=raw t 'teams.leave_alert1' %>
+        </div>
+      <% elsif @user.teamings.where(active:true).first.created_at.to_date >= 2.days.ago %>
+        <div class="alert alert-danger" style="clear:both;">
+          <%=raw t 'teams.leave_alert2' %>
+        </div>
+      <% end %>
+
+      <%= hidden_field_tag "user", @user.id %>
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "#{t 'btn.confirm'}", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.cancel' %></button>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,33 @@
+<style type="text/css">
+  #new-history textarea { width:80%; height:100px; }
+</style>
+
+<%= simple_form_for(@history, method: :put, remote: params[:remote].present? ? false : true) do |f| %>
+<div id="new-history" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Modifier un evenement</h3>
+    </div>
+    <div class="modal-body text-center">
+      <div class="row" style="margin-bottom:30px;">
+        <div class="col-xs-5">
+          <%= f.input :action, as: :select, collection: History::ACTIONS, label: false, include_blank: false %>
+        </div>
+        <div class="col-xs-7">
+          <%= f.input :date, as: :date, :order => [:day, :month, :year], label: false, include_blank: false %>
+        </div>
+      </div>
+
+      <%= f.input :content, as: :text, label: false, maxlength: 250 %>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Enregistrer", data: { disable_with: "Envoi..." }, class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

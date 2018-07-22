@@ -1,0 +1,104 @@
+<style type="text/css">
+  #tournament-modal .modal-body input { text-align: center; width: 80%; }
+</style>
+
+<%= simple_form_for(@tournament, method: :put, remote: true) do |f| %>
+<div id="tournament-modal" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Modifier un Tournoi</h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-sm-4">
+          <h4>Nom</h4>
+          <%= f.input :name, label: false, required: true, maxlength: 35, class:"form-control" %>
+        </div>
+        <div class="col-sm-4">
+          <h4>Organisateur</h4>
+          <%= f.input :owner, label: false, required: true, maxlength: 35 %>
+        </div>
+        <div class="col-sm-4">
+          <h4>Logo</h4>
+          <%= f.input :logo, label: false, maxlength: 35 %>
+        </div>
+      </div>
+
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-sm-4">
+          <h4>Site</h4>
+          <%= f.input :website, label: false, maxlength: 50 %>
+        </div>
+        <div class="col-sm-4">
+          <h4>Vocal</h4>
+          <%= f.input :vocal, label: false, maxlength: 50 %>
+        </div>
+        <div class="col-sm-4">
+          <h4>Inscription</h4>
+          <%= f.input :registration, label: false, required: true, maxlength: 100 %>
+        </div>
+      </div>
+
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-sm-3">
+          <h4>Jeu</h4>
+          <%= f.input :game_id, as: :select, collection: Game.all, label_method: :title, value_method: :id, label: false, include_blank: false %>
+        </div>
+        <div class="col-sm-3">
+          <h4>Niveau</h4>
+          <%= f.input :mmr, as: :select, collection: Tournament::MMR, label: false, include_blank: false %>
+        </div>
+        <div class="col-sm-3">
+          <h4>Carte</h4>
+          <%= f.input :map, as: :select, collection: Tournament::MAPS, label: false, include_blank: false %>
+        </div>
+        <div class="col-sm-3">
+          <h4>Format</h4>
+          <%= f.input :battle, as: :select, collection: Tournament::BATTLE, label: false, include_blank: false %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3">
+          <h4>Fréquence</h4>
+          <%= f.input :frequency, as: :select, collection: Tournament::FREQUENCY.map{ |k,v| [eval(k),v]}, label: false, include_blank: false %>
+        </div>
+        <div class="col-sm-3">
+          <h4>Jour</h4>
+          <%= f.input :day, as: :select, collection: Tournament::DAYS.map{ |k,v| [eval(k),v]}, label: false, include_blank: false %>
+        </div>
+        <div class="col-sm-3">
+          <h4>Heure</h4>
+          <%= f.input :hour, as: :time, label: false, include_blank: false %>
+        </div>
+        <div class="col-sm-3">
+          <h4>Date</h4>
+          <%= f.input :date, as: :date, :order => [:day, :month, :year], label: false, include_blank: true %>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="field">
+        <h4>Règles</h4>
+        <%= f.input :rules, as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini' } }, label: false, maxlength: 500 %>
+      </div>
+
+      <div class="field">
+        <h4>Récompenses</h4>
+        <%= f.input :prizes, as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini' } }, label: false, maxlength: 500 %>
+      </div>
+
+    </div>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Mettre a jour", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

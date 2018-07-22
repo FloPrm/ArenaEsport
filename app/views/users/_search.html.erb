@@ -1,0 +1,41 @@
+<style style="text/css">
+	.field { margin-bottom: 10px; }
+	ul { margin-left: 0px; }
+</style>
+
+<% unless current_user.date_search.blank?%>
+	<p class="text-center"><i class="fa fa-circle-o-notch fa-spin"></i>&nbsp; <%=t 'users.searching_since' %> <b><%= l(current_user.date_search.to_date, format: :search)%></b>.</p>
+<%end%>
+
+<%= render 'users/search_team_bar' %>
+
+<div class="col-sm-7 text-center">
+	<span class="label label-default"><%= @account.p_role %></span>
+		<% unless @account.s_role.blank?%>
+			<% @account.s_role.each do |role| %>
+				<span class="label label-default" style="background:#a2a2a2;"><%= role[0...3] %></span>
+			<% end %>
+		<% end %>
+	<%unless current_user.birth_date.blank?%>
+	<%end%>
+	<table class="table" style="width:100%;margin-bottom:0px;margin-top:10px;">
+		<thead>
+			<tr>
+				<th class="user-dispos"><%=t 'layout.week' %></th>
+				<th class="user-dispos"><%=t 'layout.weekend' %></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<!-- RENDER DISPOS SEMAINE & WEEKEND -->
+				<%= render(partial: 'users/dispos', locals: {reload: true, player: current_user}) %>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="col-sm-5">
+	<div class="field">
+		<b>Tryhard: </b> <%= @account.gameplay %>/4
+	</div>
+	<%= render 'users/premade' %>
+</div>

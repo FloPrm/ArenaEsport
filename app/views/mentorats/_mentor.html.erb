@@ -1,0 +1,46 @@
+<div class="field">
+  <%= render 'users/avatar' %>
+  <h4><%= render partial:"users/language", locals:{user: @user, height:15} %>&nbsp;<%= @account.name %></h4>
+</div>
+
+<div class="field">
+  <span class="label label-default"><%= @account.p_role %></span>
+    <% unless @account.s_role.blank?%>
+      <% @account.s_role.each do |role| %>
+        <span class="label label-default" style="background:#a2a2a2;"><%= role[0...3] %></span>
+      <% end %>
+    <% end %>
+</div>
+
+<div class="field">
+  <%= render partial: 'users/top3', locals:{size:50} %>
+</div>
+
+<div class="field">
+  <%= render 'users/rank' %> <%= render 'users/rank_flex' %>
+</div>
+
+<div class="field">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="user-dispos"><%=t 'layout.week' %></th>
+          <th class="user-dispos"><%=t 'layout.week_end' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <!-- RENDER DISPOS SEMAINE & WEEKEND -->
+          <% if @mentorat.mentor.present? %>
+            <% if current_user == @mentorat.user %>
+              <%= render(partial: 'users/dispos', locals: {reload: true, player: @mentor}) %>
+            <% else %>
+              <%= render(partial: 'users/dispos', locals: {reload: true, player: @user}) %>
+            <% end %>
+          <% elsif @mentorat.teacher.present? %>
+            <%= render(partial: 'users/dispos', locals: {reload: true, player: @user}) %>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+</div>

@@ -1,0 +1,139 @@
+<section>
+<%= link_to "Présentation du profil type", user_path(1)%>
+</br>
+<iframe src="https://discordapp.com/widget?id=206189080470355968&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
+
+
+
+<h2> Parlons un peu de notre utilisateur... </h2>
+
+<p> Tout d'abord, il peut avoir plusieurs rôles :
+	<ul>
+		<li>Admin</li>
+		<li>Modérateur</li>
+		<li>Manager-Coach</li>
+		<li>Joueur
+			<ul>
+				<li>Arena</li>
+				<li>Arena +</li>
+				<li>Capitaine +</li>
+			</ul>
+		</li>
+		<li>Ami (ni en équipe, ni en recherche)</li>
+		<li>Banni (pour X temps) : n'a plus droit aux services de base pour mauvaise conduite</li>
+	</ul>
+</p>
+</br>
+<p>
+Vous vous en doutiez, un utilisateur peut avoir une équipe (naaaan, sans blaaaague). D'où l'intérêt que tout utilisateur ait un onglet "Mon équipe", expliqué plus en détail dans cette section.
+</br>
+Grâce à ce profil, toutes les informations concernant un joueur pourront être stockées. Et adieu les Google Docs ! \o/ En deux mots, une fois que tout marchera (ouais pas de suite, mais j'aime y penser), TOUT sera plus rapide et plus simple. Et quand je dis TOUT, je déconne pas :o
+</p>
+</br>
+
+<p>
+Quand un joueur ou ami se rendra sur cette page, trois cas seront possibles :
+<h3>Cas n°1 : "Ami"</h3>
+	<p>
+	<ul>
+		<li>L'Utilisateur n'est ni en Équipe, ni en Recherche.</li>
+		<li>Il peut modifier toutes ses informations (demande changement de nom de page de unes pour le changement de pseudo sur le jeu).</li>
+		<li>Il peut entrer en recherche d'équipe.</li>
+		<li><b>Choix pour nous :</b> Possibilité de réserver un Manager-Coach ? Sachant que le côté premium est gérable facilement.</li>
+	</ul>
+	</p>
+	<i>nb : par changement de pseudo je veux dire de compte, puisqu'on a l'id.</i>
+<h3>Cas n°2 : "En Recherche"</h3>
+	<p>
+	<ul>
+		<li>L'Utilisateur est actuellement en Recherche d'Équipe.</li>
+		<li>Il peut modifier toutes ses infomations, mais aura un message d'alertes si elles touchent à son placement en équipe car ralentissement du placement.</li>
+		<li>Il peut quitter la recherche d'équipe.</li>
+		<li>Même choix avec les MC que ci dessus</li>
+	</ul>
+	</p>
+<h3>Cas n°3 : "En Équipe"</h3>
+	<p>
+	<ul>
+		<li>L'Utilisateur est actuellement en Équipe.</li>
+		<li>Une modification qui me gène ici : le planning, car il peut devenir plus restrictif que les horaires de l'équipe.</li>
+		<li>Il peut quitter son équipe. Possibilité alors de mettre des messages - replacer en recherche? - ou "pénalité de 3 jours d'attente avant remise en queue car équipe quittée trop vite/trop de fois"</li>
+		<li>Réservation Manager-Coach</li>
+	</ul>
+	</p>
+</p>
+Quel que soit le scénario, un onglet Premium clairement visible, avec gestion de leurs comptes pour les uns et description des avantages pour les autres.</br>
+</br>
+Idée : dans formulaire de recherche, l'utilisateur peut préciser s'il veut rejoindre une équipe en particulier, soit en remplaçant, soit pour rôle manquant ! -> notification à l'équipe 
+Peut choisir ou non d'intégrer la recherche globale en parallèle? (peut créer conflit, peut-être demander au joueur au bout de X jours s'il veut être mis en recherche si pas de réponse).
+</section>
+
+<section>
+	<h3>Champs généraux obligatoires</h3>
+<p>
+	Ces informations sont à remplir à toute création de compte, que ce soit pour rejoindre une équipe, poster sur le forum, ou accéder aux fonctions de manager-coach.
+</p>
+<ul>
+	<li>Nom</li>
+	<li>Prénom</li>
+	<li>Pseudo sur le site</li>
+	<li>Email</li>
+	<li>Date de naissance</li>
+	<li>Code parrainage (facultatif mais uniquement présent dans formulaire d'inscription)</li>
+</ul>
+
+
+
+<h3>Champs généraux facultatifs</h3>
+<p>
+	Ces informations peuvent être ajoutées pour compléter son profil.
+</p>
+<ul>
+	<li>Skype</li>
+	<li>Facebook</li>
+	<li>Twitter</li>
+	<li>Description</li>
+
+</ul>
+
+<h3>Champs de recherche </h3>
+<p>
+	Ces informations sont à ajouter pour entrer en recherche d'équipe.
+</p>
+<ul>
+	<li>Horaires semaine/week-end</li>
+	<li>Rôle en jeu</li>
+	<li>Remplaçant ? (ou champ à part?)</li>
+	<li>Premade (si premade en recherche sans avoir rempli, invitation. Si en recherche et rempli, prérempli pour op. Si pas en recherche, invitation et remplissage formulaire</li>
+	<li>D'accord pour être capitaine? </li>
+</ul>
+
+<h3>Champs "cachés" </h3>
+<p>
+	Ces informations ne sont soit pas modifiables par l'utilisateur de base, soit visibles.
+</p>
+<ul>
+	<li>Rôle sur le site (admin, modo, etc.)</li>
+	<li>Statut (en équipe, en recherche,...)</li>
+	<li>Temps si en recherche? (ici ou dans un autre model?)</li>
+	<li>Expliciter banni/excluded from Q</li>
+</ul>
+
+<p>
+Idée avant d'aller me coucher : quand joueur quitte une équipe / est exclu / que l'équipe disband, autres joueurs peuvent "laisser un avis" pour savoir si possibilité d'être replacés ensemble ou pour mettre en basse priorité joueurs avec mauvais score global.
+</p>
+</br>
+</br>
+<p>
+Petite recherche pendant ma pause repas à LM :</br>
+
+https://gamurs.com/g/lol/lobby :<br>
+<ul>
+	<li>Sur la page principale, nouveaux inscrits, nouvelles équipes, nouvelles activités (un peu comme admin_activities sur lm</li>
+	<li>Country et language requis (pays à faire, mais champ à prévoir)</li>
+	<li>Ne pas oublier le "terms of conditions" & "privacy policy"</li>
+	<li>Champs des coachs : rank, experience, what i'm offering, coaching availabilty</li>
+</ul>
+</p>
+	
+</section>

@@ -1,0 +1,42 @@
+<style type="text/css">
+  #new-team input {
+    text-align: center;
+  }
+</style>
+
+<%= simple_form_for(@team) do |f| %>
+<div id="new-team" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel"><%=t 'teams.create' %></h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <h4><%=t 'layout.name' %></h4>
+      <input type="text" class="form-control" style="width:50%;margin:0 auto;" name="team[name]" id="team_name" maxlength="35" autofocus>
+
+      <% if can? :manage, :all %>
+      <h4>Jeu</h4>
+      <%= f.collection_select :game_id, Game.all, :id, :title %>
+      <br>
+      <% else %>
+      <input type="number" value="<%= current_user.account.game_id %>" class="form-control" style="display:none;" name="team[game_id]" id="team_game_id">
+      <% end %>
+      <% unless can? :manage, Friendship %>
+      <br>
+      <div class="alert alert-info">
+        <%=t 'teams.new_alertbox' %> <b><%= link_to "#{t 'teams.search'}", search_team_user_path(current_user), method: :put %></b>.
+      </div>
+      <% end %>
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "#{t 'btn.create'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.close' %></button>
+    </div>
+  </div>
+</div>
+<% end %>

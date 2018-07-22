@@ -1,0 +1,72 @@
+<% @search = User.search(params[:q]) %>
+<% @users = @search.result.includes(:account).paginate(:page => params[:page]) %>
+
+<table class="table table-striped" id="index_users">
+<thead>
+  <tr>
+    <th><%= sort_link @search, :created_at, "Créé", {}, { :remote => true, :method => :get } %></th>
+    <th>Pays</th>
+    <th><%= sort_link @search, :user_name, "Pseudo", {}, { :remote => true, :method => :get } %></th>
+    <th><%= sort_link @search, :account_name, "Invocateur", {}, { :remote => true, :method => :get } %></th>
+    <th>Rôle</th>
+    <th class="text-center"><%= sort_link @search, :account_mmr, "Solo", {}, { :remote => true, :method => :get } %></th>
+    <th class="text-center"><%= sort_link @search, :account_flex_mmr, "Flex", {}, { :remote => true, :method => :get } %></th>
+    <th class="text-center">Statut</th>
+    <th>Équipe</th>
+    <th colspan="2"></th>
+  </tr>
+</thead>
+
+<tbody>
+  <% @users.order('created_at desc').each do |user| %>
+    <% @account = user.game_accounts.where(active:true).first %>
+    <% if @account.nil? %>
+      <% @account = user.game_accounts.first %>
+    <% end %>
+    <tr>
+      <td><%= user.created_at.strftime("%d/%m/%y") %></td>
+      <td><%= render partial:"users/flag", locals:{user: user, height:20} %></td>
+      <td><%= link_to user.user_name, user %></td>
+      <% if @account != nil %>
+        <td><%= @account.name %></td>
+        <% if @account.p_role != nil %>
+          <td class="text-left" style="text-transform: uppercase;"><span class="label label-default"><%= @account.p_role[0...3] %></span></td>
+        <% else %>
+        	<td>-</td>
+        <%end%>
+        <td class="table-rank"><%= render 'users/rank' %></td>
+        <td class="table-rank"><%= render 'users/rank_flex' %></td>
+      <%else%>
+      <td colspan="4"></td>
+      <%end%>
+      <% if user.role != nil %>
+        <td class="text-center">
+        <%= link_to "#{user.role.to_s.humanize}", edit_role_modal_user_path(user), {:remote => true, 'data-toggle' => "modal", 'data-target' => '#modal-window'} %>
+        </td>
+      <% else %>
+        <td class="text-center">
+        <%= link_to "Set role", edit_role_modal_user_path(user), {:remote => true, 'data-toggle' => "modal", 'data-target' => '#modal-window'} %>
+        </td>
+      <%end%>
+      <% if user.teamings.where(active: true).empty? %>
+        <td>
+          <%= link_to edit_state_user_path(user), method: :patch, remote: true do %>
+            <%if user.state == 1%>
+            En recherche
+            <%else%>
+            Off
+            <%end%>
+          <% end %>
+        </td>
+      <% else %>
+        <% teaming = user.teamings.where(active:true).first %>
+        <% team = teaming.team %>
+        <td><%= link_to team.name, team %></td>
+      <% end %>
+      <td>
+        <%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_user_path(user), remote: true %>
+      </td>
+    </tr>
+  <%end%>
+</tbody>
+</table>

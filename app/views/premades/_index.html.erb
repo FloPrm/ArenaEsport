@@ -1,0 +1,35 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Joueur1</th>
+      <th>Joueur2</th>
+      <th>Joueur3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @premades.order(:updated_at).reverse_order.each do |premade| %>
+    <tr>
+      <td><%= premade.id %></td>
+      <td>
+        <% unless premade.user1.nil? %>
+          <%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, kick_premade_path(premade, friend: premade.user1.user_id), method: :put, data: { confirm: 'Voulez-vous exclure ce joueur de la premade ?' } %>
+          <%= link_to premade.user1.name, user_preview_user_path(premade.user1.user), method: :get, remote: true %>
+        <% end %>
+      </td>
+      <td>
+        <% unless premade.user2.nil? %>
+          <%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, kick_premade_path(premade, friend: premade.user2.user_id), method: :put, data: { confirm: 'Voulez-vous exclure ce joueur de la premade ?' } %>
+          <%= link_to premade.user2.name, user_preview_user_path(premade.user2.user), method: :get, remote: true %>
+        <% end %>
+      </td>
+      <td>
+        <% unless premade.user3.nil? %>
+          <%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, kick_premade_path(premade, friend: premade.user3.user_id), method: :put, data: { confirm: 'Voulez-vous exclure ce joueur de la premade ?' } %>
+          <%= link_to premade.user3.name, user_preview_user_path(premade.user3.user), method: :get, remote: true %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

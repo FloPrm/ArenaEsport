@@ -1,0 +1,57 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Joueur</th>
+      <th><%= sort_link @search, :subscription_plan_id, "Formule", {}, { :remote => true, :method => :get } %></th>
+      <th><%= sort_link @search, :created_at, "Début", {}, { :remote => true, :method => :get } %></th>
+      <th><%= sort_link @search, :end_date, "Fin", {}, { :remote => true, :method => :get } %></th>
+      <th>Durée</th>
+      <th><%= sort_link @search, :price, "Prix", {}, { :remote => true, :method => :get } %></th>
+      <th><%= sort_link @search, :payment_method, "Paiement", {}, { :remote => true, :method => :get } %></th>
+      <th><%= sort_link @search, :active, "Etat", {}, { :remote => true, :method => :get } %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @subscriptions.order('created_at desc').each do |subscription| %>
+    <tr>
+      <td><%= link_to subscription.user.account.name, user_preview_user_path(id: subscription.user_id), method: :get, remote: true %></td>
+      <td><%= subscription.subscription_plan.title %></td>
+      <td><%= subscription.created_at.strftime("%d/%m/%y") %></td>
+      <td>
+        <% if subscription.end_date.present? %>
+          <%= subscription.end_date.strftime("%d/%m/%y") %>
+        <% else %>
+          A vie
+        <% end %>
+      </td>
+      <td>
+        <% if subscription.end_date.present? %>
+          <%= (subscription.end_date.year * 12 + subscription.end_date.month) - (subscription.created_at.year * 12 + subscription.created_at.month) %> mois
+        <% else %>
+          Illimité
+        <% end %>
+      </td>
+      <td>
+        <% if subscription.price < 700 %>
+          <%= subscription.price.to_f.round(2) %>€
+        <% else %>
+          <%= subscription.price.to_i %> <i class="ra ra-gem" style="color:#3498db;"></i>
+        <% end %>
+      </td>
+      <td><%= subscription.payment_method.capitalize unless subscription.payment_method.nil? %></td>
+      <td>
+        <%= link_to state_subscription_path(subscription), method: :put, remote: true do %>
+          <% if subscription.active == true %>
+          Actif
+          <% elsif subscription.active == false %>
+          Inactif
+          <% else %>
+          Attente
+          <% end %>
+        <% end %>
+      </td>
+      <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, subscription, method: :delete, data: { confirm: 'Etes-vous sûr ?' }, remote: true %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

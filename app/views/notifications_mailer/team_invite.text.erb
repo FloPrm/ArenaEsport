@@ -1,0 +1,11 @@
+Salut <%= @receiver.account.name %>
+Le joueur <%= @sender.account.name %> <%= "(ami)" if @receiver.friends.include?(@sender) %> t'invite à rejoindre son équipe <%= @team.name %> en tant que <%= @invitation.role.capitalize %>.
+
+<% unless @content.nil? %>
+Message: <%= @content %>
+<% end %>
+
+Pour accepter l'invitation, connecte-toi à ton espace personnel sur le site: https://arena-esport.com
+
+eSpotivement,
+le Staff Arena Esport

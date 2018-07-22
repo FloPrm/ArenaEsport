@@ -1,0 +1,10 @@
+<% @user = user %>
+<% if ((@user.can? :manage, Champion) or (@user.can? :manage, Article)) && @user.avatar.present? %>
+  <%= image_tag @user.avatar.thumb.url, style:"width:50px;", class:"img-thumbnail #{"bg-gold" if (@user.can? :manage, Champion) && @user.role != "admin"} #{"bg-admin" if (@user.can? :manage, Article)}" %>
+<% else %>
+  <% unless @user.icon.nil? or @user.icon.empty? %>
+    <%= image_tag @user.icon, style:"width:50px;", class:"img-thumbnail #{"bg-gold" if (@user.can? :manage, Champion) && @user.role != "admin"} #{"bg-admin" if (@user.can? :manage, Article)}" %>
+  <% else %>
+    <%= image_tag image_url('icons/icon1.jpg'), style:"width:50px;", class:"img-thumbnail #{"bg-gold" if (@user.can? :manage, Champion) && @user.role != "admin"} #{"bg-admin" if (@user.can? :manage, Article)}" %>
+  <% end %>
+<% end %>

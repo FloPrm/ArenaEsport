@@ -1,0 +1,16 @@
+<div class="panel-heading">
+  <i class="ra ra-queen-crown"></i>&nbsp;&nbsp;<h4 style="display:inline-block">Election du Capitaine</h4>&nbsp;&nbsp;<i class="ra ra-queen-crown"></i>
+</div>
+<div class="panel-body" style="min-height:98px;">
+
+<% @election = @team.votes.where(action:"élection").last %>
+<p>Choisir <b><%= @election.votable.game_accounts.where(active:true).first.name %></b> comme capitaine ?</p>
+
+<% teaming = current_user.teamings.where(team_id: @team.id, active:true).first %>
+<% if !@election.has_voted[teaming.num_role].nil?%>
+	<p>Votes : <b><%= @election.votes %></b>/5</p>
+<%else%>
+  <%= link_to "<i class='fa fa-check'></i>".html_safe, election_vote_path(vote: @election, answer: true), method: :put, class:"btn btn-success", remote: true %>
+  <%= link_to "<i class='fa fa-remove'></i>".html_safe, election_vote_path(vote: @election, answer: false), method: :put, class:"btn btn-danger", remote: true %>
+<% end %>
+</div>

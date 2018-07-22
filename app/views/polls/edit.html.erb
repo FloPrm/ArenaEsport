@@ -1,0 +1,85 @@
+<%= simple_form_for(@poll, method: :put) do |f| %>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'polls.content' %></h3>
+    </div>
+    <div class="panel-body text-center">
+      <div class="field">
+        <h4><%=t 'layout.title' %></h4>
+        <input type="text" value="<%= @poll.title %>" class="form-control" style="width:80%;margin:0 auto;text-align:center;" name="poll[title]" id="poll_title" maxlength="50" <%= @poll.result == 2 ? 'readonly' : 'autofocus' %>>
+      </div>
+
+      <div class="field">
+        <h4><%=t 'layout.description' %></h4>
+        <p class="explain"><%=t 'polls.description_explain' %></p>
+        <%= f.input :body, as: :ckeditor, input_html: { ckeditor: { toolbar: 'mini' } }, label: false, maxlength: @body_length, disabled: @poll.result == 2 ? true : false %>
+        <span id="body_status" data-maximum-length="<%= @body_length %>" class="explain" style="font-size:14px;"></span>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="field">
+            <h4><%=t 'polls.choices' %></h4>
+            <% if @poll.result < 2 %>
+              <%= link_to "#{t 'btn.add'}", choices_poll_path(@poll, type:"add"), method: :put, remote: true %>
+            <% end %>
+            <hr>
+            <div id="choices_list">
+              <%= render 'polls/edit_choices' %>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="field">
+            <h4><%=t 'layout.language' %></h4>
+            <%= f.input :language, as: :select, collection:{"#{t 'layout.all'}" => "", "#{t 'language.french'}" => "french", "#{t 'language.english'}" => "english"}, label: false, include_blank: false %>
+          </div>
+          <% if can? :manage, Article %>
+            <div class="field">
+              <h4>Featured</h4>
+              <%= f.input :featured, as: :select, label: false, include_blank: false %>
+            </div>
+            <div class="field">
+              <h4><%=t 'polls.result' %></h4>
+              <%= f.input :result, as: :select, collection:{"#{t 'polls.pending'}" => 0, "#{t 'polls.current'}" => 1, "#{t 'polls.over'}" => 2}, label: false, include_blank: false %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+    <div class="panel-footer text-center">
+      <% if @poll.result < 2 or (can? :manage, Article) %>
+        <%= submit_tag "#{t 'btn.save'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary"%>
+      <% end %>
+      <%= link_to "#{t 'btn.back'}", @poll, class: "btn btn-default" %>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var status1 = $('#body_status');
+  var maxLen1 = status1.data("maximum-length");
+  var editor1 = CKEDITOR.instances.poll_body;
+
+  status1.text(maxLen1 + " caractères restants")
+
+  editor1.on('key', function(event) {
+    var characters1 = this.getData().length;
+
+    status1.text(maxLen1 - characters1+' caractères restants');
+
+    // Applique un style CSS au texte du span 'status' si la limite est dépassée
+    if(maxLen1 < characters1) {
+      status1.css('color','red');
+    }
+    else {
+      status1.css('color','black')
+    }
+  });
+});
+</script>

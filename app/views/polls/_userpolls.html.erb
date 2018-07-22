@@ -1,0 +1,13 @@
+<% if current_user.polls.where(result:0).present? %>
+<% @waiting = current_user.polls.where(result:0) %>
+<div class="alert alert-warning">
+  <% if @waiting.count > 1 %>
+    <%=t 'polls.pending_many', nb: @waiting.count %>
+  <% else %>
+    <%=t 'polls.pending_one', nb: @waiting.count %>
+  <% end %>
+</div>
+<% end %>
+<% @polls.where(user:current_user).each do |poll| %>
+  <%= render(poll) %>
+<% end %>

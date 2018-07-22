@@ -1,0 +1,33 @@
+<% if user_signed_in? && current_user.state == 2 %>
+<% unless controller?("teams") && action?("show") && (can? :manage, Article) or (current_user.mentor.present? && @team.present? && @team.mentorat.present? && @team.mentorat.mentor.present? && @team.mentorat.mentor.user == current_user) %>
+<% unless controller?("registrations") %> <!-- Très important sinon la page d'édition des infos personnelles crash -->
+<div class="chatbox">
+  <div id="chatbox-header" class="chatbox-header">
+    <h5 style="display:inline"><i class='fa fa-comments' style="color:#c0392b;"></i>&nbsp;&nbsp; <%=t 'messages.header' %></h5>
+  </div>
+  <div id="chatbox-main" style="display:none;">
+    <% if current_user.team_messages.where(user_id:current_user.id).count < 1 %>
+      <p class="text-muted" style="padding:5px 10px;"><%=raw t 'messages.advice', link: link_to("Discord", current_user.language == 'french' ? current_user.account.game.discord : current_user.account.game.discord_eu) %></p>
+    <% end %>
+    <div id="chatbox" class="chatbox-body" style="height:300px;overflow-x:hidden;overflow-y:scroll;">
+      <%= render 'messages/chatbox_messages' %>
+    </div>
+    <div class="chatbox-footer" style="padding:5px;">
+      <%= simple_form_for(Message.new, remote: true) do |f| %>
+        <%= hidden_field_tag(:team, current_user.team.id) %>
+        <div class="input-group">
+          <input type="text" placeholder="<%=t 'messages.placeholder' %>" class="form-control" name="message[body]" id="message_body" maxlength="500" autocomplete="off">
+          <span class="input-group-btn">
+            <%= button_tag(type: "submit", class: "btn btn-default", style:"padding:5px 12px;") do %>
+               <i class="fa fa-reply"></i>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<span id="chatbox-team-id" data-team="<%= current_user.team.id %>"></span>
+<% end %>
+<% end %>
+<% end %>

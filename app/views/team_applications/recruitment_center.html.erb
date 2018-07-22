@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'team_applications.recruitment_center_title' %></h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-1 col-xs-4 text-center">
+          <i class="fa fa-question-circle" style="font-size:40px;"></i>
+        </div>
+        <div class="col-sm-11 col-xs-8">
+          <p style="text-align:justify;"><%=t 'team_applications.recruitment_center_content' %></p>
+        </div>
+      </div>
+      <hr>
+
+      <% if @premiums.present? %>
+        <hr>
+        <h4 class="text-center">Premiums</h4>
+        <p class="text-muted text-center"><%=t 'team_applications.premium_subtitle' %></p>
+        <hr>
+        <%= render(:partial =>'team_applications/recruitment_center', locals: {reload: true, teams: @premiums})%>
+      <% end %>
+
+      <% if @tofits.present? %>
+        <hr>
+        <h4 class="text-center"><%=t 'team_applications.search_last' %></h4>
+        <p class="text-muted text-center"><%=t 'team_applications.search_last_subtitle' %></p>
+        <hr>
+        <%= render(:partial =>'team_applications/recruitment_center', locals: {reload: true, teams: @tofits})%>
+      <% end %>
+
+      <% if @precompos.present? %>
+        <hr>
+        <h4 class="text-center"><%=t 'team_applications.construction' %></h4>
+        <p class="text-muted text-center"><%=t 'team_applications.construction_subtitle' %></p>
+        <hr>
+        <%= render(:partial =>'team_applications/recruitment_center', locals: {reload: true, teams: @precompos})%>
+      <% end %>
+    </div>
+  </div>
+</div>

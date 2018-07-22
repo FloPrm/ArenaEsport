@@ -1,0 +1,27 @@
+<%=t 'hello' %> <%= @student.name %>
+<% if @type == "solo" %>
+<%= strip_tags(t('mails.mentorat_seance.player', name: @mentor.name)) %>
+<% elsif @type == "team" %>
+<%= strip_tags(t('mails.mentorat_seance.team', name: @mentor.name)) %><% end %>
+_____________________________________________________
+
+              <%= @seance.title %>
+
+<%=t 'layout.date' %>: <%= l(@seance.date, format: "%A %d %B") %>
+<%=t 'layout.hour' %>: <%= @seance.hour.strftime("%H:%M") %>
+<%=t 'layout.duration' %>: <% Seance::DURATION.each do |k,v| %><%= k if v == @seance.duration %><% end %>
+_____________________________________________________
+
+              <%=t 'mentors.proceedings' %>
+
+<%= strip_tags(@seance.content) unless @seance.content.nil? %>
+_____________________________________________________
+
+<% if @type == "solo" %>
+<%= strip_tags(t('mails.signatures.mentorat', link: (t('mails.signatures.connect') + " (#{root_url})"))) %>
+<% elsif @type == "team" %>
+<%= strip_tags(t('mails.signatures.team', link: (t('mails.signatures.connect') + " (#{root_url})"))) %>
+<% end %>
+
+<%=t 'mails.signature_1' %>
+<%=t 'mails.signature_2' %>

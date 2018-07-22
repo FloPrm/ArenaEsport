@@ -1,0 +1,82 @@
+<div class="dropdown-menu" id="friends-dropdown">
+  <div id="friends-dropdown-heading">
+    <h5 style="text-align:center; margin:0px;"><%=t 'friendships.many' %></h5>
+  </div>
+  <% if current_user.friends.empty? && current_user.pending_friends.empty? %>
+    <p style="text-align:center;margin-top:35%;margin-bottom: 32%;"><%=t 'friendships.none' %></p>
+  <% else %>
+    <div style="height:75%; width:100%;overflow-x:hidden;overflow-y:scroll;">
+    <ul id="friends-list" style="padding:0px; width:95%">
+    <% current_user.friends.order('status desc').order('last_sign_in_at desc').each do |friend|%>
+        <li id="friend-<%= friend.id %>">
+          <div class="row" style="margin-left:0px;">
+            <%= link_to friend do %>
+            <div class="col-xs-3" style="text-align:right;">
+              <%= render(partial: 'friendships/avatar', locals: {reload: true, user: friend}) %>
+              <div id="status-friend-<%= friend.id %>" class="<%= friend.status == 1 ? 'status-online' : 'status-offline' %> status-dot status-avatar"></div>
+            </div>
+            <div class="col-xs-7" style="padding-top:5px;">
+              <p>
+                <b>
+                  <% if friend.account.present? %>
+                    <%= friend.account.name %>
+                  <% else %>
+                    <%= friend.user_name %>
+                  <% end %>
+                </b>
+                <i class="explain"><%= friend.user_name %></i><br>
+                <% if friend.state == 2 %>
+                  <span style="color:#c0392b;"><%= truncate(friend.teamings.where(active:true).first.team.name, length: 30) %></span>
+                <% elsif friend.state == 1 %>
+                  <span><%=t 'friendships.state1' %></span>
+                <% else %>
+                  <span><%=t 'friendships.state0' %></span>
+                <% end %>
+              </p>
+              <% if friend.status == 0 %>
+                <div id="offline-<%= friend.id %>" style="">
+                  <%= render partial:'friendships/last_sign_in', locals:{date:friend.last_sign_in_at} %>
+                </div>
+              <% end %>
+            </div>
+            <% end %> <!-- link to friend -->
+            <% if current_user.premade.present? && current_user.premade.users.include?(friend.account) %>
+              <div class="col-xs-2" style="padding-top:10px;">
+                <%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, kick_premade_path(current_user.premade, friend: friend.id), method: :put, data: { confirm: 'Voulez-vous exclure ce joueur de la premade ?' } %>
+              </div>
+            <% end %>
+          </div>
+        </li>
+    <% end %> <!-- @notifications.each -->
+    <% unless current_user.pending_friends.empty? %>
+      <div id="pending-friends">
+        <%= render 'friendships/pending' %>
+      </div>
+    <% end %>
+  </ul>
+  </div>
+  <% end %> <!-- @notifications.empty? -->
+  <div id="friends-dropdown-footer" class="col-sm-12">
+    <%= simple_form_for(@friendship, remote: true) do |f| %>
+      <% unless current_user.account.nil?
+        @game = current_user.account.game
+      else
+        @game = Game.find(1)
+      end %>
+
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="<%=t 'layout.player' %>" name="friendship[friend]" id="friendship_friend" style="text-align:center;">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default" style="padding:5px 12px;">
+            <i class='fa fa-plus'></i>
+          </button>
+        </span>
+      </div>
+    <%= hidden_field_tag(:asker, current_user.id) %>
+    <% end %>
+    <div id="notice-friend" class="col-sm-12">
+    </div>
+  </div>
+
+
+</div>

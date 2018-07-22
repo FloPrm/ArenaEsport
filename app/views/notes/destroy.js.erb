@@ -1,0 +1,5 @@
+<% if !@team.nil? %>
+$('#notes').html("<%= j (render 'notes/notes') %>");
+<% elsif !@composition.nil? %>
+$('#notes-compo-<%= @composition.id %>').html("<%= j (render 'notes/notes_compo') %>");
+<% end %>

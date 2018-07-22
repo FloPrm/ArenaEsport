@@ -1,0 +1,4 @@
+$('#compos').html("<%= j (render 'compositions/compositions') %>");
+$("#compos").scrollTop($("#compos")[0].scrollHeight);
+// $('#compos').prepend('<%= j render(@composition) %>');
+$("#modal-window").modal('hide');

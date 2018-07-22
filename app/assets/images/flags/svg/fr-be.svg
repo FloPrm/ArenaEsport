@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="-180 415.5 480 360" style="enable-background:new -180 415.5 480 360;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFD90C;}
+	.st1{fill:#F31830;}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:#00267F;}
+	.st4{fill:#FFFFFF;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
+</style>
+<g id="Calque_2">
+	<g id="surface1_1_">
+		<path d="M-180,415.5h160v360h-160V415.5z"/>
+		<path class="st0" d="M-20,415.5h160v360H-20V415.5z"/>
+		<path class="st1" d="M140,415.5h160v360H140V415.5z"/>
+	</g>
+</g>
+<g id="Calque_1">
+	<g id="surface1">
+		<polygon class="st2" points="300,775.5 -180,775.5 -180,415.5 		"/>
+		<polygon class="st3" points="-20,535.5 -20,775.5 -180,775.5 -180,415.5 		"/>
+		<polygon class="st1" points="300,775.5 140,775.5 140,655.5 		"/>
+	</g>
+	<polyline class="st4" points="-180,415.5 -20,535.5 140,655.5 300,775.5 	"/>
+</g>
+</svg>

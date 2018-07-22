@@ -1,0 +1,60 @@
+<table class="table table-striped" id="index_teams">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Nom</th>
+      <th>Age</th>
+      <th style="text-align:right;">Min</th>
+      <th>Max</th>
+      <th class="team-dispos">Semaine</th>
+      <th class="team-dispos">Weekend</th>
+      <% if can? :manage, :all %>
+      <th colspan="3"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @teams.where('u_count >= ?', 5).order(:updated_at).reverse_order.limit(20).each do |team| %>
+      <% if team.u_count == team.game.nb_players %>
+        <% @joueurs = User.joins(:teamings).where(:teamings => { team_id: team.id, active: true }) %>
+        <tr>
+          <td><%= render partial:"teams/flag", locals:{team: team, height:20} %></td>
+          <td>
+            <% if team.members.where.not(state: 2).present? %>
+              <i class='fa fa-clock-o'></i>&nbsp;
+            <% end %>
+            <%= link_to team.name[0..15], team %>
+          </td>
+
+          <% @ages = [] %>
+          <% @joueurs.where('birth_date < ?', Date.today).each do |user| @ages << user.birth_date.find_age end %>
+          <% if @joueurs.where('birth_date < ?', Date.today).count > 0 %>
+          <td><%= @ages.sort.first %> à <%= @ages.sort.last %></td>
+          <% else %>
+          <td>-</td>
+          <% end %>
+
+          <% @game_accounts = team.accounts %>
+          <% @min = @game_accounts.sort_by(&:"#{:mmr}").first %>
+          <% @max = @game_accounts.sort_by(&:"#{:mmr}").last %>
+
+          <td class="table-rank"><%= render(:partial =>'teams/rank', locals: {reload: true, account: @min})%></td>
+          <td class="table-rank"><%= render(:partial =>'teams/rank', locals: {reload: true, account: @max})%></td>
+
+          <% @week_starts = @joueurs.pluck(:week_start) %>
+          <% @week_ends = @joueurs.pluck(:week_end) %>
+          <% @we_starts = @joueurs.pluck(:we_start) %>
+          <% @we_ends = @joueurs.pluck(:we_end) %>
+
+          <%= render 'teams/dispos' %>
+
+          <% if can? :manage, :all %>
+          <td><%= link_to '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'.html_safe, edit_team_path(team), remote: true %></td>
+          <td><%= link_to '<i class="fa fa-remove" aria-hidden="true"></i>'.html_safe, team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    <%end%>
+  </tbody>
+</table>

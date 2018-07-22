@@ -1,0 +1,139 @@
+<style type="text/css">
+h4 .fa { color: #c0392b; margin-right: 10px; }
+</style>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%= @game.title %></h3>
+    </div>
+    <div class="panel-body text-center">
+      <hr>
+      <h4><i class="fa fa-bar-chart"></i> Statistiques</h4>
+      <hr>
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-sm-2" style="padding-top:15px;">
+          <i class="fa fa-user" style="font-size:40px;color:#c0392b;"></i>
+        </div>
+        <div class="col-sm-3 col-xs-4">
+          <h5>Total</h5>
+          <%= @users.count %>
+        </div>
+        <div class="col-xs-4">
+          <h5>Proportion</h5>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="<%= @percent_u %>" aria-valuemin="0" aria-valuemax="100" style="width:<%= @percent_u %>%;">
+              <%= @percent_u %>%
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-xs-4">
+          <h5>Actifs</h5>
+          <%= @users.where(updated_at: 1.months.ago..Time.now).count %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2" style="padding-top:15px;">
+          <i class="fa fa-group" style="font-size:40px;color:#c0392b;"></i>
+        </div>
+        <div class="col-sm-3 col-xs-4">
+          <h5>Total</h5>
+          <%= @teams.count %>
+        </div>
+        <div class="col-xs-4">
+          <h5>Proportion</h5>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="<%= @percent_t %>" aria-valuemin="0" aria-valuemax="100" style="width:<%= @percent_t %>%;">
+              <%= @percent_t %>%
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-xs-4">
+          <h5>Actives</h5>
+          <%= @teams.where(end_date:nil, updated_at:1.month.ago..Time.now).where('u_count >= ?', @game.nb_players-1).count %>
+        </div>
+      </div>
+      <hr>
+      <h4><i class="fa fa-gears"></i> Paramètres</h4>
+      <hr>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="field">
+            <h5>Nombre de joueurs</h5>
+            <%= @game.nb_players %>
+          </div>
+          <div class="row">
+            <div class="col-xs-3"></div>
+            <div class="col-xs-6">
+              <h5>Roles</h5>
+              <ul class="text-left", style="list-style:disc;">
+                <% @game.roles.each do |role| %>
+                  <li><%= role.capitalize %></li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="col-xs-3"></div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="field">
+            <h5>MMR Mentorat</h5>
+            <%= @game.mentorat_mmr %>
+          </div>
+          <div class="field">
+            <h5>Joueur</h5>
+            <%= @game.player_name.capitalize unless @game.player_name.nil? %>
+          </div>
+          <div class="field">
+            <h5>Personnage</h5>
+            <%= @game.character_name.capitalize unless @game.character_name.nil? %>
+          </div>
+          <div class="field">
+            <h5>Discord</h5>
+            <%= link_to @game.discord, @game.discord, target:"_blank" %>
+          </div>
+          <div class="field">
+            <h5>Discord EU</h5>
+            <%= link_to @game.discord_eu, @game.discord_eu, target:"_blank" %>
+          </div>
+        </div>
+        <div class="col-sm-4">
+
+          <div class="field">
+            <h5>SoloQ</h5>
+            <%= @game.has_soloq ? "Oui" : "Non" %>
+          </div>
+          <div class="field">
+            <h5>TeamQ</h5>
+            <%= @game.has_teamq ? "Oui" : "Non" %>
+          </div>
+          <div class="field">
+            <h5>Adaptable</h5>
+            <%= @game.adaptable ? "Oui" : "Non" %>
+          </div>
+          <div class="field">
+            <h5>Compositions</h5>
+            <%= @game.compositions ? "Oui" : "Non" %>
+          </div>
+          <div class="field">
+            <h5>Compo Bans</h5>
+            <%= @game.compo_bans ? "Oui" : "Non" %>
+          </div>
+          <div class="field">
+            <h5>Personnages</h5>
+            <%= @game.characters ? "Oui" : "Non" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-6">
+          <%= link_to "Retour", games_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-right">
+          <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, edit_game_path(@game), class:"btn btn-default" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

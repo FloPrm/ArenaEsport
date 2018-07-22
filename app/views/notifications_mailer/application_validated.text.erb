@@ -1,0 +1,9 @@
+
+<%=t 'hello' %> <%= @user.account.name %>
+
+<%=strip_tags(t('mails.application_validated.l1', name: @team.name))  %>
+
+<%=t 'mails.signatures.team', link: (t('mails.signatures.connect') + " (#{root_url})") %>
+
+<%=t 'mails.signature_1' %>
+<%=t 'mails.signature_2' %>

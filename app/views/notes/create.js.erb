@@ -1,0 +1,7 @@
+<% if params[:team].present? %>
+$('#notes').prepend("<div class='row note-row' id='note-<%= @note.id %>'><%= j render(@note) %></div>");
+$("#note_body")[0].value = "";
+<% elsif params[:composition].present? %>
+$('#notes-compo-<%= @note.composition_id %>').prepend("<div class='row note-row' id='note-<%= @note.id %>'><%= j render(@note) %></div>");
+$("#note_body_<%= @note.composition_id %>")[0].value = "";
+<% end %>

@@ -1,0 +1,11 @@
+<br>
+<p><%=t 'hello' %> <b><%= @receiver.account.name %></b></p>
+<p><%=raw t 'mails.team_invite.l1', name: @sender.account.name, known: @receiver.friends.include?(@sender) ? "(#{t('friendships.one')})" : "", team: @team.name, role: @invitation.role.capitalize %></p>
+<% unless @content.nil? %>
+<br>
+<p><u><%=t 'messages.one' %>:</u>  <%= @content %></p>
+<br>
+<% end %>
+<p><%=raw t 'mails.team_invite.l2', link: link_to(t('mails.signatures.connect'), root_url, target: "_blank") %></p>
+<%= render 'notifications_mailer/signature' %>
+<br>

@@ -1,0 +1,114 @@
+<style type="text/css">
+  .box-text { padding: 20px; }
+  #show-plan ul { list-style: disc; }
+</style>
+
+<div id="show-plan" class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2><%= @subscription_plan.title %></h2>
+    </div>
+
+    <div class="panel-body">
+      <% if @subscription_plan.active == true %>
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="box-text" style="min-height: 450px;">
+              <!-- <%= @subscription_plan.content.html_safe unless @subscription_plan.content.nil? %> -->
+              <h4 class="text-center"><%=t 'subscriptions.plan_subtitle' %></h4>
+              <% if !@subscription_plan.duration.nil? %>
+              <hr>
+                <p class="text-center"><%=raw t 'subscriptions.lifetime_offer', link: link_to(t('subscriptions.lifetime_link'), subscription_plan_path(id:3)) %></p>
+              <hr>
+              <% else %>
+              <hr>
+              <% end %>
+              <u><%=t('subscriptions.user').capitalize %>:</u>
+              <ul>
+                <li><%=t 'subscriptions.u1' %></li>
+                <li><%=t 'subscriptions.u2' %></li>
+                <li><%=t 'subscriptions.u3' %></li>
+                <li><%=t 'subscriptions.u4' %></li>
+              </ul>
+              <u><%=t('teams.one').capitalize %>:</u>
+              <ul>
+                <li><%=t 'subscriptions.t1' %></li>
+                <li><%=t 'subscriptions.t2' %></li>
+                <li><%=t 'subscriptions.t3' %></li>
+                <li><%=t 'subscriptions.t4' %></li>
+                <li><%=t 'subscriptions.t5' %></li>
+                <li><%=t 'subscriptions.t6' %></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <%= simple_form_for(@subscription, url: renewal? ? renewal_subscription_path(@subscription) : @subscription, method: :post ) do |f| %>
+            <div class="panel panel-default">
+              <div class="panel-body" style="min-height:390px;">
+                <div id="price">
+                  <%= render 'subscription_plans/price' %>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-xs-5">
+                    <h5><%=t 'subscriptions.duration' %></h5>
+                  </div>
+                  <div class="col-xs-7">
+                    <% SubscriptionPlan::DURATION.each do |k,v| %>
+                      <% if @subscription_plan.duration == v %>
+                        <h4 style="color:#c0392b;"><%= eval(k) %></h4>
+                      <% end %>
+                    <% end %>
+                    <!--
+                    <select id="duration" name="duration" style="width:100%;margin-top:5px;">
+                      <% Subscription::DURATION.each do |k,v| %>
+                      <option value="<%= v %>"><%= k %></option>
+                      <% end %>
+                    </select>
+                    -->
+                  </div>
+                </div>
+                <div id="price1">
+                  <%= hidden_field_tag(:price, @price_ttc) %>
+                </div>
+                <% unless @subscription_plan.duration.nil? %>
+                  <%= hidden_field_tag(:duration, @subscription_plan.duration) %>
+                <% end %>
+                <%= hidden_field_tag(:plan, @subscription_plan.id) %>
+              </div>
+              <div class="panel-footer">
+                <div id="informations">
+                  <%= submit_tag "#{@label}", data: { disable_with: "#{t 'btn.loading'}" }, class: "btn btn-primary btn-block" %>
+                </div>
+              </div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <h4 style="text-align:center;margin:200px 0px;">Indisponible à la vente</h4>
+      <% end %>
+    </div>
+
+    <div class="panel-footer">
+      <%= link_to "#{t 'btn.back'}", pricing_path, class:"btn btn-default" %>
+      <% if can? :manage, :all %>
+        <%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_subscription_plan_path(@subscription_plan), class: "btn btn-default" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+/*
+$(document).ready(function() {
+  $('#duration').on('change',function(){
+    $.ajax({
+      type: "PUT",
+      url: "<%= select_duration_subscription_plan_path(@subscription_plan) %>",
+      data: "duration=" + $(this).val()
+    })
+  });
+});
+*/
+</script>

@@ -1,0 +1,75 @@
+<style type="text/css">
+  #new-registration input { text-align: center; margin: 0 auto; }
+  #country-select select { width: 100px; }
+</style>
+
+<section class="row">
+
+  <div class="col-lg-3 hidden-sm hidden-xs">
+  </div>
+
+  <div id="new-registration" class="container col-lg-6 col-sm-12 col-xs-12" style="margin:auto;">
+    <%= simple_form_for(resource, as: resource_name, url: create_user_path) do |f| %>
+      <%= render 'layouts/error_messages', object: f.object %>
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h2><%=t "btn.signup" %></h2>
+      </div>
+
+      <div class="panel-body">
+          <div class="form-inputs text-center">
+            <div class="field">
+              <%= f.label "#{t 'layout.user_name'}" %>
+              <input type="text" class="form-control" style="width:40%;" name="user[user_name]" id="user_user_name" maxlength="30" autofocus>
+            </div>
+            <div class="field">
+              <%= f.label 'Email' %>
+              <input type="text" class="form-control" style="width:40%;" name="user[email]" id="user_email" maxlength="50">
+            </div>
+            <div class="field"><%= f.label "#{t 'layout.birth_date' }"%><br />
+            <%= f.input :birth_date, :as => :date, :start_year => Date.today.year - 12,
+              :end_year => 1960,
+              :order => [:day, :month, :year], :required => true, label: false, error: false %>
+            </div>
+            <div id="country-select" class="field">
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                  <div class="col-sm-6">
+                    <%= f.label "#{t 'layout.country' }"%><br />
+                    <%= f.country_select :country, priority_countries: ["FR", "BE", "CH", "GB"], selected: "FR" %>
+                  </div>
+                  <div class="col-sm-6">
+                    <%= f.label "#{t 'layout.language' }"%>
+                    <%= render partial:"users/language_select", locals:{attribute:"language", user:current_user} %>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <%= f.label "#{t 'layout.password'}" %>
+              <input type="password" placeholder="<%= @minimum_password_length if @minimum_password_length %> caractères minimum" class="form-control" style="width:40%;" name="user[password]" id="user_password" maxlength="30">
+            </div>
+            <div class="field">
+              <%= f.label "#{t 'layout.confirm_pw'}" %>
+              <input type="password" class="form-control" style="width:40%;" name="user[password_confirmation]" id="user_password_confirmation" maxlength="30">
+            </div>
+          </div>
+      </div>
+
+      <%= hidden_field_tag(:token, params[:token]) %>
+
+      <div class="panel-footer">
+        <%= submit_tag "#{t 'btn.lets_go' }", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary btn-lg btn-block"%>
+      </div>
+    </div>
+  <% end %>
+  </div>
+
+  <div class="col-lg-3 hidden-sm hidden-xs">
+  </div>
+
+</section>

@@ -1,0 +1,26 @@
+<%= simple_form_for(premium_invitation_path, url: invitations_path, method: :post) do |f| %>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Inviter un ami</h3>
+    </div>
+    <div class="modal-body text-center">
+
+      <p>Inviter <%= @friend.account.name %> à prendre le rôle de</p>
+      <%= f.input :role, as: :select, collection: @available, label: false, include_blank: false %>
+      <br>
+
+      <%= hidden_field_tag(:role, params[:role]) %>
+      <%= hidden_field_tag(:type, params[:type]) %>
+      <%= hidden_field_tag(:receiver, params[:friend]) %>
+
+    <div class="modal-footer" style="text-align:center;">
+      <%= submit_tag "Envoyer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

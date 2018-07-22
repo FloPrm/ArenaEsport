@@ -1,0 +1,156 @@
+<%= javascript_include_tag "http://www.google.com/jsapi", "chartkick" %>
+
+<section class="container">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="text-center">Analytics</h3>
+    </div>
+    <div class="panel-body" style="padding:50px 10px;min-height:400px;">
+      <div style="margin-bottom:50px;">
+        <div>
+          <h4>Critères de sélection</h4>
+          <%= form_tag "/analytics_search", :methode => 'post', :remote => true do %>
+
+            <h4>Période:</h4>
+            <div class="date_r1" style="display:inline;">2017-03-09
+              &nbsp;-&nbsp;
+              <div class="date_r2" style="display:inline;">Aujourd'hui</div>
+            </div>
+            <div class="container-fluid 1">
+              <div class="row perso_set">
+                <div class="b col-xs-1" style="text-align:left; width:30px;">
+                  Du
+                </div>
+                <div class="col-xs-5">
+                  <%= text_field_tag "start_date",'', {:type => 'date', :style => 'width:100%;', value: "#{Date.parse((Time.now.months_ago(1)).to_s)}"} %>
+                </div>
+                <div class="col-xs-1 b" style="text-align:left;">
+                  jusqu'au
+                </div>
+                <div class="col-xs-5">
+                  <%= text_field_tag "end_date",'',{:type => 'date', :style => 'width:100%' , value: "#{Date.today}"} %>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-xs-3 month_set">
+                Mois:
+                <%= render 'month_filter' %>
+              </div>
+              <div class="col-xs-1"></div>
+              <div class="col-xs-1">
+                <%= link_to "Aujourd'hui", '#', :onclick => "$('#start_date').val('#{Date.today.strftime('%Y-%m-%d')}'); $('#end_date').val('#{Date.today.strftime('%Y-%m-%d')}'); $('#start_date').trigger('change'); $('#end_date').trigger('change'); return false;" %>
+              </div>
+              <div class="col-xs-1">
+                <%= link_to "Hier", '#', :onclick => "$('#start_date').val('#{Date.yesterday.strftime('%Y-%m-%d')}'); $('#end_date').val('#{Date.yesterday.strftime('%Y-%m-%d')}'); $('#start_date').trigger('change'); $('#end_date').trigger('change'); return false;" %>
+              </div>
+            </div>
+            <br>
+
+            <h4>Critères joueur </h4>
+
+            <div>
+            Âge : entre
+            <%= select_tag "age_min", options_for_select((@age_min..@age_max))%>
+            ans et 
+            <%= select_tag "age_max", options_for_select((@age_min..@age_max))%>
+            ans
+            </div>
+
+            <br>
+
+            <div class="row">
+              <div class="col-xs-4">
+                <%= submit_tag "Envoyer", :id => "submit", :style => "width:100%" %>
+              </div>
+              <div class="col-xs-4">
+                <i class="fa fa-refresh fa-spin fa-2x" style="display:none;"></i>
+                <i class="success" id="result">o</i>
+              </div>
+            </div>
+
+          <%end%>
+        </div>
+        <br>
+        <br>
+
+        <table class="table table-striped" id="index_users">
+          <thead>
+            <tr>
+              <th colspan="1"></th>
+              <th>Total</th>
+              <th>En recherche</th>
+              <th>En équipe</th>
+              <th>Off</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Inscrits</td>
+              <td id="insc_total"><%=@insc_total%></td>
+              <td id="insc_rech"><%=@insc_rech%></td>
+              <td id="insc_team"><%=@insc_team%></td>
+              <td id="insc_off"><%=@insc_off%></td>
+            </tr>
+            <tr>
+              <td>Sur lol</td>
+              <td id="lol_total"><%=@lol_total%></td>
+              <td id="lol_rech"><%=@lol_rech%></td>
+              <td id="lol_team"><%=@lol_team%></td>
+              <td id="lol_off"><%=@lol_off%></td>
+            </tr>
+            <tr>
+              <td>Sur ow</td>
+              <td id="ow_total"><%=@ow_total%></td>
+              <td id="ow_rech"><%=@ow_rech%></td>
+              <td id="ow_team"><%=@ow_team%></td>
+              <td id="ow_off"><%=@ow_off%></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id='graphs'>
+          <h4>Evolution des inscriptions et des créations d'équipe</h4>
+          <div id="graph1">
+            <%= line_chart [
+              {name: "Nouveaux inscrits", data: @users.group_by_day(:created_at).count},
+              {name: "Nouvelles équipes", data: @teams.group_by_day(:start_date).count}
+            ] %>
+          </div>
+          <h4>Répartition des premiers rôles sur les comptes de jeu - LOL</h4>
+          <div id="graph2">
+            <%= pie_chart @lol_accounts.group(:p_role).count %>
+          </div>
+          <h4>Répartition des premiers rôles sur les comptes de jeu - OW</h4>
+          <%= pie_chart @ow_accounts.group(:p_role).count %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+ 
+  
+     //||||||| On change in month field, disable week field and accordingly change [start_date, end_date] |||||||\\
+    $('select#month').change(function(){
+      var end_date = new Date("20"+parseInt(parseInt($('select#month option:selected').parent().attr('id'))+17), $('select#month option:selected').attr('value'), 0);
+      $('#start_date').val("20"+parseInt(parseInt($('select#month option:selected').parent().attr('id'))+17)+"-"+('0' + $('select#month option:selected').attr('value')).slice(-2)+"-01");
+      $('#end_date').val(end_date.getFullYear() + "-" + ('0' + parseInt(parseInt(end_date.getMonth())+1)).slice(-2) + "-" + ('0' + end_date.getDate()).slice(-2));
+      $('#week').val("");
+      var start_date = $('#start_date').val().split('-');
+      $('.date_r1').html(start_date[2] + '/' + start_date[1] + '/' + start_date[0]);
+      var end_date = $('#end_date').val().split('-');
+      $('.date_r2').html(end_date[2] + '/' + end_date[1] + '/' + end_date[0]);
+      return false;
+    });
+  
+    $('#submit').on('click', function(){
+      $('.fa-refresh').show();
+      $(this).prop("disabled", true);
+      $('#result').html("");
+    });
+</script>

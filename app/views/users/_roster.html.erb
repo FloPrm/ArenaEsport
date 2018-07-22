@@ -1,0 +1,67 @@
+<style type="text/css">
+  /*table tbody tr:first-child td {
+    border-top: 1px solid white;
+  }*/
+
+  #roster_current_user > tbody > tr > td {
+    border-top: 1px solid white;
+  }
+  #rank-roster .label-rank {
+    display: inline-block;
+    width: 100%;
+  }
+
+</style>
+
+<div class="col-sm-6">
+  <% @teamings_count = @team.teamings.joins(:user).where(:users => {state: 2 }, active: true).count %>
+  <% if @teamings_count == 4 %><br>
+  <% elsif @teamings_count == 3 %><br>
+  <% elsif @teamings_count == 2 %><br><br>
+  <% elsif @teamings_count == 1 %><br><br><br>
+  <% end %>
+
+  <table id="roster_current_user" class="table table-condensed" style="margin:0px;">
+    <thead>
+      <tr></tr>
+    </thead>
+
+    <% ordering = @account.game.roles %>
+    <tbody>
+    <% teamings = @team.teamings.joins(:user).where(:users => {state: 2 }, active: true).sort_by { |t| ordering.index(t.role) || ordering.size}.each do |teaming|%>
+    	<% @account = teaming.user.game_accounts.where(:active => true).first %>
+    	<tr>
+    		<td><span class="label label-default"><%= teaming.role[0...3].humanize %></span></td>
+    		<td>
+          <div id="status-user-<%= teaming.user_id %>" class="<%= teaming.user.status == 1 ? 'status-online' : 'status-offline' %> status-dot">
+          </div>
+          <%= "<i class='ra ra-queen-crown'></i>".html_safe if teaming.captain == true %> <%= @account.name %>
+        </td>
+    	</tr>
+    <% end %>
+  	</tbody>
+  </table>
+
+  <% if @teamings_count == 4 %><br>
+  <% elsif @teamings_count == 3 %><br><br>
+  <% elsif @teamings_count < 3 %><br><br><br>
+  <% end %>
+</div>
+<div class="col-sm-6 text-center">
+  <br>
+  <h4><%=t 'layout.rank' %></h4>
+  <table class="table table-condensed" id="rank-roster">
+    <thead>
+      <tr>
+        <th style="text-align:center;">Min</th>
+        <th style="text-align:center;">Max</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @min})%></td>
+        <td><%= render(:partial =>'teams/rank', locals: {reload: true, account: @max})%></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

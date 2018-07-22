@@ -1,0 +1,59 @@
+<style type="text/css">
+#informations label > input{ /* HIDE RADIO */
+visibility: hidden; /* Makes input not-clickable */
+position: absolute; /* Remove input from document flow */
+}
+#informations label > input + .payment { /* IMAGE STYLES */
+cursor:pointer;
+border:4px solid transparent;
+}
+#informations label > input:checked + .payment { /* (RADIO CHECKED) IMAGE STYLES */
+border:4px solid #0070ba;
+}
+#payment-value label,
+#payment-value .payment {
+  width: 100%;
+  min-height: 120px;
+}
+#payment-value .payment {
+  text-align: center;
+  border-radius: 10px;
+  color:#0070ba;
+  padding: 15px 10px;
+  background-color: white;
+  box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.1);
+}
+</style>
+<%= simple_form_for(@wallet, url: payment_wallet_path, method: :post, html: {multipart: true}) do |f| %>
+<div id="informations" class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>informations</h3>
+    </div>
+    <div class="panel-body">
+      <div id="payment-value" class="row">
+        <div class="col-xs-3">
+          <label>
+            <input type="radio" name="value" value="5" checked="checked">
+            <div class="payment">
+              <h3>5€</h3>
+            </div>
+          </label>
+        </div>
+        <div class="col-xs-3">
+          <label>
+            <input type="radio" name="value" value="10">
+            <div class="payment">
+              <h3>10€</h3>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer text-center">
+      <%= submit_tag "Payer", data: { disable_with: "Chargement..." }, class: "btn btn-primary" %>
+      <%= link_to "Retour", dashboard_path, class: "btn btn-default" %>
+    </div>
+  </div>
+</div>
+<% end %>

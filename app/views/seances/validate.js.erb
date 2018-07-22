@@ -1,0 +1,5 @@
+$('#mentorat-archives').html("<%= j (render 'mentorats/archives') %>");
+<% if @team.present? %>
+$('#team-tabs').html("<%= j (render 'teams/mentorat') %>");
+<% end %>
+$('#seances-attente').hide();

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  mentor_id: 
+  status: 1
+  hours: 1
+  teacher: MyString
+  problem: MyText
+
+two:
+  user_id: 
+  mentor_id: 
+  status: 1
+  hours: 1
+  teacher: MyString
+  problem: MyText

@@ -1,0 +1,183 @@
+<% if @team.mentorat.present?
+  @mentorat = @team.mentorat
+  @mentor = @team.mentor
+  if @mentor.present?
+    @account = @mentor.game_account
+    @user = @account.user
+  end
+  @seances = @team.mentorat.seances
+end %>
+<% nb = @team.game.nb_players-1 %>
+<% if @mentor.nil? %>
+  <%= render partial:"layouts/ai_box", locals:{partial:"teams/mentorat", nb: nb} %>
+<% end %>
+
+<div class="col-sm-4 text-center">
+  <div id="team-mentor" class="panel panel-default">
+    <div class="panel-heading">
+      <h4><i class="fa fa-graduation-cap"></i> Mentor</h4>
+    </div>
+    <div class="panel-body">
+      <% if @mentor.present? %>
+        <div class="field" style="margin-bottom:14px;">
+          <%= link_to @mentor do %>
+            <%= render 'users/avatar' %>
+            <%= render 'mentors/certification' %>
+          <% end %>
+          <h4 style="margin-top:20px;"><%= @account.name %></h4>
+        </div>
+
+        <div class="field">
+          <span class="label label-default"><%= @account.p_role %></span>
+            <% unless @account.s_role.blank?%>
+              <% @account.s_role.each do |role| %>
+                <span class="label label-default" style="background:#a2a2a2;"><%= role[0...3] %></span>
+              <% end %>
+            <% end %>
+        </div>
+
+        <div class="field">
+          <%= render partial: 'users/top3', locals:{size:50} %>
+        </div>
+
+        <div class="field">
+          <%if @team.game.has_soloq %>
+            <td class="table-rank"><%= render 'users/rank' %></td>
+          <%end%>
+
+          <%if @team.game.has_teamq %>
+            <td class="table-rank"><%= render 'users/rank_flex' %></td>
+          <%end%>
+        </div>
+
+        <div class="field">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-center"><%=t 'layout.week' %></th>
+                <th class="text-center"><%=t 'layout.week_end' %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <%= render(partial: 'users/dispos', locals: {player: @user}) %>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <% elsif @mentorat.present? && @mentorat.teacher.present? %>
+        <div style="padding:120px 0px;">
+          <i class="fa fa-circle-o-notch fa-spin"></i>&nbsp; <%=raw t 'mentorats.pending_request', link: link_to(@mentorat.teacher.game_account.name, mentor_path(@mentorat.teacher)) %>
+          <br><br><p class="explain"><%=t 'mentorats.pending_request_explain' %></p>
+        </div>
+      <% else %>
+        <div style="padding:150px 0px;">
+          Pas encore de Mentor
+        </div>
+      <% end %>
+    </div>
+    <div class="panel-footer">
+      <% if @mentor.nil? %>
+        <% if @team.members.where(state:2).count < nb %>
+          <a href="#" disabled="disabled" class="btn btn-primary btn-block">Liste des Mentors</a>
+        <% else %>
+          <%= link_to "Liste des Mentors", mentors_path, class:"btn btn-primary btn-block" %>
+        <% end %>
+      <% else %>
+        <% if current_user == @mentor.user %>
+          <%= link_to "Nouvelle seance", new_seance_path(mentorat: @mentorat.id), class:"btn btn-primary btn-block", remote: true %>
+        <% end %>
+        <% if @mentorat.status == 1 && (captain? or current_user == @mentor.user)  %>
+          <%= link_to "Stopper le suivi", stop_mentorat_path(@mentorat), class:"btn btn-default btn-block", method: :put %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-8">
+  <div class="panel panel-default">
+    <div class="panel-heading text-center">
+      <h4><i class="fa fa-calendar"></i>&nbsp;&nbsp; Séances</h4>
+    </div>
+    <div class="panel-body" style="min-height:500px">
+      <h4 class="text-center" style="margin-bottom:15px;">Prochainement</h4>
+      <% if @seances.present? && @seances.where('date >= ?', Time.now).present? %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Heure</th>
+              <th>Durée</th>
+              <th>Titre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @seances.where('mentor_id > ?', 0).order(:date).reverse_order.where('date >= ?', Time.now).each do |seance|%>
+              <tr>
+                <td><%= seance.date.strftime("%d/%m/%y") %></td>
+                <td><%= seance.hour.strftime("%H:%M") %></td>
+                <td>
+                  <% Seance::DURATION.each do |k,v| %>
+                  <%= k if v == seance.duration %>
+                  <% end %>
+                </td>
+                <td><%= link_to seance.title, seance_path(seance), remote: true %></td>
+                <% if current_user == seance.mentor.user %>
+                  <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_seance_path(seance), remote: true %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="text-center">Aucune séance à venir</p>
+      <% end %>
+      <hr style="margin:50px 0px;">
+      <h4 class="text-center" style="margin-bottom:15px;">Archives</h4>
+      <% if @seances.present? && @seances.where('date < ?', Time.now).present? %>
+      <div id="mentorat-archives" style="height:300px!important;width:100%;overflow-x:hidden;overflow-y:scroll;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Titre</th>
+              <th>Mentor</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @seances.where('mentor_id > ?', 0).order(:date).reverse_order.where('date < ?', Time.now).each do |seance| %>
+            <tr>
+              <td><%= seance.date.strftime("%d/%m/%y") %></td>
+              <td><%= link_to truncate(seance.title, length: 35), seance_path(seance), remote: true %></td>
+              <td><%= link_to seance.mentor.user.account.name, mentor_path(seance.mentor) %></td>
+              <td><%= render(partial: 'seances/status', locals: {reload: true, seance: seance}) %></td>
+              <% if current_user == seance.mentor.user  %>
+                <td><%= link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, edit_seance_path(seance), remote: true %></td>
+                <% if seance.status == 0 %>
+                <td><%= link_to '<i class="fa fa-remove"></i>'.html_safe, seance, method: :delete, data: {confirm: "Etes-vous sûr de vouloir supprimer cette séance ?"}, remote: true %></td>
+                <% end %>
+              <% end %>
+              <% if seance.status == 0 && captain? %>
+                <td>
+                  <%= link_to '<i class="fa fa-check"></i>'.html_safe, validate_seance_path(seance, validation: 1), class:"btn btn-success", method: :put, remote: true %>
+                  <%= link_to '<i class="fa fa-remove"></i>'.html_safe, validate_seance_path(seance, validation: 2), class:"btn btn-danger", method: :put, remote: true %>
+                </td>
+              <% end %>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% else %>
+        <p class="text-center">Aucune ancienne séance</p>
+      <% end %>
+    </div>
+    <div class="panel-footer">
+      <% if @mentorat.present? && captain? %>
+        <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, edit_mentorat_path(@mentorat), class:"btn btn-default" %>
+      <% end %>
+    </div>
+  </div>
+</div>

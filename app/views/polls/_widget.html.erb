@@ -1,0 +1,42 @@
+<div class="col-sm-12">
+  <div class="panel panel-default">
+    <div id="poll-widget" class="panel-body" style="padding:0px;">
+      <div class="col-sm-3 text-center" style="height:100%;background-color:#f5f5f5;padding:15px;border: 1px solid #ddd;">
+        <h4><%=t 'polls.daily' %></h4>
+      </div>
+      <div class="col-sm-9 text-center" style="height:100%;padding:15px;padding-top:20px;">
+        <% @all = Poll.where(result:1, featured:true)
+           @polls = []
+           @all.each do |poll|
+             if !poll.language.nil? && poll.language == "" or poll.language == current_user.language
+               @polls << poll
+             end
+           end
+           @poll = @polls.shuffle.first
+        %>
+        <% unless @polls.empty? %>
+          <div class="col-sm-5">
+            <h5><%= link_to @poll.title, @poll, style:"color:#333333;" %></h5>
+          </div>
+          <div class="col-sm-5" style="padding-top:6px;">
+            <% unless @poll.pollings.empty? %>
+              <%
+                votes = @poll.pollings.pluck(:vote)
+                freq = votes.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+                best = votes.max_by { |v| freq[v] }
+              %>
+              <p style="margin-bottom:8px;"><b><%= @poll.result == 2 ? "#{t 'polls.result'}" : "#{t 'polls.best'}" %> :</b>&nbsp;&nbsp; <%= truncate(@poll.choices[best], length:35) %></p>
+            <% else %>
+              <p style="padding-top:10px;"><%=t 'polls.no_vote' %></p>
+            <% end %>
+          </div>
+          <div class="col-sm-2">
+            <%= link_to "#{t 'polls.vote'}", @poll, class:"btn btn-default btn-block" %>
+          </div>
+        <% else %>
+          <p><%=t 'polls.no_poll' %> <%= link_to "#{t 'btn.here'}", polls_path %> !</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

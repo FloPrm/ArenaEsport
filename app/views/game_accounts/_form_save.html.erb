@@ -1,0 +1,44 @@
+<%= simple_form_for(@game_account) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+  </div>
+
+  <div class="form-actions">
+
+
+  <% if @game_account.name.blank? %>
+  	<h4>Nom d'invocateur</h4>
+  	<b>Code à placer en titre de l'une de vos pages de runes :
+  		<%= @activation_code %>
+  	</b>
+  	<label for="inputGameName" class="sr-only">Nom d'invocateur</label>
+  	<%= f.text_field :name, class: 'form-control', placeholder: 'Nom d\'invocateur', style: 'width: 40%;', required: true%>
+  <%end%>
+
+  <h4>Rôle Principal</h4>
+  
+  <label for="inputRoleP" class="sr-only">Rôle Principal</label>
+  <%= f.collection_select :p_role, @game_account.game.roles, :to_s, :humanize, required: true %>
+  <!-- in users/_form.html.erb -->
+  <br>
+  <h4>Rôle Secondaire</h4>
+  
+  <label for="inputRoleS" class="sr-only">Rôle Secondaire</label>
+  <ul>
+  <% for s_role in @game_account.game.roles %>
+    <li>
+      <%= check_box_tag "s_roles[]", s_role %>
+      <%= s_role %>
+    </li>
+  <% end %>
+  </ul>
+
+	<%= hidden_field_tag(:activation_code, @activation_code) %>
+	<% if @game_account.name.blank?%>
+  	<%= f.button :submit, value: 'Ajouter un compte', class: 'btn btn-default'%>
+  <%else%>
+   	<%= f.button :submit, value: 'Modifier les informations', class: 'btn btn-default'%>
+  <%end%>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<div class="col-xs-1 text-center">
+  <%= note.created_at.strftime("%d/%m") %>
+</div>
+<div class="<%= note.team_id.nil? ? 'col-xs-2' : 'col-xs-3' %> text-center">
+  <b><%= note.user.account.name %></b>
+</div>
+<div class="<%= note.team_id.nil? ? 'col-xs-8' : 'col-xs-7' %>">
+  <%= auto_link(note.body, :html => { :target => '_blank' }) %>
+</div>
+<div class="col-xs-1">
+  <% if current_user == note.user or (can? :manage, Article) %>
+    <%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, edit_note_path(note), method: :get, remote: true %>&nbsp;&nbsp;
+    <%= link_to "<i class='fa fa-remove'></i>".html_safe, note, method: :delete, remote: true, data: {confirm: "Etes-vous sûr de vouloir supprimer la note ?"} %>
+  <% end %>
+</div>

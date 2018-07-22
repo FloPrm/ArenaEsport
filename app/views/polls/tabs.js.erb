@@ -1,0 +1,9 @@
+<% if params[:tab] == "current" %>
+  $('#poll-tabs').html("<%= j (render partial: 'polls/index', locals:{result: 1, order1:'featured desc', order2:'created_at asc'}) %>");
+<% elsif params[:tab] == "over" %>
+  $('#poll-tabs').html("<%= j (render partial: 'polls/index', locals:{result: 2, order1:'created_at asc', order2:'created_at asc'}) %>");
+<% elsif params[:tab] == "waiting" %>
+  $('#poll-tabs').html("<%= j (render partial: 'polls/index', locals:{result: 0, order1:'created_at asc', order2:'created_at asc'}) %>");
+<% elsif params[:tab] == "userpolls" %>
+  $('#poll-tabs').html("<%= j (render 'polls/userpolls') %>");
+<% end %>

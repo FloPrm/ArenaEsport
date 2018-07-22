@@ -1,0 +1,65 @@
+<style type="text/css">
+  section {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+
+</style>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-heading line-1 anim-typewriter"><%=t('home.title')%></div>
+                <div class="intro-lead-in"><%=t 'home.subtitle' %></div>
+                <% if !user_signed_in? %>
+                  <%= link_to "#{t 'btn.signup'}", sign_up_path, class: "btn btn-xl" %>
+                <% else %>
+                  <%= link_to "Dashboard", dashboard_path, class: "btn btn-xl" %>
+                <% end %>
+                <!--<a href="#services" class="page-scroll btn btn-xl">Fonctionnement</a>
+                <a href="#formules" class="page-scroll btn btn-xl">Nos formules</a>-->
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading"><%=t 'home.3steps_title' %></h2>
+                    <h3 class="section-subheading text-muted"><%=t 'home.3steps_subtitle' %></h3>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa fa-id-card fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading"><%=t 'home.step1_title' %></h4>
+                    <p class="text-muted"><%=t 'home.step1_content' %></p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading"><%=t 'home.step2_title' %></h4>
+                    <p class="text-muted"><%=t 'home.step2_content' %></p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading"><%=t 'home.step3_title' %></h4>
+                    <p class="text-muted"><%=t 'home.step3_content' %></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="bg-red" style="padding-top:50px;padding-bottom:50px;">
+      <%= render partial: 'home/references_carousel'%>
+    </section>

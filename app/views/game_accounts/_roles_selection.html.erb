@@ -1,0 +1,45 @@
+<%= simple_form_for(@game_account, remote: true) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="field">
+    <% if @game_account.name.blank? %>
+      <h4>Pseudo</h4>
+      <!--
+      <p class="explain">Code à placer en titre de l'une de vos pages de runes : <b><%= @activation_code %></b></p>
+      -->
+      <% if @game_account.game.id == 2 %>
+        <p class="explain">Format: battletag#00000</p>
+      <%end%>
+      <input type="text" class="form-control" style="width:40%;margin:0 auto;" name="game_account[name]" id="game_account_name" maxlength="35" autofocus>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <h4>Rôle Principal</h4>
+    <%= f.collection_select :p_role, @game_account.game.roles, :to_s, :humanize, required: true %>
+  </div>
+
+  <div class="field">
+    <h4 style="margin-bottom:0px;">Rôle Secondaire</h4>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <span class="explain">(Optionnel)</span>
+      <ul style="text-align:left;list-style-type:none;">
+        <% for s_role in @game_account.game.roles %>
+          <li>
+            <%= check_box_tag "s_role[]", s_role %>
+            <%= s_role.humanize %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+  <%= hidden_field_tag(:activation_code, @activation_code) %>
+  <%= hidden_field_tag(:game, @game_account.game.id)%>
+  <div class="modal-footer" style="text-align:center;">
+    <%= submit_tag "Envoyer", data: { disable_with: "Envoi..." }, class: "btn btn-primary"%>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+  </div>
+<% end %>

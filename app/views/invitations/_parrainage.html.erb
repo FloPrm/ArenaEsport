@@ -1,0 +1,22 @@
+<% if current_user.invitations.first.nil? %>
+  <% generate_parrainage_link(current_user) %>
+<% end %>
+<% if current_user.urls.first.nil? %>
+  <% generate_url(current_user) %>
+<% end %>
+
+<% unless current_user.invitations.first.nil? %>
+<% if controller?("users")%>
+<h5 class="text-center"><%=t 'users.invite_friends' %> &nbsp;
+<%= link_to virtual_currency_wallet_path(current_user.wallet) do %><i class="fa fa-question-circle"></i><% end %>
+</h5>
+<% end %>
+  <div class="input-group col-sm-9 col-xs-7" style="margin:0 auto;">
+        <input id="clipboard" type="text" class="form-control" value="<%= request.base_url + '/' + current_user.urls.first.short %>" readonly>
+        <span class="input-group-btn">
+          <button class="btn btn-default clipboard" type="button" data-clipboard-target="#clipboard" style="padding:5px 12px;">
+            <i class="fa fa-clipboard"></i>
+          </button>
+        </span>
+  </div>
+<% end %>

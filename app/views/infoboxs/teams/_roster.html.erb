@@ -1,0 +1,8 @@
+<% if @team.members.where(state:2).count < @team.game.nb_players/2+1 %>
+  <p style="margin-bottom:10px"><%=raw t 'teams.not_enough', nb: @team.game.nb_players/2+1 %> <%= link_to "Arena+", subscription_plan_path(2) %> ⊂[◉‿◉].</p>
+<% end %>
+<% if !compatible_hours?(@team) %>
+  <p><%=raw t 'teams.not_compatible' %></p>
+<% elsif @team.members.where(state:2).count >= @team.game.nb_players/2+1 && @team.players.include?(1) %>
+  <p><%=raw t 'teams.vacant_roles' %></p>
+<% end %>

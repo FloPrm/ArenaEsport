@@ -1,0 +1,5 @@
+<% if !user.lang_p.nil? %>
+<div style="display:inline-block" data-toggle="tooltip" title="<%= user.lang_p.capitalize %>">
+  <%= image_tag "flags/svg/#{user.lang_p[0..1]}.svg", height:height %>
+</div>
+<% end %>

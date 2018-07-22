@@ -1,0 +1,14 @@
+<section>
+<% if can? :manage, User %>  
+<h1>Editing Contact</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @contact %> |
+<%= link_to 'Back', contacts_path %>
+
+<%else%>
+<p>Vous n'avez pas l'autorisation d'accéder à cette page.</p>
+<%end%>	
+
+</section>

@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Compositions</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Equipe</th>
+            <% for i in 1..6 %>
+            <th>Pick <%= i %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+        <% @compositions.order('created_at desc').each do |composition| %>
+          <tr>
+            <td><%= composition.title %></td>
+            <td><%= link_to composition.team.name, composition.team %></td>
+            <% composition.picks.each do |pick| %>
+              <td><%= pick %></td>
+            <% end %>
+            <td><%= link_to "<i class='fa fa-remove'></i>".html_safe, composition, method: :delete, data: {confirm: "Etes-vous sûr de vouloir supprimer cette composition ?"} %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3" style="margin-top:10px;">
+          <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+        </div>
+        <div class="col-sm-6 text-center">
+          <%= will_paginate @compositions, :previous_label => "Précédent", :next_label => "Suivant", inner_window: 2, outer_window: 1 %>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+    </div>
+  </div>
+</div>

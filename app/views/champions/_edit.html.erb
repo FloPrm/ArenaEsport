@@ -1,0 +1,33 @@
+<style type="text/css">
+
+</style>
+
+<%= simple_form_for(@champion, remote: true) do |f| %>
+<div id="badge-editor" class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 class="modal-title text-center" id="myModalLabel">Modifier un Champion</h3>
+    </div>
+    <div class="modal-body text-center">
+      <div class="row" style="margin-bottom:15px;">
+        <div class="col-sm-6">
+          <input type="text" value="<%= @champion.name %>" class="form-control" placeholder="Nom" name="champion[name]" id="champion_name" maxlength="30">
+        </div>
+        <div class="col-sm-6">
+          <%= f.input :game_id, as: :select, collection: Game.all, label_method: :title, value_method: :id, label: false, include_blank: false %>
+        </div>
+      </div>
+
+      <input type="text" value="<%= @champion.icon %>" class="form-control" placeholder="Nom" name="champion[icon]" id="champion_icon" maxlength="50">
+
+    </div>
+    <div class="modal-footer" style="text-align:center;">
+        <%= submit_tag "Enregistrer", class: "btn btn-primary"%>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+  </div>
+</div>
+<% end %>

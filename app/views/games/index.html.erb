@@ -1,0 +1,39 @@
+<div class="container">
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Jeux</h3>
+  </div>
+  <div class="panel-body">
+    <div style="margin-bottom:30px;">
+
+    </div>
+    <div id="index">
+      <table class="table table-striped" >
+        <tbody>
+          <% @games.each do |game| %>
+            <tr>
+              <td><%= link_to game.title, game %></td>
+              <td><%= game.active ? "Actif" : "Inactif" %></td>
+              <td><%= link_to "<i class='fa fa-pencil-square-o'></i>".html_safe, edit_game_path(game) %></td>
+              <td><%= link_to "<i class='fa fa-remove'></i>".html_safe, game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-sm-6" style="margin-top:10px;">
+        <%= link_to "Retour", admin_panel_path, class:"btn btn-default" %>
+      </div>
+      <div class="col-sm-6 text-right" style="margin-top:10px;">
+        <%= link_to '<i class="fa fa-plus"></i> Nouveau'.html_safe, new_game_path, method: :get, remote: true, class:"btn btn-primary" %>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+</div>
+
+</div>

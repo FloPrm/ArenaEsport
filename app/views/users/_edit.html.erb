@@ -1,0 +1,230 @@
+<style type="text/css">
+  /*table {border-collapse:collapse; table-layout:fixed; width:600px;}*/
+
+  #edit-user textarea {
+    width: 100%;
+    height: 100px;
+  }
+
+  #edit-user h5 { text-align: left; }
+
+  #edit-user .field {
+    margin-top: 15px;
+  }
+
+  #edit-user .field h5 {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+  #edit-user ul { list-style: none; }
+
+</style>
+
+<%= simple_form_for(@user, :validate => true, html: {multipart: true}, remote: true) do |f| %>
+<%= render 'layouts/error_messages', object: f.object %>
+  <%= simple_fields_for(@game_account) do |g| %>
+  <%= render 'layouts/error_messages', object: g.object %>
+  <div id="edit-user" class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title text-center" id="myModalLabel"><%=t 'users.form_title' %></h3>
+      </div>
+
+      <div class="modal-body" style="padding-top:30px;">
+
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="<%= @game_account.game.characters == true ? 'col-sm-6' : 'col-sm-12' %>" style="<%= @game_account.game.characters == true ? 'border-right: 2px solid rgba(0, 0, 0, 0.1);' : '' %>">
+              <div class="field">
+                <h5><%=t 'users.role_p' %></h5>
+                <%= g.collection_select :p_role, @game_account.game.roles, :to_s, :humanize, required: true %>
+              </div>
+
+              <div class="field">
+                <h5><%=t 'users.role_s' %></h5>
+                <p class="explain"><i class="fa fa-warning" style="color:#c0392b;"></i>&nbsp; <%=t 'users.role_s_explain' %></p>
+                <ul>
+                <% for s_role in @game_account.game.roles %>
+                  <li>
+                    <% if !@game_account.s_role.nil? %>
+                      <%= check_box_tag "s_role[]", s_role, @game_account.s_role.include?(s_role) ? true : false %>
+                      <%= s_role.humanize %>
+                    <% else %>
+                      <%= check_box_tag "s_role[]", s_role %>
+                      <%= s_role.humanize %>
+                    <% end %>
+                  </li>
+                <% end %>
+                </ul>
+              </div>
+            </div>
+            <% if @game_account.game.characters == true %>
+            <div class="col-sm-6">
+              <div class="field">
+                <% @game = current_user.account.game %>
+                <h5>Top 3 <%= @game.character_name.nil? ? "Personnages" : @game.character_name.pluralize.capitalize %></h5>
+                <p class="explain"><%=t 'users.top3_explain' %></p>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                  <input type="text" class="form-control" style="text-transform:lowercase" placeholder="<%=t 'users.top3_placeholder', name: @game.character_name.nil? ? 'personnage' : @game.character_name %>" id="search">
+                </div>
+              </div>
+              <div id="champions_list">
+                <%= render 'users/champions_list' %>
+              </div>
+              <hr>
+              <h5><%=t 'layout.language' %></h5>
+              <% @user.lang_p = @user.language if @user.lang_p.nil? %>
+              <%= render partial:"users/language_select", locals:{attribute:"lang_p", user:@user} %>
+            </div>
+            <% end %>
+          </div>
+
+          <% if @game_account.gameplay.nil? %>
+            <% @game_account.gameplay = 3 %>
+          <% end %>
+
+          <div class="field">
+            <h5><%=t 'users.gameplay' %></h5>
+            <div class="row col-sm-12">
+              <div class="text-right col-xs-2">Fun</div>
+              <div class="text-center col-xs-8">
+                <%= g.input :gameplay, as: :radio_buttons, label: false, collection: 1..4, item_wrapper_class: 'radio-inline', required: true %>
+              </div>
+              <div class="text-left col-xs-2">Tryhard</div>
+            </div>
+          </div>
+
+          <!-- Initialisation pour donner un bon exemple de valeurs sélectionnées !-->
+          <%if @user.week_start == nil%>
+          <%
+            @user.week_start = 18
+            @user.week_end = 22
+            @user.we_start = 18
+            @user.we_end = 22
+          %>
+          <%end%>
+
+          <br>
+          <br>
+
+          <div class="field">
+            <h5><%=t 'users.week_schedule' %></h5>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="col-sm-9"><%=t 'users.starting_hour' %></div>
+                <div class="col-sm-3"><%= f.input :week_start, collection: User::JOUR, label: false, value: @user.week_start, include_blank: false %></div>
+              </div>
+              <div class="col-sm-6">
+                <div class="col-sm-7"><%=t 'users.ending_hour' %></div>
+                <div class="col-sm-3"><%= f.input :week_end, collection: User::SOIR, label: false, value: @user.week_end, include_blank: false %></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-info"><i class="fa fa-info-circle"></i> <%=t 'users.schedule_explain' %></div>
+
+          <div class="field">
+            <h5><%=t 'users.we_schedule' %></h5>
+            <div class="row">
+              <div class="col-sm-6 horaires">
+                <div class="col-sm-9"><%=t 'users.starting_hour' %></div>
+                <div class="col-sm-3"><%= f.input :we_start, collection: User::JOUR, label: false, value: @user.we_start, include_blank: false %></div>
+              </div>
+              <div class="col-sm-6 horaires">
+                <div class="col-sm-7"><%=t 'users.ending_hour' %></div>
+                <div class="col-sm-3"><%= f.input :we_end, collection: User::SOIR, label: false, value: @user.we_end, include_blank: false %></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-5">
+          <% if can? :manage, :all %>
+            <div class="field">
+              <h5>Note Admin</h5>
+              <%= f.input :admin_note, as: :text, label: false, maxlength: 500 %>
+            </div>
+          <% end %>
+
+          <div class="field">
+            <h5><%=t 'users.goals' %></h5>
+            <ul>
+            <% for objectifs in GameAccount::OBJECTIFS %>
+              <li>
+                <% if !@game_account.objectifs.nil? %>
+                  <%= check_box_tag "objectifs[]", objectifs.last, @game_account.objectifs.include?(objectifs.last) ? true : false %>
+                  <%= eval(objectifs.first) %>
+                <% else %>
+                  <%= check_box_tag "objectifs[]", objectifs.last %>
+                  <%= eval(objectifs.first) %>
+                <% end %>
+              </li>
+            <% end %>
+            </ul>
+          </div>
+
+          <div class="field">
+            <h5><%=t 'users.schedule_spe' %></h5>
+            <p class="explain"><%=t 'users.schedule_spe_explain' %></p>
+            <%= f.input :horaire, as: :text, label: false, maxlength: 250 %>
+          </div>
+
+          <div class="field">
+            <h5><%=t 'layout.other' %></h5>
+            <p class="explain"><%=t 'users.other_explain' %></p>
+            <%= g.input :autre, as: :text, label: false, maxlength: @maximum_length, id: 'autre' %>
+            <span id="status" data-maximum-length="<%= @maximum_length %>" class="explain" style="font-size:14px;"></span>
+          </div>
+
+          <div class="field">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
+              <input type="text" class="form-control" value="<%= @user.discord %>" placeholder="Discord: pseudo#0000" style="width:80%" name="user[discord]" id="user_discord" maxlength="50">
+            </div>
+            <p style="font-size:14px;"><%=t 'users.informed_from' %> <%= link_to "Discord", @game_account.game.discord, target:"_blank" %> !</p>
+          </div>
+
+          <% if current_user == @user or (can? :manage, :all) %>
+          <div class="field">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-skype"></i></span>
+              <input type="text" class="form-control" value="<%= @user.skype %>" placeholder="ID ou mail Skype" style="width:80%" name="user[skype]" id="user_skype" maxlength="50">
+            </div>
+            <p class="explain"><%=t 'users.informed_from' %> Skype.</p>
+          </div>
+          <% end %>
+
+          <br>
+
+        </div>
+      </div>
+
+      <div class="modal-footer" style="text-align:center;">
+        <%= submit_tag "#{t 'btn.update'}", data: { disable_with: "#{t 'btn.sending'}" }, class: "btn btn-primary"%>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%=t 'btn.close' %></button>
+      </div>
+    </div>
+  </div>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  var names = <%= raw @champions.to_json %>;
+  $('#search').autocomplete({
+    source : names,
+    select: function(event, ui){ // lors de la sélection d'une proposition
+     $.ajax({
+      type: "PUT",
+      url: "/users/<%= @user.id %>/add_champion" + "?champion=" + ui.item.value
+     });
+    }
+  });
+</script>

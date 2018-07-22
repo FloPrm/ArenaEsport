@@ -1,0 +1,106 @@
+<%= stylesheet_link_tag "pricing" %>
+<style type="text/css">
+    #pricing li{
+        color: white;
+    }
+    .price-header h3 { margin-bottom: 10px; }
+</style>
+    <!-- Section pricing -->
+    <div class="standard-section section-pricing" id="pricing">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading">Nos formules Premiums</h2>
+                <h3 class="section-subheading text-muted">Boost ta recherche d'équipe et bénéficie d'avantages exclusifs !</h3>
+                <!-- <h3 class="section-subheading text-muted">Pour une expérience en équipe sur mesure.</h3> -->
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div data-100p-top="transform[swing]:translateX(-25px);opacity[swing]:0" data-75p-top="transform[swing]:translateX(0);opacity[swing]:1">
+                        <div class="price-item price-basic">
+                            <div class="price-header">
+                                <h3><strong>Gratuit</strong></h3>
+                                <br>
+                            </div>
+                            <div class="price-description">Basique</div>
+
+                            <ul class="price-list list-unstyled">
+                                <li><b>Utilisateur</b></li>
+                                <li>Priorité Standard</li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li>Galerie d'avatars</li>
+                                <li><b>Équipe</b></li>
+                                <li>Une seule candidature en simultané dans le centre de recrutement</li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li>Discord : Accès aux canaux vocaux publics</li>
+                            </ul>
+                            <div class="price-button">
+                                <a href="/users/sign_up" class="btn btn-primary btn-lg btn-block" <%= 'disabled="disabled"' if user_signed_in? %> ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Postuler</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="col-sm-4">
+                    <div data-100p-top="transform[swing]:translateX(-25px);opacity[swing]:0" data-75p-top="transform[swing]:translateX(0);opacity[swing]:1">
+                        <div class="price-item price-basic">
+                            <div class="price-header">
+                                <h3><strong>5</strong>€</h3>
+                                <h5>Sans engagement</h5>
+                            </div>
+                            <div class="price-description">Arena +</div>
+
+                            <ul class="price-list list-unstyled">
+                                <li><b>Utilisateur</b></li>
+                                <li>Priorité Maximale</li>
+                                <li>Service client 24/7</li>
+                                <li>Droits Discord (annonces, bot musique...)</li>
+                                <li>Avatar personnalisé (jpg, png, gif...)</li>
+                                <li><b>Équipe</b></li>
+                                <li>Candidatures illimitées dans le centre de recrutement</li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li><i class="fa fa-close" aria-hidden="true"></i></li>
+                                <li>Canal Vocal Discord</li>
+                            </ul>
+                            <div class="price-button">
+                              <a href="/subscription_plans/1" class="btn btn-primary btn-lg btn-block"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Souscrire</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div data-100p-top="transform[swing]:translateX(-25px);opacity[swing]:0" data-75p-top="transform[swing]:translateX(0);opacity[swing]:1">
+                        <div class="price-item price-basic">
+                            <div class="price-header">
+                                <h3> <strong>7.99</strong>€</h3>
+                                <h5>Sans engagement</h5>
+                            </div>
+                            <div class="price-description">Capitaine +</div>
+
+                            <ul class="price-list list-unstyled">
+                            <li><b>Utilisateur</b></li>
+                            <li>Priorité Maximale</li>
+                            <li>Service client 24/7</li>
+                            <li>Droits Discord (annonces, bot musique...)</li>
+                            <li>Avatar personnalisé (jpg, png, gif...)</li>
+                            <li><b>Équipe</b></li>
+                            <li>Candidatures illimitées dans le centre de recrutement</li>
+                            <li>Accès au catalogue des joueurs</li>
+                            <li>Invitations illimitées de joueurs</li>
+                            <li>Droits de capitaine automatiques</li>
+                            <li>Canal Vocal & Textuel Discord (Privé)</li>
+                            </ul>
+                            <div class="price-button">
+                              <a href="/subscription_plans/2" class="btn btn-primary btn-lg btn-block"><i class="fa fa-shopping-basket" aria-hidden="true"></i> Souscrire</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

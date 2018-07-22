@@ -1,0 +1,9 @@
+$('#premade_friend').val('');
+$('#notice-premade').html("<%= flash[:invitation] %>");
+
+$('#team_friend').val('');
+<% unless @team.nil? %>
+  $('#team-tabs').html("<%= j (render 'teams/roster') %>");
+<% end %>
+$('#notice-team-<%= params[:num_role] %>').html("<%= flash[:invitation] %>");
+$('#modal-window').modal('hide');

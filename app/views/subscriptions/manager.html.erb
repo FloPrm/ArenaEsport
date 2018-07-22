@@ -1,0 +1,110 @@
+<style type="text/css">
+  #my-subscription tbody tr:first-child td { border-top: 0 }
+</style>
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3><%=t 'subscriptions.manager_title' %></h3>
+    </div>
+    <div class="panel-body" style="padding:50px 15px;">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <h4><%=t 'subscriptions.mine' %></h4>
+            </div>
+            <div class="panel-body" style="height:200px;">
+              <% unless @subscription.nil? %>
+                <table id="my-subscription" class="table">
+                  <tbody>
+                    <tr>
+                      <td><h5><%=t 'subscriptions.formula' %></h5></td>
+                      <td><%= @subscription.subscription_plan.title %></td>
+                    </tr>
+                    <tr>
+                      <td><h5><%=t 'subscriptions.duration' %></h5></td>
+                      <td>
+                        <% unless @subscription.end_date.nil? %>
+                          <%=t 'layout.from_to_date', date1: @subscription.created_at.strftime("%d/%m/%y"), date2: @subscription.end_date.strftime("%d/%m/%y") %>
+                        <% else %>
+                          <%=t 'subscriptions.lifetime' %>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><h5><%=t 'subscriptions.remaining' %></h5></td>
+                      <td>
+                        <%  unless @subscription.end_date.nil? %>
+                          <%= (@subscription.end_date.to_date - Time.now.to_date).to_i %> <%=t 'layout.days' %>
+                        <% else %>
+                          <%=t 'subscriptions.unlimited' %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              <% else %>
+                <p style="text-align:center;margin-top:80px;"><%=t 'subscriptions.none' %></p>
+              <% end %>
+            </div>
+            <div class="panel-footer">
+              <% unless @subscription.nil? %>
+                <% unless @subscription.end_date.nil? %>
+                  <%= link_to "#{t 'subscriptions.renew'}", subscription_plan_path(@subscription.subscription_plan), class:"btn btn-primary btn-block" %>
+                <% else %>
+                  <br>
+                <% end %>
+              <% else %>
+                <%= link_to "#{t 'layout.become_premium'}", pricing_path, class:"btn btn-primary btn-block" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <h4><%=t 'subscriptions.history' %></h4>
+            </div>
+            <div class="panel-body" style="height:260px;width:100%;overflow-x:hidden;overflow-y:scroll;">
+              <table class="table" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th><%=t 'subscriptions.formula' %></th>
+                    <th><%=t 'layout.start' %></th>
+                    <th><%=t 'layout.end' %></th>
+                    <th><%=t 'subscriptions.price' %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @subscriptions.each do |subscription| %>
+                    <tr>
+                      <td><%= subscription.subscription_plan.title %></td>
+                      <td><%= subscription.created_at.strftime("%d/%m/%y") %></td>
+                      <td>
+                        <% unless subscription.end_date.nil? %>
+                          <%= subscription.end_date.strftime("%d/%m/%y") %>
+                        <% else %>
+                          <%=t 'subscriptions.lifetime' %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% if subscription.price < 700 %>
+                          <%= subscription.price.to_f.round(2) %>€
+                        <% else %>
+                          <%= subscription.price.to_i %> <i class="ra ra-gem" style="color:#3498db;"></i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <%= link_to "#{t 'btn.back'}", dashboard_path, class:"btn btn-default" %>
+    </div>
+  </div> <!-- Panel -->
+</div>
